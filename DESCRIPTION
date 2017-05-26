@@ -1,0 +1,15 @@
+Package: bayessource
+Type: Package
+Title: Bayesian approach to evaluate whether two datasets come from the same population
+Version: 0.1.0
+Author: Lorenzo Gaborini
+Maintainer: Lorenzo Gaborini <lorenzo.gaborini@unil.ch>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: Rcpp (>= 0.12.10), RcppArmadillo, matrixStats, MCMCpack, coda
+LinkingTo: Rcpp, RcppArmadillo
+Suggests: testthat
+RoxygenNote: 6.0.1
