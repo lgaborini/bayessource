@@ -226,14 +226,14 @@ X.inv.chol <- chol(X.inv)
 # X.chol is triangular
 
 test_that('Rcpp::inv_triangular is correct.',
-	expect_equal(solve(X.chol), .inv_triangular(X.chol)))
+	expect_equal(solve(X.chol), inv_triangular(X.chol)))
 
 test_that('Rcpp::chol2inv is correct.', {
-	expect_equal(chol2inv(X.chol), .chol2inv(X.chol))
-	expect_equal(.chol2inv(X.chol), X.inv)
+	expect_equal(chol2inv(X.chol), chol2inv(X.chol))
+	expect_equal(chol2inv(X.chol), X.inv)
 })
 
-X.inv.chol.arma <- .inv_Cholesky_from_Cholesky(X.chol)
+X.inv.chol.arma <- inv_Cholesky_from_Cholesky(X.chol)
 test_that('Rcpp::inv_Cholesky_from_Cholesky is correct.',
 	expect_equal(X.inv.chol, X.inv.chol.arma)
 )
@@ -260,8 +260,8 @@ lprobs <- log(probs)
 mean.probs <- mean(probs)
 
 # C++
-mean.lse.arma <- exp(.logSumExp_arma(lprobs) - log(length(lprobs)))
-mean.lsem.arma <- exp(.logSumExpMean_arma(lprobs))
+mean.lse.arma <- exp(logSumExp_arma(lprobs) - log(length(lprobs)))
+mean.lsem.arma <- exp(logSumExpMean_arma(lprobs))
 
 test_that('Mean with Rcpp::logSumExp is correct', expect_equal(mean.lse.arma, mean.probs))
 test_that('Rcpp::logSumExpMean is correct', expect_equal(mean.lsem.arma, mean.probs))

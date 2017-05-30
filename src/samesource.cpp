@@ -20,7 +20,8 @@ const double pi = arma::datum::pi;
 // -------- Numerical functions -----------
 
 // Computes log( \sum_i( exp(v[i] )) ) in a stable way.
-// [[Rcpp::export(.logSumExp_arma, rng = false)]]
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
 double logSumExp_arma(const arma::vec &v){
    double v_max = v.max();
 
@@ -28,13 +29,15 @@ double logSumExp_arma(const arma::vec &v){
 }
 
 // Computes log( \sum_i( exp(v[i] )) ) - log(n) in a stable way.
-// [[Rcpp::export(.logSumExpMean_arma, rng = false)]]
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
 double logSumExpMean_arma(const arma::vec &v){
    return (logSumExp_arma(v) - log(v.n_elem));
 }
 
 // Computes log( \cumsum_i( exp(v[i] )) ) in a stable way.
-// [[Rcpp::export(.logCumsumExp_arma, rng = false)]]
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
 arma::vec logCumsumExp_arma(const arma::vec &v){
    double v_max = v.max();
 
@@ -42,7 +45,8 @@ arma::vec logCumsumExp_arma(const arma::vec &v){
 }
 
 // Computes log( \cummean_i( exp(v[i] )) ) in a stable way.
-// [[Rcpp::export(.logCumsumExpmean_arma, rng = false)]]
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
 arma::vec logCumsumExpmean_arma(const arma::vec &v){
    return (logCumsumExp_arma(v) - log(v.n_elem));
 }
@@ -50,28 +54,29 @@ arma::vec logCumsumExpmean_arma(const arma::vec &v){
 // Upper triangular matrix inversion
 //
 // R: X.chol.inv <- backsolve(r = X.chol, x = diag(p))
-//
-// [[Rcpp::export(.inv_triangular, rng = false)]]
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
 arma::mat inv_triangular(const arma::mat &U){
    return(arma::solve(arma::trimatu(U), arma::eye(arma::size(U))));
 }
 
 // Compute the inverse from the upper Cholesky factor
-//
-// [[Rcpp::export(.chol2inv, rng = false)]]
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
 arma::mat chol2inv(const arma::mat &U_chol){
    arma::mat X = solve(arma::trimatl(U_chol.t()), arma::eye(arma::size(U_chol)));
    return solve(arma::trimatu(U_chol), X);
 }
 
 // Cholesky factor of inverse from Cholesky factor
-//
-// [[Rcpp::export(.inv_Cholesky_from_Cholesky, rng = false)]]
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
 arma::mat inv_Cholesky_from_Cholesky(const arma::mat &U){
    return (arma::chol(chol2inv(U)));
 }
 
 // log-determinant from Cholesky factor
+//' @keywords internal
 // [[Rcpp::export(rng = false)]]
 double ldet_from_Cholesky(const arma::mat &T_chol){
    return 2 * (arma::sum(log(arma::diagvec(T_chol))));
@@ -80,7 +85,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol){
 // -------- Statistical functions -----------
 
 // Generate from multivariate normal
-// [[Rcpp::export(rmvnorm_arma)]]
+// [[Rcpp::export]]
 arma::mat rmvnorm_arma(const unsigned int n,
                        const arma::colvec &mu,
                        const arma::mat &Cov,
@@ -99,7 +104,7 @@ arma::mat rmvnorm_arma(const unsigned int n,
 
 
 // Density of multivariate normal
-// [[Rcpp::export(dmvnorm_arma, rng = false)]]
+// [[Rcpp::export(rng = false)]]
 arma::vec dmvnorm_arma(const arma::mat &x,
                        const arma::rowvec &mean,
                        const arma::mat &Cov,
@@ -131,16 +136,19 @@ arma::vec dmvnorm_arma(const arma::mat &x,
    return(out);
 }
 
-
-// Generate from Wishart
-//
-// Anderson/Press parametrization
-// As R::rWishart function.
-//
-// Only the upper Cholesky factor of the scale matrix can be considered.
-// Only the upper Cholesky factor of the sampled Wishart can be returned.
-//
-// [[Rcpp::export(rwish_arma)]]
+//' Generate random sample from Wishart. (faster)
+//'
+//' Same code as \code{\link{rWishart}} function in package \code{\pkg{stats}}.
+//'
+//' @param v dof
+//' @param S the scale matrix (pxp)
+//' @param is_chol if TRUE, S is the upper Cholesky factor of S
+//' @param return_chol if TRUE, the upper Cholesky factor is returned
+//' @return a single random variate from W(v, S)
+//' @export
+//'
+//' @template Wishart_eqn
+// [[Rcpp::export()]]
 arma::mat rwish_arma(const double v,
    const arma::mat &S,
    const bool is_chol = false,
@@ -192,13 +200,21 @@ arma::mat rwish_arma(const double v,
 
 
 
-// Density of Inverse Wishart from inverse
-// X ~ IWishart(X, df, Sigma)
-// Using Press parametrization
-//
-// Computes the pdf p_X(x) by knowing x^(-1)
-//
-// [[Rcpp::export(diwishart_inverse_arma, rng = false)]]
+//' Inverted Wishart density from the inverse (faster)
+//'
+//' Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
+//' Avoids a matrix inversion.
+//'
+//' Computes the pdf p_X(x) by knowing x^(-1)
+//'
+//'@param X_inv inverse of X (the observation)
+//'@param df degrees of freedom
+//'@param Sigma scale matrix
+//'@param logd if TRUE, return the log-density
+//'@param is.is_chol if TRUE, Sigma and X.inv are the Cholesky factors of Sigma and X.inv
+//'@export
+//'@template InverseWishart_Press
+// [[Rcpp::export(rng = false)]]
 double diwishart_inverse_arma(const arma::mat &X_inv,
                        const double &df,
                        const arma::mat &Sigma,
@@ -245,10 +261,11 @@ double diwishart_inverse_arma(const arma::mat &X_inv,
 }
 
 
-
-
-// [[Rcpp::export(name = .samesource_C)]]
-Rcpp::List samesource_C(
+//' Fast Bayesian same source hypothesis. Gaussian MV.
+//' To be called by the R wrapper.
+//' @keywords internal
+// [[Rcpp::export]]
+Rcpp::List samesource_C_internal(
       const arma::mat &dati,
       const unsigned int n_iter,
       const arma::mat &B_inv,
@@ -552,6 +569,6 @@ Rcpp::List samesource_C(
 
 /*** R
 # Run the unit test for this script
-testthat::test_file('test_samesource_cpp.R')
+# testthat::test_file('test_samesource_cpp.R')
 
 */

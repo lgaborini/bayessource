@@ -5,12 +5,29 @@
 
 # source('statistical_functions.R')
 
+#' Bayesian same source hypothesis. Gaussian MV.
+#' Implemented in R (slow).
+#'
+#' @param dati the dataset
+#' @param n.iter number of MC iterations
+#' @param B.inv prior inverse of between covariance matrix
+#' @param W.inv prior inverse of within covariance matrix
+#' @param U covariance matrix for the mean
+#' @param nw degrees of freedom
+#' @param mu prior mean
+#' @param burn.in burn-in iterations
+#' @param output.mcmc output the entire chain
+#' @param verbose if TRUE, also output all posterior samples
+#'
+#' @return a LR value, or a list(LR value, posterior samples)
+#' @export
+#' @template gaussmv_model
 samesource_R <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
 
    # Redundant arguments
    p <- nrow(B.inv)
-   vp <- 1:p
-   lc0 <- -(nw - p - 1) * p/2 * log(2) - p * (p - 1)/4 * log(pi) - sum(log(gamma((nw - p - vp)/2)))
+   # vp <- 1:p
+   # lc0 <- -(nw - p - 1) * p/2 * log(2) - p * (p - 1)/4 * log(pi) - sum(log(gamma((nw - p - vp)/2)))
 
    # \theta chain outputs
    theta.gibbs <- list()
