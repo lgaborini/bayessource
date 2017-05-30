@@ -11,8 +11,6 @@ Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 0.12.10), RcppArmadillo, matrixStats, MCMCpack, coda
 LinkingTo: Rcpp, RcppArmadillo
-Suggests: testthat,
-    knitr,
-    rmarkdown
+Suggests: testthat
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
