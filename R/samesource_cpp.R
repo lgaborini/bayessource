@@ -5,7 +5,7 @@
 library(coda)
 
 #' Fast Bayesian same source hypothesis. Gaussian MV.
-#' Implemented in C (faster)
+#' Implemented in C (faster).
 #'
 #' @param dati the dataset
 #' @param n.iter number of MC iterations
@@ -23,7 +23,7 @@ library(coda)
 #' @template gaussmv_model
 #'
 samesource_C <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
-
+   # Wrap the C function
    result <- samesource_C_internal(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
 
    if (output.mcmc) {

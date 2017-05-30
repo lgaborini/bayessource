@@ -19,7 +19,8 @@ const double pi = arma::datum::pi;
 
 // -------- Numerical functions -----------
 
-// Computes log( \sum_i( exp(v[i] )) ) in a stable way.
+//' Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
+//'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 double logSumExp_C(const arma::vec &v){
@@ -28,14 +29,16 @@ double logSumExp_C(const arma::vec &v){
    return (v_max + log(sum(exp(v - v_max))));
 }
 
-// Computes log( \sum_i( exp(v[i] )) ) - log(n) in a stable way.
+//' Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
+//'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 double logSumExpMean_C(const arma::vec &v){
    return (logSumExp_C(v) - log(v.n_elem));
 }
 
-// Computes log( \cumsum_i( exp(v[i] )) ) in a stable way.
+//' Computes log( cumsum_i( exp(v[i]) ) ) in a stable way.
+//'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 arma::vec logCumsumExp_C(const arma::vec &v){
@@ -44,38 +47,43 @@ arma::vec logCumsumExp_C(const arma::vec &v){
    return (v_max + log(cumsum(exp(v - v_max))));
 }
 
-// Computes log( \cummean_i( exp(v[i] )) ) in a stable way.
+//' Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
+//'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 arma::vec logCumsumExpmean_C(const arma::vec &v){
    return (logCumsumExp_C(v) - log(v.n_elem));
 }
 
-// Upper triangular matrix inversion
-//
-// R: X.chol.inv <- backsolve(r = X.chol, x = diag(p))
+//' Upper triangular matrix inversion
+//'
+//' Quickly computes the inverse of a upper triangular matrix (e.g. a Cholesky factor).
+//'
+//' Equivalent R code:
+//' \code{X.chol.inv <- backsolve(r = X.chol, x = diag(p))}
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 arma::mat inv_triangular(const arma::mat &U){
    return(arma::solve(arma::trimatu(U), arma::eye(arma::size(U))));
 }
 
-// Compute the inverse from the upper Cholesky factor
-//' @keywords internal
+//' Compute the inverse from the upper Cholesky factor
+//'
+//' @export
 // [[Rcpp::export(rng = false)]]
 arma::mat chol2inv(const arma::mat &U_chol){
    arma::mat X = solve(arma::trimatl(U_chol.t()), arma::eye(arma::size(U_chol)));
    return solve(arma::trimatu(U_chol), X);
 }
 
-// Cholesky factor of inverse from Cholesky factor
+//' Cholesky factor of inverse from Cholesky factor
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 arma::mat inv_Cholesky_from_Cholesky(const arma::mat &U){
    return (arma::chol(chol2inv(U)));
 }
 
-// log-determinant from Cholesky factor
+//' log-determinant from Cholesky factor
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 double ldet_from_Cholesky(const arma::mat &T_chol){
@@ -84,7 +92,16 @@ double ldet_from_Cholesky(const arma::mat &T_chol){
 
 // -------- Statistical functions -----------
 
-// Generate from multivariate normal
+//' Generate from multivariate normal
+//'
+//' Faster than rmvnorm (implemented in C).
+//'
+//' @param n amount of samples to generate from
+//' @param mu column vector for the mean
+//' @param Cov covariance matrix
+//' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
+//' @return a nxp matrix of samples
+//' @export
 // [[Rcpp::export]]
 arma::mat rmvnorm_C(const unsigned int n,
                        const arma::colvec &mu,
@@ -103,7 +120,17 @@ arma::mat rmvnorm_C(const unsigned int n,
 }
 
 
-// Density of multivariate normal
+//' Multivariate normal density. Much faster, assumes symmetry.
+//'
+//' Faster than \code{\link{dmvnorm_fast}}. Implemented in C.
+//'
+//' @param x the observation (nxp)
+//' @param mean mean vector (row vector, 1xp)
+//' @param Cov covariance matrix (pxp)
+//' @param logd if TRUE, return the log-density
+//' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
+//' @return the density in x (nx1)
+//' @export
 // [[Rcpp::export(rng = false)]]
 arma::vec dmvnorm_C(const arma::mat &x,
                        const arma::rowvec &mean,
@@ -148,7 +175,7 @@ arma::vec dmvnorm_C(const arma::mat &x,
 //' @export
 //'
 //' @template Wishart_eqn
-// [[Rcpp::export()]]
+// [[Rcpp::export]]
 arma::mat rwish_C(const double v,
    const arma::mat &S,
    const bool is_chol = false,
@@ -263,6 +290,8 @@ double diwishart_inverse_C(const arma::mat &X_inv,
 
 //' Fast Bayesian same source hypothesis. Gaussian MV.
 //' To be called by the R wrapper.
+//'
+//' @template gaussmv_model
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::List samesource_C_internal(
@@ -343,7 +372,7 @@ Rcpp::List samesource_C_internal(
    if (verbose){
       Rcout << "Gibbs chain started." << endl;
       Rcout << "Parameters: " << endl;
-      Rcout << "  USE_CHOLESKY: " << USE_CHOLESKY << endl;
+      Rcout << "  using Cholesky? " << USE_CHOLESKY << endl;
    }
    int print_mod = 100;
 

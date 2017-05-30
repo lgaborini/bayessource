@@ -5,8 +5,8 @@
 
 # source('statistical_functions.R')
 
-#' Bayesian same source hypothesis. Gaussian MV.
-#' Implemented in R (slow).
+#' Bayesian same source hypothesis. Multivariate gaussian model.
+#' Implemented in R (very slow).
 #'
 #' @param dati the dataset
 #' @param n.iter number of MC iterations

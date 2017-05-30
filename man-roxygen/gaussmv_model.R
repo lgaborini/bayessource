@@ -1,11 +1,11 @@
 #' @section Multivariate Gaussian model:
 #'
 #' Observation level:
-#' \deqn{X_{ij} ~ N(theta, W)}
+#' \deqn{X_{ij} \sim N(theta, W)}
 #'
 #' Group level:
-#' \deqn{theta ~ N(\mu, B)}
-#' \deqn{W ~ IW(nw, U)}
+#' \deqn{theta \sim N(\mu, B)}
+#' \deqn{W \sim IW(nw, U)}
 #'
 #' Hyperparameters:
 #' \eqn{B, U, nw, \mu}

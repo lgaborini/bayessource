@@ -194,7 +194,7 @@ diwishart_Anderson <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
 
 #' Wishart density.
 #'
-#' Parametrization according to Press/Anderson.
+#' \eqn{X \sim W(df, Sigma)}
 #'
 #' @param X the observation
 #' @param df degrees of freedom
@@ -236,6 +236,7 @@ dwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
 
 
 #' Multivariate normal density. Faster, assumes symmetry.
+#' A faster version is implemented in \code{\link{dmvnorm_C}}.
 #'
 #' @param x the observation
 #' @param mean mean vector
@@ -244,7 +245,7 @@ dwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
 #' @param is.chol if TRUE, sigma is the upper Cholesky factor of sigma
 #' @return the density in X
 #' @export
-#'
+#' @seealso \code{\link{dmvnorm_C}}
 dmvnorm_fast <- function(x, mean = rep(0, p), sigma = diag(p), log = FALSE, is.chol = FALSE)
 {
    if (is.vector(x))
