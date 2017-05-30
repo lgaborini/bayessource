@@ -45,8 +45,8 @@ test_that('R logSumExpMean is correct', expect_equal(mean.lprobs, mean.lsem))
 
 
 # C++: in its own file
-# mean.lse.arma <- exp(.logSumExp_arma(lprobs) - log(length(lprobs)))
-# mean.lsem.arma <- exp(.logSumExpMean_arma(lprobs))
+# mean.lse.arma <- exp(.logSumExp_C(lprobs) - log(length(lprobs)))
+# mean.lsem.arma <- exp(.logSumExpMean_C(lprobs))
 
 # test_that('Rcpp::logSumExp is correct', expect_equal(mean.lse.arma, mean.probs))
 # test_that('Rcpp::logSumExpMean is correct', expect_equal(mean.lsem.arma, mean.probs))

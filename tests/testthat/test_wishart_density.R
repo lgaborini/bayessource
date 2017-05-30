@@ -3,7 +3,7 @@
 #
 # Checks that Wishart / IWishart densities are correctly computed
 #
-# R tests
+# statistical_functions.R tests
 
 library(testthat)
 
@@ -12,7 +12,7 @@ rm(list = ls())
 # source('statistical_functions.R')
 # source('samesource_cpp.R')
 
-context('R Wishart/Inverted Wishart')
+context('statistical_functions.R: Wishart/Inverted Wishart')
 
 # Wishart test ------------------------------------------------------------
 
@@ -153,6 +153,6 @@ test_that('diwishart (Press) = diwishart (Anderson), pass Cholesky', {
 
 # dens.iwishart <- diwishart_inverse(solve(X), df + p + 1, Sigma, log = FALSE)
 # dens.iwishart
-# dens.iwishart.arma <- diwishart_inverse_arma(solve(X), df + p + 1, Sigma, logd = FALSE)
+# dens.iwishart.arma <- diwishart_inverse_C(solve(X), df + p + 1, Sigma, logd = FALSE)
 # dens.iwishart.arma
 # test_that('diwishart (Press) = diwishart (Rcpp)', expect_equal(dens.iwishart, dens.iwishart.arma))

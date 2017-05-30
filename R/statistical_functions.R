@@ -51,7 +51,7 @@ iwishart.logconstant <- function(df, p) {
 #' @param df degrees of freedom
 #' @param Sigma scale matrix
 #' @param log if TRUE, return the log-density
-#' @param is.chol if TRUE, Sigma and X are the Cholesky factors of Sigma and X
+#' @param is.chol if TRUE, Sigma and X are the upper Cholesky factors of Sigma and X
 #' @return the density in X
 #' @export
 #' @seealso \code{\link{diwishart_Anderson}, \code{\link{diwishart_inverse}}}
@@ -106,7 +106,7 @@ diwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
 #' @param df degrees of freedom
 #' @param Sigma scale matrix
 #' @param log if TRUE, return the log-density
-#' @param is.chol if TRUE, Sigma and X.inv are the Cholesky factors of Sigma and X.inv
+#' @param is.chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
 #' @return the density in X
 #' @export
 #' @seealso \code{\link{diwishart}}
@@ -153,7 +153,7 @@ diwishart_inverse <- function(X.inv, df, Sigma, log = FALSE, is.chol = FALSE) {
 #' @param df degrees of freedom
 #' @param Sigma scale matrix
 #' @param log if TRUE, return the log-density
-#' @param is.chol if TRUE, Sigma and X are the Cholesky factors of Sigma and X
+#' @param is.chol if TRUE, Sigma and X are the upper Cholesky factors of Sigma and X
 #' @return the density in X
 #' @export
 #' @seealso \code{\link{diwishart}}
@@ -200,7 +200,7 @@ diwishart_Anderson <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
 #' @param df degrees of freedom
 #' @param Sigma scale matrix
 #' @param log if TRUE, return the log-density
-#' @param is.chol if TRUE, Sigma and X are the Cholesky factors of Sigma and X
+#' @param is.chol if TRUE, Sigma and X are the upper Cholesky factors of Sigma and X
 #' @return the density in X
 #' @export
 #' @seealso \code{\link{riwish_Press}}
@@ -241,7 +241,7 @@ dwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
 #' @param mean mean vector
 #' @param sigma covariance matrix
 #' @param log if TRUE, return the log-density
-#' @param is.chol if TRUE, sigma is the Cholesky factor of sigma
+#' @param is.chol if TRUE, sigma is the upper Cholesky factor of sigma
 #' @return the density in X
 #' @export
 #'

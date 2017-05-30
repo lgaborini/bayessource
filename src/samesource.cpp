@@ -22,7 +22,7 @@ const double pi = arma::datum::pi;
 // Computes log( \sum_i( exp(v[i] )) ) in a stable way.
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-double logSumExp_arma(const arma::vec &v){
+double logSumExp_C(const arma::vec &v){
    double v_max = v.max();
 
    return (v_max + log(sum(exp(v - v_max))));
@@ -31,14 +31,14 @@ double logSumExp_arma(const arma::vec &v){
 // Computes log( \sum_i( exp(v[i] )) ) - log(n) in a stable way.
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-double logSumExpMean_arma(const arma::vec &v){
-   return (logSumExp_arma(v) - log(v.n_elem));
+double logSumExpMean_C(const arma::vec &v){
+   return (logSumExp_C(v) - log(v.n_elem));
 }
 
 // Computes log( \cumsum_i( exp(v[i] )) ) in a stable way.
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-arma::vec logCumsumExp_arma(const arma::vec &v){
+arma::vec logCumsumExp_C(const arma::vec &v){
    double v_max = v.max();
 
    return (v_max + log(cumsum(exp(v - v_max))));
@@ -47,8 +47,8 @@ arma::vec logCumsumExp_arma(const arma::vec &v){
 // Computes log( \cummean_i( exp(v[i] )) ) in a stable way.
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-arma::vec logCumsumExpmean_arma(const arma::vec &v){
-   return (logCumsumExp_arma(v) - log(v.n_elem));
+arma::vec logCumsumExpmean_C(const arma::vec &v){
+   return (logCumsumExp_C(v) - log(v.n_elem));
 }
 
 // Upper triangular matrix inversion
@@ -86,7 +86,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol){
 
 // Generate from multivariate normal
 // [[Rcpp::export]]
-arma::mat rmvnorm_arma(const unsigned int n,
+arma::mat rmvnorm_C(const unsigned int n,
                        const arma::colvec &mu,
                        const arma::mat &Cov,
                        const bool is_chol = false) {
@@ -105,7 +105,7 @@ arma::mat rmvnorm_arma(const unsigned int n,
 
 // Density of multivariate normal
 // [[Rcpp::export(rng = false)]]
-arma::vec dmvnorm_arma(const arma::mat &x,
+arma::vec dmvnorm_C(const arma::mat &x,
                        const arma::rowvec &mean,
                        const arma::mat &Cov,
                        const bool logd = false,
@@ -149,7 +149,7 @@ arma::vec dmvnorm_arma(const arma::mat &x,
 //'
 //' @template Wishart_eqn
 // [[Rcpp::export()]]
-arma::mat rwish_arma(const double v,
+arma::mat rwish_C(const double v,
    const arma::mat &S,
    const bool is_chol = false,
    const bool return_chol = false){
@@ -211,11 +211,11 @@ arma::mat rwish_arma(const double v,
 //'@param df degrees of freedom
 //'@param Sigma scale matrix
 //'@param logd if TRUE, return the log-density
-//'@param is.is_chol if TRUE, Sigma and X.inv are the Cholesky factors of Sigma and X.inv
+//'@param is_chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
 //'@export
 //'@template InverseWishart_Press
 // [[Rcpp::export(rng = false)]]
-double diwishart_inverse_arma(const arma::mat &X_inv,
+double diwishart_inverse_C(const arma::mat &X_inv,
                        const double &df,
                        const arma::mat &Sigma,
                        const bool logd = false,
@@ -355,9 +355,9 @@ Rcpp::List samesource_C_internal(
 
       if (USE_CHOLESKY){
          B_upd_g_chol = arma::chol(B_upd_g);
-         theta_g = rmvnorm_arma(1, mu_upd_g, B_upd_g_chol, true);
+         theta_g = rmvnorm_C(1, mu_upd_g, B_upd_g_chol, true);
       } else {
-         theta_g = rmvnorm_arma(1, mu_upd_g, B_upd_g, false);
+         theta_g = rmvnorm_C(1, mu_upd_g, B_upd_g, false);
       }
 
       U_upd_g = nr * (theta_g - bary).t() * (theta_g - bary) + U + S;
@@ -365,11 +365,11 @@ Rcpp::List samesource_C_internal(
       // Sample W from Inverted Wishart (nwstar, U_upd_g) = sample from Wishart (nwstar, solve(U_upd_g)), then invert
       if (USE_CHOLESKY){
          U_upd_g_chol = arma::chol(U_upd_g);
-         W_inv_g_chol = rwish_arma(nwstar, inv_Cholesky_from_Cholesky(U_upd_g_chol), true, true);
+         W_inv_g_chol = rwish_C(nwstar, inv_Cholesky_from_Cholesky(U_upd_g_chol), true, true);
       } else {
          // Using stats::rWishart (verified, same result!)
          // W_inv_g = Rcpp::as<arma::cube>(rWishart(1, nwstar, arma::inv_sympd(U_upd_g))).slice(0);
-         W_inv_g = rwish_arma(nwstar, arma::inv_sympd(U_upd_g), false, false);
+         W_inv_g = rwish_C(nwstar, arma::inv_sympd(U_upd_g), false, false);
       }
 
 
@@ -395,9 +395,9 @@ Rcpp::List samesource_C_internal(
       // Compute the likelihood
       // ... automatically
       if (USE_CHOLESKY){
-         logf = arma::sum(dmvnorm_arma(dati, theta_g, inv_Cholesky_from_Cholesky(W_inv_g_chol), true, true));
+         logf = arma::sum(dmvnorm_C(dati, theta_g, inv_Cholesky_from_Cholesky(W_inv_g_chol), true, true));
       } else {
-         logf = arma::sum(dmvnorm_arma(dati, theta_g, arma::inv_sympd(W_inv_g), true, false));
+         logf = arma::sum(dmvnorm_C(dati, theta_g, arma::inv_sympd(W_inv_g), true, false));
       }
 
       if (logf > logf_star){
@@ -444,11 +444,11 @@ Rcpp::List samesource_C_internal(
       }
 
       if (USE_CHOLESKY){
-         lpihat_theta_star = arma::as_scalar(dmvnorm_arma(theta_star, arma::conv_to< arma::rowvec >::from(mu_upd_g), B_upd_g_chol, true, true));
-         lpihat_W_star = diwishart_inverse_arma(W_inv_star_chol, nwstar, U_upd_g_chol, true, true);
+         lpihat_theta_star = arma::as_scalar(dmvnorm_C(theta_star, arma::conv_to< arma::rowvec >::from(mu_upd_g), B_upd_g_chol, true, true));
+         lpihat_W_star = diwishart_inverse_C(W_inv_star_chol, nwstar, U_upd_g_chol, true, true);
       } else {
-         lpihat_theta_star = arma::as_scalar(dmvnorm_arma(theta_star, arma::conv_to< arma::rowvec >::from(mu_upd_g), B_upd_g, true, false));
-         lpihat_W_star = diwishart_inverse_arma(W_inv_star, nwstar, U_upd_g, true, false);
+         lpihat_theta_star = arma::as_scalar(dmvnorm_C(theta_star, arma::conv_to< arma::rowvec >::from(mu_upd_g), B_upd_g, true, false));
+         lpihat_W_star = diwishart_inverse_C(W_inv_star, nwstar, U_upd_g, true, false);
       }
 
       // logsumexp: save the samples
@@ -464,8 +464,8 @@ Rcpp::List samesource_C_internal(
    // lpihat_theta_star = arma::sum(lpihat_theta_star_samples)/(n_iter - burn_in);
    // lpihat_W_star = arma::sum(lpihat_W_star_samples)/(n_iter - burn_in);
    // The correct log-means:
-   lpihat_theta_star = logSumExpMean_arma(lpihat_theta_star_samples.subvec(burn_in + 1, n_iter - 1));
-   lpihat_W_star = logSumExpMean_arma(lpihat_W_star_samples.subvec(burn_in + 1, n_iter - 1));
+   lpihat_theta_star = logSumExpMean_C(lpihat_theta_star_samples.subvec(burn_in + 1, n_iter - 1));
+   lpihat_W_star = logSumExpMean_C(lpihat_W_star_samples.subvec(burn_in + 1, n_iter - 1));
 
    // Joint posterior on \theta, W: independent parameters
    double lpihat_psi_star = lpihat_theta_star + lpihat_W_star;
@@ -488,16 +488,16 @@ Rcpp::List samesource_C_internal(
 
    double lpi_theta_star;
    if (USE_CHOLESKY) {
-      lpi_theta_star = arma::as_scalar(dmvnorm_arma(theta_star, arma::conv_to< arma::rowvec >::from(mu), arma::chol(B), true, true));
+      lpi_theta_star = arma::as_scalar(dmvnorm_C(theta_star, arma::conv_to< arma::rowvec >::from(mu), arma::chol(B), true, true));
    } else {
-      lpi_theta_star = arma::as_scalar(dmvnorm_arma(theta_star, arma::conv_to< arma::rowvec >::from(mu), B, true, false));
+      lpi_theta_star = arma::as_scalar(dmvnorm_C(theta_star, arma::conv_to< arma::rowvec >::from(mu), B, true, false));
    }
 
    double lpi_W_star;
    if (USE_CHOLESKY) {
-      lpi_W_star = diwishart_inverse_arma(W_inv_star_chol, nw, arma::chol(U), true, true);
+      lpi_W_star = diwishart_inverse_C(W_inv_star_chol, nw, arma::chol(U), true, true);
    } else {
-      lpi_W_star = diwishart_inverse_arma(W_inv_star, nw, U, true, false);
+      lpi_W_star = diwishart_inverse_C(W_inv_star, nw, U, true, false);
    }
    double lpi_psi_star = lpi_theta_star + lpi_W_star;
 
