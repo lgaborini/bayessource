@@ -4,7 +4,7 @@
 
 library(coda)
 
-#' Fast Bayesian same source hypothesis. Gaussian MV.
+#' Fast Bayesian marginal likelihood for the Gaussian MV model.
 #' Implemented in C (faster).
 #'
 #' @param dati the dataset
@@ -16,15 +16,15 @@ library(coda)
 #' @param mu prior mean
 #' @param burn.in burn-in iterations
 #' @param output.mcmc output the entire chain
-#' @param verbose if TRUE, also output all posterior samples
+#' @param verbose if TRUE, be verbose
 #'
-#' @return the LR value, or a list(LR value, posterior samples)
+#' @return a list with the log-marginal likelihood value, or a list(the value, posterior samples)
 #' @export
 #' @template gaussmv_model
 #'
-samesource_C <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
+marginalLikelihood_C <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
    # Wrap the C function
-   result <- samesource_C_internal(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
+   result <- marginalLikelihood_C_internal(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
 
    if (output.mcmc) {
 
@@ -46,4 +46,34 @@ samesource_C <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.
    } else {
       return(result$LR.num)
    }
+}
+
+
+
+#' Fast Bayesian same source hypothesis. Gaussian MV.
+#' Implemented in C (faster).
+#'
+#' @param quest the questioned dataset
+#' @param ref the reference dataset
+#' @param n.iter number of MC iterations
+#' @param B.inv prior inverse of between covariance matrix
+#' @param W.inv.1 prior inverse of within covariance matrix (questioned items)
+#' @param W.inv.2 prior inverse of within covariance matrix (reference items)
+#' @param U covariance matrix for the mean
+#' @param nw degrees of freedom
+#' @param mu prior mean
+#' @param burn.in burn-in iterations
+#' @param verbose if TRUE, be verbose
+#'
+#' @return the LR value
+#' @export
+#' @template gaussmv_model
+#'
+samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
+   # Wrap the C functions
+   LR.num <- marginalLikelihood_C_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.den.1 <- marginalLikelihood_C_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.den.2 <- marginalLikelihood_C_internal(ref, n.iter, B.inv, W.inv.2, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+
+   LR.num$LR.num - LR.den.1$LR.num - LR.den.2$LR.num
 }

@@ -1,11 +1,11 @@
-#' @section Multivariate Gaussian model:
+#' @section Normal-Inverse-Wishart model:
 #'
 #' Observation level:
-#' \deqn{X_{ij} \sim N(theta, W)}
+#' \deqn{X_{ij} ~ N(theta, W)} (i = items, j = variables)
 #'
 #' Group level:
-#' \deqn{theta \sim N(\mu, B)}
-#' \deqn{W \sim IW(nw, U)}
+#' \deqn{theta ~ N(\mu, B)}
+#' \deqn{W ~ IW(nw, U)}
 #'
 #' Hyperparameters:
 #' \eqn{B, U, nw, \mu}

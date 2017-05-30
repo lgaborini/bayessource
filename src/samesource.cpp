@@ -23,7 +23,7 @@ using namespace Rcpp;
 //' @template gaussmv_model
 //' @keywords internal
 // [[Rcpp::export]]
-Rcpp::List samesource_C_internal(
+Rcpp::List marginalLikelihood_C_internal(
       const arma::mat &dati,
       const unsigned int n_iter,
       const arma::mat &B_inv,
