@@ -24,7 +24,7 @@ const double pi = arma::datum::pi;
 //'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-double logSumExp_C(const arma::vec &v){
+double logSumExp(const arma::vec &v){
    double v_max = v.max();
 
    return (v_max + log(sum(exp(v - v_max))));
@@ -34,15 +34,15 @@ double logSumExp_C(const arma::vec &v){
 //'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-double logSumExpMean_C(const arma::vec &v){
-   return (logSumExp_C(v) - log(v.n_elem));
+double logSumExpMean(const arma::vec &v){
+   return (logSumExp(v) - log(v.n_elem));
 }
 
 //' Computes log( cumsum_i( exp(v[i]) ) ) in a stable way.
 //'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-arma::vec logCumsumExp_C(const arma::vec &v){
+arma::vec logCumsumExp(const arma::vec &v){
    double v_max = v.max();
 
    return (v_max + log(cumsum(exp(v - v_max))));
@@ -52,8 +52,8 @@ arma::vec logCumsumExp_C(const arma::vec &v){
 //'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
-arma::vec logCumsumExpmean_C(const arma::vec &v){
-   return (logCumsumExp_C(v) - log(v.n_elem));
+arma::vec logCummeanExp(const arma::vec &v){
+   return (logCumsumExp(v) - log(v.n_elem));
 }
 
 //' Upper triangular matrix inversion
@@ -104,7 +104,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol){
 //' @return a nxp matrix of samples
 //' @export
 // [[Rcpp::export]]
-arma::mat rmvnorm_C(const unsigned int n,
+arma::mat rmvnorm(const unsigned int n,
                        const arma::colvec &mu,
                        const arma::mat &Cov,
                        const bool is_chol = false) {
@@ -123,7 +123,7 @@ arma::mat rmvnorm_C(const unsigned int n,
 
 //' Multivariate normal density. Much faster, assumes symmetry.
 //'
-//' Faster than \code{\link{dmvnorm_fast}}. Implemented in C.
+//' Faster than \code{\link{dmvnorm_sym}}. Implemented in C.
 //'
 //' @param x the observation (nxp)
 //' @param mean mean vector (row vector, 1xp)
@@ -133,7 +133,7 @@ arma::mat rmvnorm_C(const unsigned int n,
 //' @return the density in x (nx1)
 //' @export
 // [[Rcpp::export(rng = false)]]
-arma::vec dmvnorm_C(const arma::mat &x,
+arma::vec dmvnorm(const arma::mat &x,
                        const arma::rowvec &mean,
                        const arma::mat &Cov,
                        const bool logd = false,
@@ -166,7 +166,7 @@ arma::vec dmvnorm_C(const arma::mat &x,
 
 //' Generate random sample from Wishart. (faster)
 //'
-//' Same code as \code{\link{rWishart}} function in package \code{\pkg{stats}}.
+//' Same code as \code{\link{rWishart}} function in package \pkg{stats}.
 //'
 //' @param v dof
 //' @param S the scale matrix (pxp)
@@ -177,7 +177,7 @@ arma::vec dmvnorm_C(const arma::mat &x,
 //'
 //' @template Wishart_eqn
 // [[Rcpp::export]]
-arma::mat rwish_C(const double v,
+arma::mat rwish(const double v,
    const arma::mat &S,
    const bool is_chol = false,
    const bool return_chol = false){
@@ -243,7 +243,7 @@ arma::mat rwish_C(const double v,
 //'@export
 //'@template InverseWishart_Press
 // [[Rcpp::export(rng = false)]]
-double diwishart_inverse_C(const arma::mat &X_inv,
+double diwishart_inverse(const arma::mat &X_inv,
                        const double &df,
                        const arma::mat &Sigma,
                        const bool logd = false,

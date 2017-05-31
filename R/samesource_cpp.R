@@ -18,19 +18,25 @@ library(coda)
 #' @param output.mcmc output the entire chain
 #' @param verbose if TRUE, be verbose
 #'
-#' @return a list with the log-marginal likelihood value, or a list(the value, posterior samples)
+#' @return the log-marginal likelihood value, or a list(the log-ml value, coda object with the posterior samples)
 #' @export
 #' @template gaussmv_model
 #'
-marginalLikelihood_C <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
+marginalLikelihood <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
+
    # Wrap the C function
-   result <- marginalLikelihood_C_internal(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
+   result <- marginalLikelihood_internal(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
 
    if (output.mcmc) {
+      # Build the coda object using the chain outputs
+      # Skip the burn-in samples
 
+      p <- ncol(dati)
+      # theta columns are named theta.1, ..., theta.p
       theta.mtx <- result$theta_gibbs
       colnames(theta.mtx) <- paste0('theta.', 1:p)
 
+      # samples from W^(-1)
       W.inv.mtx <- t(apply(result$W_inv_gibbs, 3, as.numeric))
       colnames(W.inv.mtx) <- paste0('W.inv.', 1:(p^2))
 
@@ -65,15 +71,15 @@ marginalLikelihood_C <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in,
 #' @param burn.in burn-in iterations
 #' @param verbose if TRUE, be verbose
 #'
-#' @return the LR value
+#' @return the log-LR value
 #' @export
 #' @template gaussmv_model
 #'
 samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
    # Wrap the C functions
-   LR.num <- marginalLikelihood_C_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
-   LR.den.1 <- marginalLikelihood_C_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
-   LR.den.2 <- marginalLikelihood_C_internal(ref, n.iter, B.inv, W.inv.2, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.num <- marginalLikelihood_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.den.1 <- marginalLikelihood_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.den.2 <- marginalLikelihood_internal(ref, n.iter, B.inv, W.inv.2, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
 
    LR.num$LR.num - LR.den.1$LR.num - LR.den.2$LR.num
 }
