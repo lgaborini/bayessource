@@ -10,15 +10,35 @@
 
 // Use Cholesky factorization when possible.
 // Matrices are propagated through their Cholesky factors.
-// #define USE_CHOLESKY false
-#define USE_CHOLESKY true
+#ifndef USE_CHOLESKY
+#define USE_CHOLESKY false
+// #define USE_CHOLESKY true
+#endif
 
 using namespace std;
 using namespace Rcpp;
 
+//' Check whether Cholesky speedup is used
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
+bool isCholeskyOn(){
+   return (USE_CHOLESKY);
+}
+
 
 //' Fast Bayesian same source hypothesis. Gaussian MV.
 //' To be called by the R wrapper.
+//'
+//' @param dati the dataset
+//' @param n_iter number of MC iterations
+//' @param B_inv prior inverse of between covariance matrix
+//' @param W_inv prior inverse of within covariance matrix
+//' @param U covariance matrix for the mean
+//' @param nw degrees of freedom
+//' @param mu prior mean
+//' @param burn_in burn-in iterations
+//' @param chain_output output the entire chain
+//' @param verbose if TRUE, be verbose
 //'
 //' @template gaussmv_model
 //' @keywords internal
@@ -302,7 +322,7 @@ Rcpp::List marginalLikelihood_internal(
    // ));
 
    // Return the full matrices for the chain instead of Cholesky factors
-   if (USE_CHOLESKY) {
+   if (USE_CHOLESKY && chain_output) {
       for (arma::uword i = 0; i < n_iter; ++i) {
          W_inv_gibbs.slice(i) = W_inv_gibbs.slice(i).t() * W_inv_gibbs.slice(i);
       }

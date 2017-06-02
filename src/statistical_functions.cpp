@@ -61,6 +61,7 @@ arma::vec logCummeanExp(const arma::vec &v){
 //' Quickly computes the inverse of a upper triangular matrix (e.g. a Cholesky factor).
 //'
 //' Equivalent R code:
+//'
 //' \code{X.chol.inv <- backsolve(r = X.chol, x = diag(p))}
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
@@ -77,7 +78,10 @@ arma::mat chol2inv(const arma::mat &U_chol){
    return solve(arma::trimatu(U_chol), X);
 }
 
-//' Cholesky factor of inverse from Cholesky factor
+//' Upper Cholesky factor of inverse from upper Cholesky factor
+//'
+//' If \eqn{A = U' U}, compute \eqn{V} where \eqn{A^{(-1)} = V' V} 
+//'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 arma::mat inv_Cholesky_from_Cholesky(const arma::mat &U){
@@ -85,6 +89,9 @@ arma::mat inv_Cholesky_from_Cholesky(const arma::mat &U){
 }
 
 //' log-determinant from Cholesky factor
+//'
+//' If \eqn{A = U' U}, compute log(det(A)) from U
+//'
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 double ldet_from_Cholesky(const arma::mat &T_chol){
@@ -95,7 +102,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol){
 
 //' Generate from multivariate normal
 //'
-//' Faster than rmvnorm (implemented in C).
+//' Faster than \pkg{mvtnorm}::\code{rmvnorm} (implemented in C).
 //'
 //' @param n amount of samples to generate from
 //' @param mu column vector for the mean
