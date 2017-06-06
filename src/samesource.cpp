@@ -116,6 +116,11 @@ Rcpp::List marginalLikelihood_internal(
 
    // Initialize Gibbs chain
    // chain over theta_g (mu_upd_g, B_upd_g), W_inv_g (U_upd_g)
+   // 
+   // We initialize W_inv_g from the hyperprior parameter W_inv
+   // B, mu are updated using the posterior formulae
+   // theta is sampled using its definition
+   // As a consequence, only W_inv_g is fully arbitrary
    W_inv_g = W_inv;
 
    if (verbose){
