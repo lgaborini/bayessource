@@ -1,0 +1,144 @@
+---
+title: "Introduction"
+author: "Lorenzo Gaborini"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: vignette.bib
+---
+
+This vignette explains briefly how to use this package.
+
+```{r, include = FALSE}
+library(bayessource)
+knitr::opts_chunk$set(fig.datapi = 96)
+```
+
+## Package goal
+
+The package has been conceived to evaluate whether two sets of items (a reference set and a questioned set) belong to the same population or not.
+Each item is described with a vector of measurements.
+
+The evaluation is performed using Bayesian statistics, particularly Gibbs sampling.
+Particular care has been given in order to obtain performing functions: the main core has been written using `Rcpp`.
+
+For theoretical details, see [@Bozza2008Probabilistic].
+
+## Package contents
+
+# Usage
+
+This section describes the usage on some made-up data.
+
+## Sample data
+
+We create some dummy data, taken from two bivariate Gaussian distributions with known means and covariances.
+Covariance matrices are generated using the bundled `rwish` function, to obtain invertible matrices with ease.
+
+```{r, results = FALSE}
+set.seed(123)
+
+p <- 2
+mean.quest <- c(0, 0)
+mean.ref <- c(3, 2)
+cov.quest <- rwish(3, diag(2))
+cov.ref <- rwish(5, diag(2))
+n.quest <- 20
+n.ref <- 20
+
+df.quest <- data.frame(rmvnorm(n.quest, mean.quest, cov.quest))
+df.ref <- data.frame(rmvnorm(n.ref, mean.ref, cov.ref))
+```
+
+Here are the datasets:
+```{r}
+
+library(ggplot2)
+ggplot() + 
+   geom_point(aes(x = X1, y = X2), col = 'red', data = df.quest) +
+   geom_point(aes(x = X1, y = X2), col = 'blue', data = df.ref)
+```
+
+It is clear that the two samples come from different populations, hence we expect a low likelihood-ratio value.
+
+## Model and prior specification
+
+The package implements a two-sample Bayesian Hierarchical model with Gaussian multivariate likelihoods, and Inverse-Wishart prior on the covariance matrices.   
+The theoretical details are specified in [@Bozza2008Probabilistic]. 
+
+Let us recall the model definition.
+We note with $X_{ij}$ the $j$-th sample from the $i$-th population, $i = 1,2$.
+The two populations are Gaussians, with means $\theta_i$, and covariances $W_i$.
+$$
+X_{ij} \; | \; \theta_i, \; W_i \sim \quad N(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
+$$\theta_i \; | \; \mu, B \sim \quad N(\mu, B)$$
+$$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
+
+As the model is Bayesian, we are required to specify the hyperparameters $\mu, B, U, n_w$, as well as the Gibbs chain initialization $W_i$.   
+Notice that inference is propagated by supplying the inverses of covariance matrices, i.e. $B^{-1}$ and $W_i^{-1}$.
+
+```{r}
+eps <- 0.001
+B.inv <- eps*diag(p)
+W.inv.1 <- eps*diag(p)
+W.inv.2 <- eps*diag(p)
+U <- eps*diag(p)
+nw <- n.quest
+mu <- (mean.quest + mean.ref)/2
+```
+
+## Log-LR computation
+
+Once the parameters are specified, we can compute the marginal likelihood (not particularly useful):
+
+```{r collapse=TRUE}
+burn.in = 1000
+n.iter = 10000
+marginalLikelihood(as.matrix(df.quest), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, verbose = FALSE)
+```
+
+and the log-LR value:
+```{r collapse=TRUE}
+samesource_C(as.matrix(df.quest), as.matrix(df.ref), n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE)
+```
+
+
+# Diagnostics
+
+The package supports the output of the entire chain for $\theta_i$ and $W^{-1}_i$ (i.e., the inverses of $W_i$).   
+At the time, this is possible only during the computation of a single marginal likelihood, in this case the one related to the sample from the questioned population.
+```{r}
+results <- marginalLikelihood(as.matrix(df.quest), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, output.mcmc = TRUE)
+```
+Notice that `results` now is a `list`, where `results$LR.num` holds the marginal likelihood value, and `results$mcmc` is the `coda` object which holds the chain output.
+
+```{r collapse=TRUE}
+head(results$mcmc, 4)
+```
+
+Remember that R is column-major: `W.inv.1` is $W^{-1}_1(1,1)$, `W.inv.2` is $W^{-1}_1(2,1)$ and so on.   
+Using standard `coda` tools, we can perform diagnostics, such as summaries:
+
+```{r}
+library(coda)
+summary(results$mcmc)
+```
+
+and traceplots:
+
+```{r fig.height=3}
+traceplot(results$mcmc)
+```
+
+We can recover the original matrices by reshaping the desired columns (e.g. for `W.inv`) into a matrix/3D array:
+```{r, collapse=TRUE}
+n.samples <- nrow(results$mcmc)
+W.inv.samples <- results$mcmc[, paste0('W.inv.', seq(1:(p^2)))]
+head(W.inv.samples, 5)
+W.inv.samples.cube <- array(W.inv.samples, dim = c(n.samples, p, p))
+dim(W.inv.samples.cube)
+```
+
