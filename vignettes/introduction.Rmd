@@ -47,7 +47,7 @@ mean.ref <- c(3, 2)
 cov.quest <- rwish(3, diag(2))
 cov.ref <- rwish(5, diag(2))
 n.quest <- 20
-n.ref <- 20
+n.ref <- n.quest
 
 df.quest <- data.frame(rmvnorm(n.quest, mean.quest, cov.quest))
 df.ref <- data.frame(rmvnorm(n.ref, mean.ref, cov.ref))
@@ -77,6 +77,8 @@ X_{ij} \; | \; \theta_i, \; W_i \sim \quad N(\theta_i, W_i) \quad \forall j = 1,
 $$\theta_i \; | \; \mu, B \sim \quad N(\mu, B)$$
 $$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
 
+where $n_w > 2p$, and $U$ is s.t. $$ E[W_i] = \frac{U}{n_w - 2(p + 1)} $$ (parametrization according to [@Press2012Applied]).
+
 As the model is Bayesian, we are required to specify the hyperparameters $\mu, B, U, n_w$, as well as the Gibbs chain initialization $W_i$.   
 Notice that inference is propagated by supplying the inverses of covariance matrices, i.e. $B^{-1}$ and $W_i^{-1}$.
 
@@ -86,7 +88,7 @@ B.inv <- eps*diag(p)
 W.inv.1 <- eps*diag(p)
 W.inv.2 <- eps*diag(p)
 U <- eps*diag(p)
-nw <- n.quest
+nw <- 2*p + 1
 mu <- (mean.quest + mean.ref)/2
 ```
 
@@ -103,6 +105,11 @@ marginalLikelihood(as.matrix(df.quest), n.iter, B.inv, W.inv.1, U, nw, mu, burn.
 and the log-LR value:
 ```{r collapse=TRUE}
 samesource_C(as.matrix(df.quest), as.matrix(df.ref), n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE)
+```
+
+Notice how low it is compared to a subset of original data:
+```{r collapse=TRUE}
+samesource_C(as.matrix(df.ref)[1:20,], as.matrix(df.ref), n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE)
 ```
 
 
@@ -142,3 +149,4 @@ W.inv.samples.cube <- array(W.inv.samples, dim = c(n.samples, p, p))
 dim(W.inv.samples.cube)
 ```
 
+## References
