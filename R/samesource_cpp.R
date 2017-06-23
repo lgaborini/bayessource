@@ -4,8 +4,9 @@
 
 library(coda)
 
-#' Fast Bayesian marginal likelihood for the Gaussian MV model.
-#' Implemented in C (faster).
+#' Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.
+#'
+#' Implemented in C.
 #'
 #' @param dati the dataset
 #' @param n.iter number of MC iterations
@@ -56,8 +57,9 @@ marginalLikelihood <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, o
 
 
 
-#' Fast Bayesian same source hypothesis. Gaussian MV.
-#' Implemented in C (faster).
+#' Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.
+#'
+#' Implemented in C.
 #'
 #' @param quest the questioned dataset
 #' @param ref the reference dataset
