@@ -1,4 +1,4 @@
-#' @section Parametrization:
+#' @section Wishart parametrization:
 #' 
 #' Uses Press/Anderson[1,2] parametrization.
 #' 

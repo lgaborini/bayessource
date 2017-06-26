@@ -7,6 +7,7 @@ library(coda)
 #' Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.
 #'
 #' Implemented in C.
+#' See \code{diwishart_inverse} for the parametrization of the Inverted Wishart.
 #'
 #' @param dati the dataset
 #' @param n.iter number of MC iterations
@@ -22,6 +23,7 @@ library(coda)
 #' @return the log-marginal likelihood value, or a list(the log-ml value, coda object with the posterior samples)
 #' @export
 #' @template gaussmv_model
+#' @template InverseWishart_Press
 #'
 marginalLikelihood <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
 
@@ -60,6 +62,7 @@ marginalLikelihood <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, o
 #' Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.
 #'
 #' Implemented in C.
+#' See \code{diwishart_inverse} for the parametrization of the Inverted Wishart.
 #'
 #' @param quest the questioned dataset
 #' @param ref the reference dataset
@@ -76,6 +79,7 @@ marginalLikelihood <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, o
 #' @return the log-LR value
 #' @export
 #' @template gaussmv_model
+#' @template InverseWishart_Press
 #'
 samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
    # Wrap the C functions

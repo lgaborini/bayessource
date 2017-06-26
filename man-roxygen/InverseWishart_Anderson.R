@@ -1,4 +1,4 @@
-#' @section Parametrization:
+#' @section Inverted Wishart parametrization (Anderson):
 #' 
 #' Uses Anderson[1] parametrization.
 #' 

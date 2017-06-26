@@ -1,4 +1,4 @@
-#' @section Parametrization:
+#' @section Inverted Wishart parametrization (Press):
 #' 
 #' Uses Press[1] parametrization.
 #' 
