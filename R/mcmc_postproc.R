@@ -3,7 +3,7 @@
 
 library(coda)
 
-#' Post-process Gibbs chain outputs
+#' Post-process Gibbs chain outputs.
 #'
 #' Extract and reshape MCMC samples from the posteriors for $\theta$ and W
 #' .

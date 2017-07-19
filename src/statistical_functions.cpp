@@ -100,7 +100,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol){
 
 // -------- Statistical functions -----------
 
-//' Generate from multivariate normal
+//' Generate from multivariate normal.
 //'
 //' Faster than \pkg{mvtnorm}::\code{rmvnorm} (implemented in C).
 //'
@@ -171,7 +171,7 @@ arma::vec dmvnorm(const arma::mat &x,
    return(out);
 }
 
-//' Generate random sample from Wishart. (faster)
+//' Generate random sample from Wishart (faster).
 //'
 //' Same code as \code{\link{rWishart}} function in package \pkg{stats}.
 //'
@@ -235,7 +235,7 @@ arma::mat rwish(const double v,
 
 
 
-//' Inverted Wishart density from the inverse (faster)
+//' Inverted Wishart density from the inverse (faster).
 //'
 //' Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
 //' Avoids a matrix inversion.

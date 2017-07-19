@@ -1,5 +1,5 @@
 
-#' Inverted Wishart density from the inverse
+#' Inverted Wishart density from the inverse.
 #'
 #' Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
 #' Avoids a matrix inversion.
