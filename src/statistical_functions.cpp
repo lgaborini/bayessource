@@ -242,13 +242,14 @@ arma::mat rwish(const double v,
 //'
 //' Computes the pdf p_X(x) by knowing x^(-1)
 //'
-//'@param X_inv inverse of X (the observation)
-//'@param df degrees of freedom
-//'@param Sigma scale matrix
-//'@param logd if TRUE, return the log-density
-//'@param is_chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
-//'@export
-//'@template InverseWishart_Press
+//' @param X_inv inverse of X (the observation)
+//' @param df degrees of freedom
+//' @param Sigma scale matrix
+//' @param logd if TRUE, return the log-density
+//' @param is_chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
+//' @export
+//' @template InverseWishart_Press
+//' @seealso \code{\link{diwishart}}, \code{\link{dwishart}}
 // [[Rcpp::export(rng = false)]]
 double diwishart_inverse(const arma::mat &X_inv,
                        const double &df,
