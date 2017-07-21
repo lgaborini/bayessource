@@ -9,7 +9,7 @@ library(coda)
 #' Implemented in C.
 #' See \code{diwishart_inverse} for the parametrization of the Inverted Wishart.
 #'
-#' @param dati the dataset
+#' @param X the dataset
 #' @param n.iter number of MC iterations
 #' @param B.inv prior inverse of between covariance matrix
 #' @param W.inv prior inverse of within covariance matrix
@@ -25,16 +25,16 @@ library(coda)
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #'
-marginalLikelihood <- function(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
+marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
 
    # Wrap the C function
-   result <- marginalLikelihood_internal(dati, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
+   result <- marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
 
    if (output.mcmc) {
       # Build the coda object using the chain outputs
       # Skip the burn-in samples
 
-      p <- ncol(dati)
+      p <- ncol(X)
       # theta columns are named theta.1, ..., theta.p
       theta.mtx <- result$theta_gibbs
       colnames(theta.mtx) <- paste0('theta.', 1:p)

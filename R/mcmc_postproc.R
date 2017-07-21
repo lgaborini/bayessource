@@ -5,7 +5,7 @@ library(coda)
 
 #' Post-process Gibbs chain outputs.
 #'
-#' Extract and reshape MCMC samples from the posteriors for $\theta$ and W
+#' Extract and reshape MCMC samples from the posteriors for theta and W
 #' .
 #' Can be used to post-process outputs from \code{\link{marginalLikelihood}} when \code{output.mcmc} is TRUE.
 #' Notice that it performs matrix inversions on every sample of W.
@@ -23,6 +23,7 @@ library(coda)
 mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
    stopifnot(is.mcmc(mcmc.output))
 
+   cummean <- function(x){ cumsum(x)/seq(length(x)) }
 
    n.samples <- nrow(mcmc.output)
    # Recover p from matrix output:
@@ -39,7 +40,7 @@ mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
 
    if (compute.ML) {
       list.out$W.samples.ML <- apply(W.samples.cube, c(2,3), mean)
-      list.out$theta.samples.ML <- as.matrix(colMeans(theta.samples))
+      list.out$theta.samples.ML <- as.vector(colMeans(theta.samples))
 
       if (cumulative) {
          list.out$W.samples.ML.cum <- apply(W.samples.cube, c(2,3), cummean)

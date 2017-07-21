@@ -12,6 +12,6 @@ LazyData: true
 Imports: Rcpp (>= 0.12.10), RcppArmadillo, matrixStats, MCMCpack, coda
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: testthat, knitr,
-    rmarkdown
+    rmarkdown, mvtnorm
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
