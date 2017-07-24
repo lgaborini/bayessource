@@ -11,11 +11,13 @@ library(bayessource)
 
 
 context('samesource.cpp (Rcpp): Gibbs sampler convergence')
+# skip('Not yet completed.')
 
-# Data ----------------------------------------------------------------------
 
 p <- 2
-seed <- round(runif(1, 1, 100))
+# seed <- round(runif(1, 1, 100))
+seed <- 1      # extreme sampling error!
+set.seed(seed)
 
 # Generate n random integers in {min, ..., max}
 randi <- function(n, min, max) { round(runif(n, min, max)) }
@@ -24,12 +26,6 @@ randinvmat <- function(p, M = 3, alpha = 1) {
    mat <- matrix(randi(p^2, -M, M), nrow = p, ncol = p)
    t(mat) %*% mat + diag(p) * alpha
 }
-
-theta.1 <- c(0,0)
-theta.2 <- c(1,1)
-Sigma.1 <- randinvmat(p)
-Sigma.2 <- randinvmat(p)
-
 
 # Inverted Wishart RNG ----------------------------------------------------
 
@@ -63,8 +59,8 @@ nw.exact <- 2*(p + 1) + 1
 # Middle hierarchical level
 theta.exact.1 <- mvtnorm::rmvnorm(1, mu.exact, B.exact)
 W.exact.1 <- riwish_Press(nw.exact, U.exact)
-theta.exact.1 <- c(0,0)
-W.exact.1 <- diag(p) + matrix(c(0, 0.2, 0.2, -0.1), nrow = p, ncol = p)
+# theta.exact.1 <- c(0,0)
+# W.exact.1 <- diag(p) + matrix(c(0, 0.2, 0.2, -0.1), nrow = p, ncol = p)
 
 # Hp: same source
 theta.exact.2 <- theta.exact.1
@@ -79,8 +75,9 @@ X <- as.matrix(df)
 
 # Run the Gibbs sampler ---------------------------------------------------------------
 
-n.iter <- 100000
 burn.in <- 1000
+n.iter <- 20000
+n.iter.full <- burn.in + n.iter
 
 # Oracle
 W.inv <- solve(W.exact.1)
@@ -90,32 +87,40 @@ mu <- mu.exact
 nw <- nw.exact
 
 # Fixed
-W.inv <- diag(p)
-U <- diag(p)
-B.inv <- diag(p)
+W.inv <- 0.01*diag(p)
+U <- 0.01*diag(p)
+B.inv <- 0.01*diag(p)
 mu <- c(0,0)
 nw <- 3
 
-results <- marginalLikelihood(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE)
+results <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = TRUE)
 postproc <- mcmc_postproc(results$mcmc, compute.ML = TRUE, cumulative = TRUE)
 
-
+# Subsample the posterior samples (to plot)
 theta.samples.mtx <- as.matrix(postproc$theta.samples)
-plot(theta.samples.mtx[,1], theta.samples.mtx[,2])
-points(theta.exact.1[1], theta.exact.1[2], col = 'red')
-points(postproc$theta.samples.ML[1], postproc$theta.samples.ML[2], col = 'blue')
+idx.rows <- seq(1, nrow(theta.samples.mtx), length.out = 10000)
 
+# Data sample mean: posterior mean should be close (if n is large enough)
+X.mean <- colMeans(X)
 
+# graphics.off()
+plot(theta.samples.mtx[idx.rows,1], theta.samples.mtx[idx.rows,2], pch = 16, cex = 0.3, col = '#7F7F7F') #,
+     # xlim = mu.exact[1] + c(-1,1) * 6, ylim = mu.exact[2] + c(-1,1) * 6)
+points(theta.exact.1[1], theta.exact.1[2], col = 'red', pch = 16, cex = 2)
+# points(postproc$theta.samples.ML.cum[1,1], postproc$theta.samples.ML.cum[1,2], col = 'black', pch = 16, cex = 2)
+lines(postproc$theta.samples.ML.cum[,1], postproc$theta.samples.ML.cum[,2], lwd = 2)
+points(postproc$theta.samples.ML[1], postproc$theta.samples.ML[2], col = 'blue', pch = 16, cex = 2)
 
 # Check accuracy for posterior mean ---------------------------------------
 
 
 # effectiveSize(postproc$theta.samples)
 
-theta.se <- effectiveSize(postproc$theta.samples)
+
+theta.se <- coda::batchSE(postproc$theta.samples)
 
 # Check if the real mean is contained into the confidence interval
-is.lower <- (theta.exact.1 < (postproc$theta.samples.ML + 2*theta.se))
-is.upper <- (theta.exact.1 > (postproc$theta.samples.ML - 2*theta.se))
+is.lower <- (X.mean[1] < (postproc$theta.samples.ML + 2*theta.se))
+is.upper <- (X.mean[2] > (postproc$theta.samples.ML - 2*theta.se))
 expect_true(all(is.lower), 'theta.ML is outside (greater than) the credibility interval.')
 expect_true(all(is.upper), 'theta.ML is outside (smaller than) the credibility interval.')
