@@ -2,8 +2,6 @@
 # Rcpp implementation wrapper
 #
 
-library(coda)
-
 #' Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.
 #'
 #' Implemented in C.
@@ -19,16 +17,17 @@ library(coda)
 #' @param burn.in burn-in iterations
 #' @param output.mcmc output the entire chain
 #' @param verbose if TRUE, be verbose
+#' @param Gibbs_only other parameters passed to \code{marginalLikelihood_internal}
 #'
 #' @return the log-marginal likelihood value, or a list(the log-ml value, coda object with the posterior samples)
 #' @export
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #'
-marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE) {
+marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE) {
 
    # Wrap the C function
-   result <- marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose)
+   result <- marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose, Gibbs_only = Gibbs_only)
 
    if (output.mcmc) {
       # Build the coda object using the chain outputs
@@ -50,7 +49,7 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
       return(
          list(
             LR.num = result$LR.num,
-            mcmc = mcmc(data = mcmc.data[(burn.in + 1):n.iter, ], start = (burn.in + 1), end = nrow(mcmc.data))
+            mcmc = coda::mcmc(data = mcmc.data[(burn.in + 1):n.iter, ], start = (burn.in + 1), end = nrow(mcmc.data))
       ))
    } else {
       return(result$LR.num)

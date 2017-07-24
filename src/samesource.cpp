@@ -29,7 +29,7 @@ bool isCholeskyOn(){
 //' Fast Bayesian same source hypothesis. Gaussian MV.
 //' To be called by the R wrapper.
 //'
-//' @param dati the dataset
+//' @param X the dataset
 //' @param n_iter number of MC iterations
 //' @param B_inv prior inverse of between covariance matrix
 //' @param W_inv prior inverse of within covariance matrix
@@ -39,12 +39,13 @@ bool isCholeskyOn(){
 //' @param burn_in burn-in iterations
 //' @param chain_output output the entire chain
 //' @param verbose if TRUE, be verbose
+//' @param Gibbs_only if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.
 //'
 //' @template gaussmv_model
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::List marginalLikelihood_internal(
-      const arma::mat &dati,
+      const arma::mat &X,
       const unsigned int n_iter,
       const arma::mat &B_inv,
       const arma::mat &W_inv,
@@ -53,12 +54,12 @@ Rcpp::List marginalLikelihood_internal(
       const arma::vec &mu,
       const unsigned int burn_in,
       const bool chain_output = false,
-      const bool verbose = false) {
+      const bool verbose = false,
+      const bool Gibbs_only = false){
 
    // Dimensions
-   unsigned int nr = dati.n_rows;
-   unsigned int p = dati.n_cols;
-
+   unsigned int nr = X.n_rows;
+   unsigned int p = X.n_cols;
 
    // GIBBS SAMPLER
 
@@ -107,16 +108,16 @@ Rcpp::List marginalLikelihood_internal(
    arma::mat W_inv_star_chol;
 
    // Compute non-normalized sample covariance
-   arma::rowvec bary = arma::mean(dati, 0);
+   arma::rowvec bary = arma::mean(X, 0);
    arma::mat S(p,p);
    S.zeros();
    for (arma::uword j = 0; j < nr; ++j){
-      S += (dati.row(j) - bary).t() * (dati.row(j) - bary);
+      S += (X.row(j) - bary).t() * (X.row(j) - bary);
    }
 
    // Initialize Gibbs chain
    // chain over theta_g (mu_upd_g, B_upd_g), W_inv_g (U_upd_g)
-   // 
+   //
    // We initialize W_inv_g from the hyperprior parameter W_inv
    // B, mu are updated using the posterior formulae
    // theta is sampled using its definition
@@ -143,6 +144,8 @@ Rcpp::List marginalLikelihood_internal(
          theta_g = rmvnorm(1, mu_upd_g, B_upd_g, false);
       }
 
+
+      // Cholesky: has no effect here
       U_upd_g = nr * (theta_g - bary).t() * (theta_g - bary) + U + S;
 
       // Sample W from Inverted Wishart (nwstar, U_upd_g) = sample from Wishart (nwstar, solve(U_upd_g)), then invert
@@ -178,9 +181,9 @@ Rcpp::List marginalLikelihood_internal(
       // Compute the likelihood
       // ... automatically
       if (USE_CHOLESKY){
-         logf = arma::sum(dmvnorm(dati, theta_g, inv_Cholesky_from_Cholesky(W_inv_g_chol), true, true));
+         logf = arma::sum(dmvnorm(X, theta_g, inv_Cholesky_from_Cholesky(W_inv_g_chol), true, true));
       } else {
-         logf = arma::sum(dmvnorm(dati, theta_g, arma::inv_sympd(W_inv_g), true, false));
+         logf = arma::sum(dmvnorm(X, theta_g, arma::inv_sympd(W_inv_g), true, false));
       }
 
       if (logf > logf_star){
@@ -204,6 +207,20 @@ Rcpp::List marginalLikelihood_internal(
 
    if (verbose){
       Rcout << "Maximum likelihood converged to (\\theta^*, \\W^*): logf = " << logf << endl;
+   }
+
+   if (Gibbs_only){
+      if (USE_CHOLESKY){
+         for (arma::uword i = 0; i < n_iter; ++i) {
+            W_inv_gibbs.slice(i) = W_inv_gibbs.slice(i).t() * W_inv_gibbs.slice(i);
+         }
+      }
+
+      return(List::create(
+            _["LR.num"] = NumericVector::create(NA_REAL),
+            _["W_inv_gibbs"] = W_inv_gibbs,
+            _["theta_gibbs"] = theta_gibbs
+      ));
    }
 
    // Estimate the posterior ordinates ================
@@ -353,5 +370,4 @@ Rcpp::List marginalLikelihood_internal(
 /*** R
 # Run the unit test for this script
 # testthat::test_file('test_samesource_cpp.R')
-
 */
