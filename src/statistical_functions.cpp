@@ -260,6 +260,10 @@ double diwishart_inverse(const arma::mat &X_inv,
    unsigned int p = Sigma.n_cols;
    double out;
 
+   if (df <= 2*(p + 1)) {
+      Rcpp::stop("Error: Inverted Wishart is degenerate (%u df, dimension %u).", df, p);
+   }
+
    // Constants
    arma::vec vp = arma::linspace<arma::vec>(1, p, p);
    double lc0 = -(df - p - 1.) * p/2. * log(2.) - p*(p - 1.)/4. * log(pi) - arma::sum(arma::lgamma((df - p - vp)/2.));

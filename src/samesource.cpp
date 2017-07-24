@@ -8,6 +8,14 @@
 // Enable C++11 via this plugin (Rcpp 0.10.3 or later)
 //// [[Rcpp::plugins(cpp11)]]
 
+// try/catch block
+#ifndef BEGIN_RCPP
+#define BEGIN_RCPP
+#endif
+#ifndef END_RCPP
+#define END_RCPP
+#endif
+
 // Use Cholesky factorization when possible.
 // Matrices are propagated through their Cholesky factors.
 #ifndef USE_CHOLESKY
@@ -56,6 +64,9 @@ Rcpp::List marginalLikelihood_internal(
       const bool chain_output = false,
       const bool verbose = false,
       const bool Gibbs_only = false){
+
+   // try/catch block
+   BEGIN_RCPP
 
    // Dimensions
    unsigned int nr = X.n_rows;
@@ -206,7 +217,7 @@ Rcpp::List marginalLikelihood_internal(
    }
 
    if (verbose){
-      Rcout << "Maximum likelihood converged to (\\theta^*, \\W^*): logf = " << logf << endl;
+      Rcout << "Maximum likelihood converged to (\\theta^*, \\W^*): logf* = " << logf_star << endl;
    }
 
    if (Gibbs_only){
@@ -363,6 +374,8 @@ Rcpp::List marginalLikelihood_internal(
    }
 
 
+   // try/catch block
+   END_RCPP
 }
 
 
