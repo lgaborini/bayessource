@@ -221,6 +221,7 @@ Rcpp::List marginalLikelihood_internal(
    }
 
    if (Gibbs_only){
+      // Convert Cholesky to full
       if (USE_CHOLESKY){
          for (arma::uword i = 0; i < n_iter; ++i) {
             W_inv_gibbs.slice(i) = W_inv_gibbs.slice(i).t() * W_inv_gibbs.slice(i);

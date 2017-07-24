@@ -11,8 +11,7 @@ library(bayessource)
 
 
 context('samesource.cpp (Rcpp): Gibbs sampler convergence')
-# skip('Not yet completed.')
-
+skip('Skipped: not batch runnable')
 
 p <- 2
 # seed <- round(runif(1, 1, 100))
@@ -87,11 +86,11 @@ mu <- mu.exact
 nw <- nw.exact
 
 # Fixed
-W.inv <- 0.01*diag(p)
-U <- 0.01*diag(p)
-B.inv <- 0.01*diag(p)
-mu <- c(0,0)
-nw <- 3
+# W.inv <- 0.01*diag(p)
+# U <- 0.01*diag(p)
+# B.inv <- 0.01*diag(p)
+# mu <- c(0,0)
+# nw <- 2*(p + 1) + 1
 
 results <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = TRUE)
 postproc <- mcmc_postproc(results$mcmc, compute.ML = TRUE, cumulative = TRUE)
@@ -114,7 +113,7 @@ points(postproc$theta.samples.ML[1], postproc$theta.samples.ML[2], col = 'blue',
 # Check accuracy for posterior mean ---------------------------------------
 
 
-# effectiveSize(postproc$theta.samples)
+# coda::effectiveSize(postproc$theta.samples)
 
 
 theta.se <- coda::batchSE(postproc$theta.samples)
@@ -122,5 +121,11 @@ theta.se <- coda::batchSE(postproc$theta.samples)
 # Check if the real mean is contained into the confidence interval
 is.lower <- (X.mean[1] < (postproc$theta.samples.ML + 2*theta.se))
 is.upper <- (X.mean[2] > (postproc$theta.samples.ML - 2*theta.se))
-expect_true(all(is.lower), 'theta.ML is outside (greater than) the credibility interval.')
-expect_true(all(is.upper), 'theta.ML is outside (smaller than) the credibility interval.')
+# expect_true(all(is.lower), 'theta.ML is outside (greater than) the credibility interval.')
+# expect_true(all(is.upper), 'theta.ML is outside (smaller than) the credibility interval.')
+
+
+# Testing full output -----------------------------------------------------
+
+
+results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = FALSE)
