@@ -29,7 +29,7 @@ mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
    # Recover p from matrix output:
    # theta columns are named 'theta.1', 'theta.2', ..., 'theta.p'
    # count them
-   p <- length(grep('^theta\\.[0-9]+$', colnames(results$mcmc)))
+   p <- length(grep('^theta\\.[0-9]+$', colnames(mcmc.output)))
 
    theta.samples <- mcmc.output[, paste0('theta.', seq(1:p))]
    W.inv.samples <- mcmc.output[, paste0('W.inv.', seq(1:(p^2)))]
