@@ -88,7 +88,7 @@ B.inv <- eps*diag(p)
 W.inv.1 <- eps*diag(p)
 W.inv.2 <- eps*diag(p)
 U <- eps*diag(p)
-nw <- 2*p + 1
+nw <- 2*(p + 1) + 1
 mu <- (mean.quest + mean.ref)/2
 ```
 
