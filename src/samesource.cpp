@@ -1,41 +1,13 @@
-#include <limits>
-
-// [[Rcpp::depends("RcppArmadillo")]]
-#include <RcppArmadillo.h>
-
+#include "config.h"
 #include "statistical_functions.h"
+#include "samesource.h"
 
-// Enable C++11 via this plugin (Rcpp 0.10.3 or later)
-//// [[Rcpp::plugins(cpp11)]]
 
-// Enable OpenMP
-//[[Rcpp::plugins(openmp)]]
-#include <omp.h>
 
-// try/catch block
-#ifndef BEGIN_RCPP
-#define BEGIN_RCPP
-#endif
-#ifndef END_RCPP
-#define END_RCPP
-#endif
-
-// Use Cholesky factorization when possible.
-// Matrices are propagated through their Cholesky factors.
-#ifndef USE_CHOLESKY
-#define USE_CHOLESKY false
-// #define USE_CHOLESKY true
-#endif
 
 using namespace std;
 using namespace Rcpp;
 
-//' Check whether Cholesky speedup is used
-//' @keywords internal
-// [[Rcpp::export(rng = false)]]
-bool isCholeskyOn(){
-   return (USE_CHOLESKY);
-}
 
 
 //' Fast Bayesian same source hypothesis. Gaussian MV.
@@ -70,6 +42,7 @@ Rcpp::List marginalLikelihood_internal(
       const bool verbose = false,
       const bool Gibbs_only = false,
       const unsigned int n_cores = 1){
+
 
    // try/catch block
    BEGIN_RCPP
@@ -387,6 +360,8 @@ Rcpp::List marginalLikelihood_internal(
       return(List::create(_["LR.num"] = lmhatHp_num));
    }
 
+
+   return(List::create(_["LR.num"] = 1));
 
    // try/catch block
    END_RCPP
