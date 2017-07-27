@@ -11,7 +11,7 @@ library(bayessource)
 
 
 context('samesource.cpp (Rcpp): Gibbs sampler convergence')
-skip('Skipped: not batch runnable')
+# skip('Skipped: not batch runnable')
 
 p <- 2
 # seed <- round(runif(1, 1, 100))
@@ -127,5 +127,19 @@ is.upper <- (X.mean[2] > (postproc$theta.samples.ML - 2*theta.se))
 
 # Testing full output -----------------------------------------------------
 
+verbose <- FALSE
+verbose <- TRUE
+n_cores <- 1
+results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores)
+results.full$LR.num
+results.full$LR.num
 
-results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = FALSE)
+
+# Testing full output w/ OpenMP -------------------------------------------
+library(microbenchmark)
+
+verbose <- FALSE
+n.times <- 10
+f <- function(n.cores) { marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores) }
+tmp <- microbenchmark(f(1), f(2), times = n.times)
+plot(tmp)

@@ -8,6 +8,10 @@
 // Enable C++11 via this plugin (Rcpp 0.10.3 or later)
 //// [[Rcpp::plugins(cpp11)]]
 
+// Enable OpenMP
+//[[Rcpp::plugins(openmp)]]
+#include <omp.h>
+
 // try/catch block
 #ifndef BEGIN_RCPP
 #define BEGIN_RCPP
@@ -48,6 +52,7 @@ bool isCholeskyOn(){
 //' @param chain_output output the entire chain
 //' @param verbose if TRUE, be verbose
 //' @param Gibbs_only if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.
+//' @param n_cores if > 1, use OpenMP on the specified amount of cores (experimental).
 //'
 //' @template gaussmv_model
 //' @keywords internal
@@ -63,7 +68,8 @@ Rcpp::List marginalLikelihood_internal(
       const unsigned int burn_in,
       const bool chain_output = false,
       const bool verbose = false,
-      const bool Gibbs_only = false){
+      const bool Gibbs_only = false,
+      const unsigned int n_cores = 1){
 
    // try/catch block
    BEGIN_RCPP
@@ -117,6 +123,12 @@ Rcpp::List marginalLikelihood_internal(
    arma::mat W_inv_star;
    // The Cholesky factor
    arma::mat W_inv_star_chol;
+
+   // OpenMP
+   omp_set_num_threads(n_cores);
+   if (verbose){
+      Rcout << "Using OpenMP with " << n_cores << " threads." << endl;
+   }
 
    // Compute non-normalized sample covariance
    arma::rowvec bary = arma::mean(X, 0);
@@ -242,6 +254,7 @@ Rcpp::List marginalLikelihood_internal(
    double lpihat_theta_star;
    double lpihat_W_star;
 
+   #pragma omp parallel for schedule(static) private(lpihat_theta_star, lpihat_W_star)
    for (unsigned int i = burn_in + 1; i < n_iter; ++i){
 
       // Load posterior hyperparameters from Gibbs chain
