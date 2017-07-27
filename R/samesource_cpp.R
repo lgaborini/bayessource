@@ -6,21 +6,20 @@
 #'
 #' Implemented in C.
 #' See \code{diwishart_inverse} for the parametrization of the Inverted Wishart.
+#' See \code{marginalLikelihood_internal} for further documentation.
 #'
 #' @param X the dataset
 #' @param n.iter number of MC iterations
 #' @param B.inv prior inverse of between covariance matrix
 #' @param W.inv prior inverse of within covariance matrix
-#' @param U covariance matrix for the mean
-#' @param nw degrees of freedom
-#' @param mu prior mean
 #' @param burn.in burn-in iterations
 #' @param output.mcmc output the entire chain
 #' @param verbose if TRUE, be verbose
-#' @param Gibbs_only other parameters passed to \code{marginalLikelihood_internal}
+#' @inheritParams marginalLikelihood_internal
 #'
 #' @return the log-marginal likelihood value, or a list(the log-ml value, coda object with the posterior samples)
 #' @export
+#' @seealso marginalLikelihood_internal
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #'
@@ -62,21 +61,17 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #'
 #' Implemented in C.
 #' See \code{diwishart_inverse} for the parametrization of the Inverted Wishart.
+#' See \code{marginalLikelihood_internal} for further documentation.
 #'
 #' @param quest the questioned dataset
 #' @param ref the reference dataset
-#' @param n.iter number of MC iterations
-#' @param B.inv prior inverse of between covariance matrix
 #' @param W.inv.1 prior inverse of within covariance matrix (questioned items)
 #' @param W.inv.2 prior inverse of within covariance matrix (reference items)
-#' @param U covariance matrix for the mean
-#' @param nw degrees of freedom
-#' @param mu prior mean
-#' @param burn.in burn-in iterations
-#' @param verbose if TRUE, be verbose
+#' @inheritParams marginalLikelihood
 #'
 #' @return the log-LR value
 #' @export
+#' @seealso marginalLikelihood, marginalLikelihood_internal
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #'
