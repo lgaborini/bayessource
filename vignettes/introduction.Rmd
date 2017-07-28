@@ -120,7 +120,7 @@ At the time, this is possible only during the computation of a single marginal l
 ```{r}
 results <- marginalLikelihood(as.matrix(df.quest), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, output.mcmc = TRUE)
 ```
-Notice that `results` now is a `list`, where `results$LR.num` holds the marginal likelihood value, and `results$mcmc` is the `coda` object which holds the chain output.
+Notice that `results` now is a `list`, where `results$value` holds the marginal likelihood value, and `results$mcmc` is the `coda` object which holds the chain output.
 
 ```{r collapse=TRUE}
 head(results$mcmc, 4)

@@ -214,7 +214,7 @@ Rcpp::List marginalLikelihood_internal(
       }
 
       return(List::create(
-            _["LR.num"] = NumericVector::create(NA_REAL),
+            _["value"] = NumericVector::create(NA_REAL),
             _["W_inv_gibbs"] = W_inv_gibbs,
             _["theta_gibbs"] = theta_gibbs
       ));
@@ -352,16 +352,16 @@ Rcpp::List marginalLikelihood_internal(
 
    if (chain_output) {
       return(List::create(
-            _["LR.num"] = lmhatHp_num,
+            _["value"] = lmhatHp_num,
             _["W_inv_gibbs"] = W_inv_gibbs,
             _["theta_gibbs"] = theta_gibbs
       ));
    } else {
-      return(List::create(_["LR.num"] = lmhatHp_num));
+      return(List::create(_["value"] = lmhatHp_num));
    }
 
 
-   return(List::create(_["LR.num"] = 1));
+   return(List::create(_["value"] = 1));
 
    // try/catch block
    END_RCPP

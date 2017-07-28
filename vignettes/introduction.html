@@ -12,7 +12,7 @@
 
 <meta name="author" content="Lorenzo Gaborini" />
 
-<meta name="date" content="2017-07-26" />
+<meta name="date" content="2017-07-28" />
 
 <title>Introduction</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction</h1>
 <h4 class="author"><em>Lorenzo Gaborini</em></h4>
-<h4 class="date"><em>2017-07-26</em></h4>
+<h4 class="date"><em>2017-07-28</em></h4>
 
 
 
@@ -147,7 +147,7 @@ n.iter =<span class="st"> </span><span class="dv">10000</span>
 <p>The package supports the output of the entire chain for <span class="math inline">\(\theta_i\)</span> and <span class="math inline">\(W^{-1}_i\)</span> (i.e., the inverses of <span class="math inline">\(W_i\)</span>).<br />
 At the time, this is possible only during the computation of a single marginal likelihood, in this case the one related to the sample from the questioned population.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw">marginalLikelihood</span>(<span class="kw">as.matrix</span>(df.quest), n.iter, B.inv, W.inv.<span class="dv">1</span>, U, nw, mu, burn.in, <span class="dt">output.mcmc =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>Notice that <code>results</code> now is a <code>list</code>, where <code>results$LR.num</code> holds the marginal likelihood value, and <code>results$mcmc</code> is the <code>coda</code> object which holds the chain output.</p>
+<p>Notice that <code>results</code> now is a <code>list</code>, where <code>results$value</code> holds the marginal likelihood value, and <code>results$mcmc</code> is the <code>coda</code> object which holds the chain output.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(results<span class="op">$</span>mcmc, <span class="dv">4</span>)
 ## Markov Chain Monte Carlo (MCMC) output:
 ## Start = 1001 

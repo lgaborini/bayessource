@@ -131,9 +131,9 @@ verbose <- FALSE
 verbose <- TRUE
 n_cores <- 1
 results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores)
-results.full$LR.num
+results.full$value
 results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = FALSE, n_cores = n_cores)
-results.full$LR.num
+results.full$value
 
 
 # Testing full output w/ OpenMP -------------------------------------------

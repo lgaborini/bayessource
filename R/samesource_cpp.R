@@ -26,7 +26,7 @@
 marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE, n_cores = 1) {
 
    # Wrap the C function
-   result <- marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose, Gibbs_only = Gibbs_only, n_cores = n_cores)
+   result <- bayessource:::marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose, Gibbs_only = Gibbs_only, n_cores = n_cores)
 
    if (output.mcmc) {
       # Build the coda object using the chain outputs
@@ -47,11 +47,11 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 
       return(
          list(
-            LR.num = result$LR.num,
+            value = result$value,
             mcmc = coda::mcmc(data = mcmc.data[(burn.in + 1):n.iter, ], start = (burn.in + 1), end = nrow(mcmc.data))
       ))
    } else {
-      return(result$LR.num)
+      return(result$value)
    }
 }
 
@@ -81,5 +81,5 @@ samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
    LR.den.1 <- marginalLikelihood_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose, n_cores = n_cores)
    LR.den.2 <- marginalLikelihood_internal(ref, n.iter, B.inv, W.inv.2, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose, n_cores = n_cores)
 
-   LR.num$LR.num - LR.den.1$LR.num - LR.den.2$LR.num
+   LR.num$value - LR.den.1$value - LR.den.2$value
 }
