@@ -130,10 +130,16 @@ is.upper <- (X.mean[2] > (postproc$theta.samples.ML - 2*theta.se))
 verbose <- FALSE
 verbose <- TRUE
 n_cores <- 1
+set.seed(1)
+mlik.target <- -1457.40472756     # digits = 12
 results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores)
 results.full$value
+expect_equal(results.full$value, mlik.target)
+
+mlik.target <- -1457.41174677
 results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = FALSE, n_cores = n_cores)
 results.full$value
+expect_equal(results.full$value, mlik.target)
 
 
 # Testing full output w/ OpenMP -------------------------------------------
