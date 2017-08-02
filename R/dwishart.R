@@ -1,7 +1,7 @@
 
 #' Wishart density.
 #'
-#' \eqn{X \sim W(df, Sigma)}
+#' Density of X ~ Wishart(df, Sigma).
 #'
 #' @param X the observation
 #' @param df degrees of freedom

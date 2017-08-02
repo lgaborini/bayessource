@@ -2,17 +2,18 @@ Package: bayessource
 Type: Package
 Title: Bayesian approach to evaluate whether two datasets come from the same population
 Version: 0.2.2
-Author: Lorenzo Gaborini
-Maintainer: Lorenzo Gaborini <lorenzo.gaborini@unil.ch>
+Authors@R: c(person("Lorenzo", "Gaborini", role = c("aut", "cre"),
+                     email = "lorenzo.gaborini@unil.ch"),
+              person("Silvia", "Bozza", role = c("ctb", "cph")))
 Description: 
     Bayesian approach to evaluate whether two datasets come from the same population.
     Currently implements a Gibbs sampler for the Multivariate Normal - Inverse Wishart model.
-License: What license is it under?
+License: Proprietary
 Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 0.12.10), RcppArmadillo, matrixStats, MCMCpack, coda
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: testthat, knitr,
-    rmarkdown, mvtnorm, microbenchmark
+    rmarkdown, mvtnorm, microbenchmark, ggplot2
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

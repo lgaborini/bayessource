@@ -87,9 +87,9 @@ arma::mat rmvnorm(const unsigned int n,
                        const arma::mat &Cov,
                        const bool is_chol = false);
 
-//' Multivariate normal density. Much faster, assumes symmetry.
+//' Multivariate normal density. Assumes symmetry.
 //'
-//' Faster than \code{\link{dmvnorm_sym}}. Implemented in C.
+//' Faster than \code{\link[mvtnorm]{dmvnorm}}. Implemented in C.
 //'
 //' @param x the observation (nxp)
 //' @param mean mean vector (row vector, 1xp)
@@ -107,7 +107,7 @@ arma::vec dmvnorm(const arma::mat &x,
 
 //' Generate random sample from Wishart (faster).
 //'
-//' Same code as \code{\link{rWishart}} function in package \pkg{stats}.
+//' Same code as \code{\link[stats]{rWishart}} function in package \pkg{stats}.
 //'
 //' @param v dof
 //' @param S the scale matrix (pxp)

@@ -1,8 +1,6 @@
 #
 # Post-processing utilities
 
-library(coda)
-
 #' Post-process Gibbs chain outputs.
 #'
 #' Extract and reshape MCMC samples from the posteriors for theta and W
@@ -21,7 +19,7 @@ library(coda)
 #' @export
 #'
 mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
-   stopifnot(is.mcmc(mcmc.output))
+   stopifnot(coda::is.mcmc(mcmc.output))
 
    cummean <- function(x){ cumsum(x)/seq(length(x)) }
 

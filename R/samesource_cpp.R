@@ -5,8 +5,8 @@
 #' Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.
 #'
 #' Implemented in C.
-#' See \code{diwishart_inverse} for the parametrization of the Inverted Wishart.
-#' See \code{marginalLikelihood_internal} for further documentation.
+#' See \code{\link{diwishart_inverse}} for the parametrization of the Inverted Wishart.
+#' See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 #'
 #' @param X the dataset
 #' @param n.iter number of MC iterations
@@ -60,8 +60,8 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.
 #'
 #' Implemented in C.
-#' See \code{diwishart_inverse} for the parametrization of the Inverted Wishart.
-#' See \code{marginalLikelihood_internal} for further documentation.
+#' See \code{\link{diwishart_inverse}} for the parametrization of the Inverted Wishart.
+#' See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 #'
 #' @param quest the questioned dataset
 #' @param ref the reference dataset
