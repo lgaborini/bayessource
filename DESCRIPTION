@@ -11,7 +11,7 @@ Description:
 License: Proprietary
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 0.12.10), RcppArmadillo, matrixStats, MCMCpack, coda
+Imports: Rcpp (>= 0.12.10), RcppArmadillo, matrixStats, MCMCpack, coda, magrittr
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: testthat, knitr,
     rmarkdown, mvtnorm, microbenchmark, ggplot2

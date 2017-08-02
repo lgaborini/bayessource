@@ -17,7 +17,7 @@
 #'
 #' @return a named list with multidimensional arrays for W, theta, and ML estimates
 #' @export
-#'
+#' @importFrom magrittr %>%
 mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
    stopifnot(coda::is.mcmc(mcmc.output))
 
