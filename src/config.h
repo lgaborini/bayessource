@@ -6,6 +6,9 @@
 // Store constants, package-wide stuff
 //-----------------------------------------------
 
+// Enable C++11 (also look for flags in Makefiles)
+// [[Rcpp::plugins(cpp11)]]
+
 // Enable OpenMP
 // [[Rcpp::plugins(openmp)]]
 #include <omp.h>
