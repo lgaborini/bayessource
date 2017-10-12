@@ -125,10 +125,10 @@ Rcpp::List marginalLikelihood_internal(
       Rcout << "Parameters: " << endl;
       Rcout << "  using Cholesky? " << USE_CHOLESKY << endl;
    }
-   int print_mod = 100;
+   int interrupt_mod = 100;
 
    for (arma::uword i = 0; i < n_iter; ++i){
-      // if (verbose && (i % print_mod == 0)) Rcout << ".";
+      // if (verbose && (i % interrupt_mod == 0)) Rcout << ".";
 
       B_upd_g = arma::inv_sympd(B_inv + nr * W_inv_g);
       mu_upd_g = B_upd_g * (B_inv * mu + nr * W_inv_g * bary.t());
@@ -199,6 +199,11 @@ Rcpp::List marginalLikelihood_internal(
       // B_inv_g = B_upd_inv_g;
       // mu_g = mu_upd_g;
 
+      // Check for user interrupt
+      if (i % interrupt_mod == 0) {
+         Rcpp::checkUserInterrupt();
+      }
+
    }
 
    if (verbose){
@@ -253,6 +258,11 @@ Rcpp::List marginalLikelihood_internal(
       // notice: 0-based indexing, the last position is n_iter - 1
       lpihat_theta_star_samples[i] = lpihat_theta_star;
       lpihat_W_star_samples[i] = lpihat_W_star;
+
+      // Check for user interrupt
+      if (i % interrupt_mod == 0) {
+         Rcpp::checkUserInterrupt();
+      }
    }
    if (verbose) Rcout << "Computing posterior ordinate constants." << endl;
 
