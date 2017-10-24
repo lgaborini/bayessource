@@ -1,7 +1,7 @@
 # Rcpp samesource test code
 #
 # Rcpp tests:
-#  convergence of Gibbs sampler under H_p (same source)
+#  convergence of Gibbs sampler under Hp (same source)
 
 
 rm(list = ls())
@@ -72,7 +72,7 @@ df.2 <- rmvnorm(n, theta.exact.2, W.exact.2)
 df <- rbind(df.1, df.2)
 X <- as.matrix(df)
 
-# Run the Gibbs sampler ---------------------------------------------------------------
+# Setup the Gibbs sampler ---------------------------------------------------------------
 
 burn.in <- 1000
 n.iter <- 20000
@@ -92,61 +92,77 @@ nw <- nw.exact
 # mu <- c(0,0)
 # nw <- 2*(p + 1) + 1
 
-results <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = TRUE)
-postproc <- mcmc_postproc(results$mcmc, compute.ML = TRUE, cumulative = TRUE)
+# Run the Gibbs sampler
+if (FALSE) {
 
-# Subsample the posterior samples (to plot)
-theta.samples.mtx <- as.matrix(postproc$theta.samples)
-idx.rows <- seq(1, nrow(theta.samples.mtx), length.out = 10000)
+   results <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = TRUE)
+   postproc <- mcmc_postproc(results$mcmc, compute.ML = TRUE, cumulative = TRUE)
 
-# Data sample mean: posterior mean should be close (if n is large enough)
-X.mean <- colMeans(X)
+   # Subsample the posterior samples (to plot)
+   theta.samples.mtx <- as.matrix(postproc$theta.samples)
+   idx.rows <- seq(1, nrow(theta.samples.mtx), length.out = 10000)
 
-# graphics.off()
-plot(theta.samples.mtx[idx.rows,1], theta.samples.mtx[idx.rows,2], pch = 16, cex = 0.3, col = '#7F7F7F') #,
-     # xlim = mu.exact[1] + c(-1,1) * 6, ylim = mu.exact[2] + c(-1,1) * 6)
-points(theta.exact.1[1], theta.exact.1[2], col = 'red', pch = 16, cex = 2)
-# points(postproc$theta.samples.ML.cum[1,1], postproc$theta.samples.ML.cum[1,2], col = 'black', pch = 16, cex = 2)
-lines(postproc$theta.samples.ML.cum[,1], postproc$theta.samples.ML.cum[,2], lwd = 2)
-points(postproc$theta.samples.ML[1], postproc$theta.samples.ML[2], col = 'blue', pch = 16, cex = 2)
+   # Data sample mean: posterior mean should be close (if n is large enough)
+   X.mean <- colMeans(X)
+
+   # graphics.off()
+   plot(theta.samples.mtx[idx.rows,1], theta.samples.mtx[idx.rows,2], pch = 16, cex = 0.3, col = '#7F7F7F') #,
+   # xlim = mu.exact[1] + c(-1,1) * 6, ylim = mu.exact[2] + c(-1,1) * 6)
+   points(theta.exact.1[1], theta.exact.1[2], col = 'red', pch = 16, cex = 2)
+   # points(postproc$theta.samples.ML.cum[1,1], postproc$theta.samples.ML.cum[1,2], col = 'black', pch = 16, cex = 2)
+   lines(postproc$theta.samples.ML.cum[,1], postproc$theta.samples.ML.cum[,2], lwd = 2)
+   points(postproc$theta.samples.ML[1], postproc$theta.samples.ML[2], col = 'blue', pch = 16, cex = 2)
+   mtext('Red point = exact, blue point = ML estimate, black line = cumulated mean')
+
+}
+
 
 # Check accuracy for posterior mean ---------------------------------------
 
+if (FALSE) {
 
-# coda::effectiveSize(postproc$theta.samples)
+   # coda::effectiveSize(postproc$theta.samples)
 
 
-theta.se <- coda::batchSE(postproc$theta.samples)
+   theta.se <- coda::batchSE(postproc$theta.samples)
 
-# Check if the real mean is contained into the confidence interval
-is.lower <- (X.mean[1] < (postproc$theta.samples.ML + 2*theta.se))
-is.upper <- (X.mean[2] > (postproc$theta.samples.ML - 2*theta.se))
-# expect_true(all(is.lower), 'theta.ML is outside (greater than) the credibility interval.')
-# expect_true(all(is.upper), 'theta.ML is outside (smaller than) the credibility interval.')
+   # Check if the real mean is contained into the confidence interval
+   is.lower <- (X.mean[1] < (postproc$theta.samples.ML + 2*theta.se))
+   is.upper <- (X.mean[2] > (postproc$theta.samples.ML - 2*theta.se))
+   # expect_true(all(is.lower), 'theta.ML is outside (greater than) the credibility interval.')
+   # expect_true(all(is.upper), 'theta.ML is outside (smaller than) the credibility interval.')
+
+}
 
 
 # Testing full output -----------------------------------------------------
+#
+# Use precomputed marginal likelihoods from known conditions
 
 verbose <- FALSE
-verbose <- TRUE
+# verbose <- TRUE
 n_cores <- 1
-set.seed(1)
-mlik.target <- -1457.40472756     # digits = 12
-results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores)
-results.full$value
-expect_equal(results.full$value, mlik.target)
 
-mlik.target <- -1457.41174677
-results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = FALSE, Gibbs_only = FALSE, n_cores = n_cores)
-results.full$value
+seeds <- c(1, 2, 3, 4, 5)
+i <- 1
+set.seed(seeds[i])
+
+mlik.targets <- c(-1457.40472756, -1457.40807384, -1457.40850114, -1457.41042937, -1457.42342274)     # digits = 12
+mlik.target <- mlik.targets[i]
+results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores)
+print(results.full$value, digits = 12)
 expect_equal(results.full$value, mlik.target)
 
 
 # Testing full output w/ OpenMP -------------------------------------------
-library(microbenchmark)
 
-verbose <- FALSE
-n.times <- 10
-f <- function(n.cores) { marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores) }
-tmp <- microbenchmark(f(1), f(2), times = n.times)
-plot(tmp)
+if (FALSE) {
+   library(microbenchmark)
+
+   verbose <- FALSE
+   n.times <- 10
+   f <- function(n.cores) { marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores) }
+   tmp <- microbenchmark(f(1), f(2), times = n.times)
+   plot(tmp)
+}
+
