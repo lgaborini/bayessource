@@ -169,8 +169,9 @@ double diwishart_inverse(const arma::mat &X_inv,
    unsigned int p = Sigma.n_cols;
    double out;
 
-   if (df <= 2*(p + 1)) {
-      Rcpp::stop("Error: Inverted Wishart is degenerate (%u df, dimension %u).", df, p);
+   const double df_min = 2*(p + 1);
+   if (df <= df_min) {
+      Rcpp::stop("Error: Inverted Wishart is degenerate (%u df, dimension %u, minimum df %u).", df, p, df_min);
    }
 
    // Constants
