@@ -6,3 +6,4 @@ inst/doc
 /src-x64/
 .Rproj.user
 *.sublime-workspace
+*.sublime-project

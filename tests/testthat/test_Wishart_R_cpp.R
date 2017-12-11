@@ -4,13 +4,26 @@
 #    Wishart/Inverted Wishart equivalence
 
 library(testthat)
-# library(mvtnorm)
 
 context('samesource.cpp (Rcpp): Wishart/Inverted Wishart densities')
-# source('diwishart_inverse.R')
 
 # Refresh cpp file without running R code chunks (avoid build-test loop)
 # Rcpp::sourceCpp('samesource.cpp', embeddedR = FALSE)
+
+# Verify 1D case: Wishart is a Chi^2 ----------------------------------------------------------------------
+# p = 1, Sigma = 1:
+# X ~ W(n, Sigma) = Chisq(n)
+
+X <- seq(from = 1e-5, to = 8, length.out = 100)
+df <- 3
+Sigma <- 1
+
+dens.wishart <- sapply(X, function(x) bayessource::dwishart(matrix(x), df, Sigma, log = FALSE, is.chol = FALSE))
+dens.wishart.chol <- sapply(X, function(x) bayessource::dwishart(chol(matrix(x)), df, chol(Sigma), log = FALSE, is.chol = TRUE))
+dens.chisq <- dchisq(X, df)
+
+test_that('1D Wishart is a Chi^2, pass full', expect_equal(dens.wishart, dens.chisq))
+test_that('1D Wishart is a Chi^2, pass Cholesky', expect_equal(dens.wishart.chol, dens.chisq))
 
 # Data ----------------------------------------------------------------------
 
@@ -24,18 +37,19 @@ Sigma.chol <- chol(Sigma)
 Sigma.inv <- solve(Sigma)
 Sigma.inv.chol <- solve(Sigma.chol)
 
-# Wishart RNG tests ---------------------------------------------------------
+# Generic p-dimensional case: ----------------------------------------------------------------------
 # X ~ Wishart(df, Sigma)    (according to Anderson/Press parametrization: rWishart, dwishart)
 
-df <- p + round(runif(1, 1, 10))			# Wishart: Press/Anderson, Inverted Wishart: Anderson
+df <- p + round(runif(1, 1, 10))       # Wishart: Press/Anderson, Inverted Wishart: Anderson
 df.Anderson <- df
-df.Press <- df + p + 1			# Inverted Wishart
+df.Press <- df + p + 1        # Inverted Wishart
 
 set.seed(seed)
 X <- bayessource:::rwish(df, Sigma, FALSE, FALSE)
 X.inv <- solve(X)
 X.chol <- chol(X)
 X.inv.chol <- chol(X.inv)
+
 
 
 
