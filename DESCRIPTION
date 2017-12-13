@@ -1,7 +1,7 @@
 Package: bayessource
 Type: Package
 Title: Bayesian approach to evaluate whether two datasets come from the same population
-Version: 0.2.3
+Version: 0.2.4
 Authors@R: c(person("Lorenzo", "Gaborini", role = c("aut", "cre"),
                      email = "lorenzo.gaborini@unil.ch"),
               person("Silvia", "Bozza", role = c("ctb", "cph")))
