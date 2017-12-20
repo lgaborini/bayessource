@@ -1,4 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^docs$
+^\.git$
+^\.gitignore$
 ^man-roxygen$
