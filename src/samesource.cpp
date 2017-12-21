@@ -97,12 +97,6 @@ Rcpp::List marginalLikelihood_internal(
    // The Cholesky factor
    arma::mat W_inv_star_chol;
 
-   // OpenMP
-   omp_set_num_threads(n_cores);
-   if (verbose){
-      Rcout << "Using OpenMP with " << n_cores << " threads." << endl;
-   }
-
    // Compute non-normalized sample covariance
    arma::rowvec bary = arma::mean(X, 0);
    arma::mat S(p,p);
@@ -232,7 +226,6 @@ Rcpp::List marginalLikelihood_internal(
    double lpihat_theta_star;
    double lpihat_W_star;
 
-   #pragma omp parallel for schedule(static) private(lpihat_theta_star, lpihat_W_star)
    for (unsigned int i = burn_in + 1; i < n_iter; ++i){
 
       // Load posterior hyperparameters from Gibbs chain
@@ -329,27 +322,6 @@ Rcpp::List marginalLikelihood_internal(
       Rcout << "  lpihat_psi_star: " << lpihat_psi_star << endl;
       Rcout << "LR (num):  lmhatHp_num: " << lmhatHp_num << endl;
    }
-
-
-   // return(List::create(
-   //       _["B_upd_gibbs"] = B_upd_gibbs,
-   //       _["mu_upd_gibbs"] = mu_upd_gibbs,
-   //       _["U_upd_gibbs"] = U_upd_gibbs,
-   //       _["W_inv_gibbs"] = W_inv_gibbs,
-   //       _["theta_gibbs"] = theta_gibbs,
-   //       _["theta_star"] = theta_star,
-   //       _["W_inv_star"] = W_inv_star,
-   //       _["logf_star"] = logf_star,
-   //       _["lpihat_theta_star"] = lpihat_theta_star,
-   //       _["lDetW_inv_star"] = lDetW_inv_star,
-   //       _["lc0star"] = lc0star,
-   //       _["lpihat_W_star"] = lpihat_W_star,
-   //       _["lpihat_psi_star"] = lpihat_psi_star,
-   //       _["lpi_theta_star"] = lpi_theta_star,
-   //       _["lpi_W_star"] = lpi_W_star,
-   //       _["lpi_psi_star"] = lpi_psi_star,
-   //       _["lmhatHp_num"] = lmhatHp_num
-   // ));
 
    // Return the full matrices for the chain instead of Cholesky factors
    if (USE_CHOLESKY && chain_output) {

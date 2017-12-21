@@ -26,7 +26,7 @@
 marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE, n_cores = 1) {
 
    # Wrap the C function
-   result <- bayessource:::marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose, Gibbs_only = Gibbs_only, n_cores = n_cores)
+   result <- bayessource:::marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose, Gibbs_only = Gibbs_only)
 
    if (output.mcmc) {
       # Build the coda object using the chain outputs
@@ -60,7 +60,7 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.
 #'
 #' Implemented in C.
-#' See \code{\link{diwishart_inverse}} for the parametrization of the Inverted Wishart.
+#' See \code{\link[bayessource]{diwishart_inverse}} for the parametrization of the Inverted Wishart.
 #' See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 #'
 #' @param quest the questioned dataset
@@ -71,7 +71,7 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #'
 #' @return the log-LR value
 #' @export
-#' @seealso marginalLikelihood, marginalLikelihood_internal
+#' @seealso marginalLikelihood
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #'

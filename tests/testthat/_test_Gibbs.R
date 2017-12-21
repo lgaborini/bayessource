@@ -151,18 +151,5 @@ mlik.targets <- c(-1457.40472756, -1457.40807384, -1457.40850114, -1457.41042937
 mlik.target <- mlik.targets[i]
 results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores)
 print(results.full$value, digits = 12)
-expect_equal(results.full$value, mlik.target)
-
-
-# Testing full output w/ OpenMP -------------------------------------------
-
-if (FALSE) {
-   library(microbenchmark)
-
-   verbose <- FALSE
-   n.times <- 10
-   f <- function(n.cores) { marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores) }
-   tmp <- microbenchmark(f(1), f(2), times = n.times)
-   plot(tmp)
-}
+test_that('marginal likelihoods are computed correctly.', expect_equal(results.full$value, mlik.target))
 
