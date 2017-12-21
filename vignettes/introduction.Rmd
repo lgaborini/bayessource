@@ -146,13 +146,26 @@ and traceplots:
 traceplot(results$mcmc)
 ```
 
-We can recover the original matrices by reshaping the desired columns (e.g. for `W.inv`) into a matrix/3D array:
+We can recover the original matrices by hand, reshaping the desired columns (e.g. for `W.inv`) into a matrix/3D array:
 ```{r}
 n.samples <- nrow(results$mcmc)
 W.inv.samples <- results$mcmc[, paste0('W.inv.', seq(1:(p^2)))]
 head(W.inv.samples, 5)
 W.inv.samples.cube <- array(W.inv.samples, dim = c(n.samples, p, p))
 dim(W.inv.samples.cube)
+```
+
+or using the supplied post-processing function `mcmc_postproc`:
+```{r}
+list.postproc <- mcmc_postproc(results$mcmc, compute.ML = TRUE, cumulative = TRUE)
+str(list.postproc$theta.samples)
+str(list.postproc$W.samples)
+```
+
+It also allows for easy computation of posterior point estimators:
+```{r}
+list.postproc$theta.samples.ML
+list.postproc$W.samples.ML
 ```
 
 ## References
