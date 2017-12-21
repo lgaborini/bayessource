@@ -1,14 +1,20 @@
+# bayessource 0.2.5
+
+* Removed OpenMP support.
+* Modified vignette.
+* Added unit test to check sign of LR in known conditions.
+
 # bayessource 0.2.4
 
 * Added information if Wishart is degenerate.
 * Added 1D Wishart test.
-* Added bayessource::rmvnorm RNG test.
+* Added `bayessource::rmvnorm` RNG test.
 
 # bayessource 0.2.3
 
 * Fixed OpenMP support (now RcppArmadillo does not complain anymore).
 * Fixed dependencies.
-* Added Rcpp::checkUserInterrupt() to MCMC loops.
+* Added `Rcpp::checkUserInterrupt()` to MCMC loops.
 
 # bayessource 0.2.2
 

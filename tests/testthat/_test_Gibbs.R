@@ -141,7 +141,6 @@ if (FALSE) {
 
 verbose <- FALSE
 # verbose <- TRUE
-n_cores <- 1
 
 seeds <- c(1, 2, 3, 4, 5)
 i <- 1
@@ -149,7 +148,7 @@ set.seed(seeds[i])
 
 mlik.targets <- c(-1457.40472756, -1457.40807384, -1457.40850114, -1457.41042937, -1457.42342274)     # digits = 12
 mlik.target <- mlik.targets[i]
-results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE, n_cores = n_cores)
+results.full <- marginalLikelihood(X, n.iter.full, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = TRUE, verbose = verbose, Gibbs_only = FALSE)
 print(results.full$value, digits = 12)
 test_that('marginal likelihoods are computed correctly.', expect_equal(results.full$value, mlik.target))
 

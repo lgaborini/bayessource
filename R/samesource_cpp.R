@@ -23,7 +23,7 @@
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #'
-marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE, n_cores = 1) {
+marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE) {
 
    # Wrap the C function
    result <- bayessource:::marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose, Gibbs_only = Gibbs_only)
@@ -75,11 +75,11 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #'
-samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE, n_cores = 1) {
+samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
    # Wrap the C functions
-   LR.num <- marginalLikelihood_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose, n_cores = n_cores)
-   LR.den.1 <- marginalLikelihood_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose, n_cores = n_cores)
-   LR.den.2 <- marginalLikelihood_internal(ref, n.iter, B.inv, W.inv.2, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose, n_cores = n_cores)
+   LR.num <- marginalLikelihood_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.den.1 <- marginalLikelihood_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.den.2 <- marginalLikelihood_internal(ref, n.iter, B.inv, W.inv.2, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
 
    LR.num$value - LR.den.1$value - LR.den.2$value
 }
