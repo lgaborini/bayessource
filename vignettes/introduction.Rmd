@@ -9,6 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 bibliography: vignette.bib
 ---
+\providecommand{\simiid}{~\overset{iid}{\sim}~}
 
 This vignette explains briefly how to use this package.
 
@@ -17,17 +18,22 @@ library(bayessource)
 knitr::opts_chunk$set(fig.datapi = 96)
 ```
 
-## Package goal
+# Package goal
 
-The package has been conceived to evaluate whether two sets of items (a reference set and a questioned set) belong to the same population or not.
-Each item is described with a vector of measurements.
+The package has been conceived to evaluate the hypothesis whether two sets of items (a reference set and a questioned set) belong to the same population or not.   
+Each item is described with a vector of $p$ measurements.   
 
 The evaluation is performed using Bayesian statistics, particularly Gibbs sampling.
-Particular care has been given in order to obtain performing functions: the main core has been written using `Rcpp`.
 
-For theoretical details, see [@Bozza2008Probabilistic].
+The model we applied is that these populations are represented as samples from Multivariate Gaussian distributions, with unknown means and covariance matrices.
+
+Particular care has been given in order to obtain strongly performing functions. The main core is written using `Rcpp`.
+
+For more theoretical details, see [@Bozza2008Probabilistic].
 
 ## Package contents
+
+The package supplies several functions to compute common densities (e.g. Wishart, Inverted Wishart), and two functions to compute the marginal likelihood of observations, as well as the full Likelihood Ratio (`marginalLikelihood`, `samesource_C`).
 
 # Usage
 
@@ -43,7 +49,7 @@ set.seed(123)
 
 p <- 2
 mean.quest <- c(0, 0)
-mean.ref <- c(3, 2)
+mean.ref <- c(2, 1)
 cov.quest <- rwish(3, diag(2))
 cov.ref <- rwish(5, diag(2))
 n.quest <- 20
@@ -83,7 +89,7 @@ As the model is Bayesian, we are required to specify the hyperparameters $\mu, B
 Notice that inference is propagated by supplying the inverses of covariance matrices, i.e. $B^{-1}$ and $W_i^{-1}$.
 
 ```{r}
-eps <- 0.001
+eps <- 0.1
 B.inv <- eps*diag(p)
 W.inv.1 <- eps*diag(p)
 W.inv.2 <- eps*diag(p)
@@ -122,7 +128,7 @@ results <- marginalLikelihood(as.matrix(df.quest), n.iter, B.inv, W.inv.1, U, nw
 ```
 Notice that `results` now is a `list`, where `results$value` holds the marginal likelihood value, and `results$mcmc` is the `coda` object which holds the chain output.
 
-```{r collapse=TRUE}
+```{r}
 head(results$mcmc, 4)
 ```
 
@@ -141,7 +147,7 @@ traceplot(results$mcmc)
 ```
 
 We can recover the original matrices by reshaping the desired columns (e.g. for `W.inv`) into a matrix/3D array:
-```{r, collapse=TRUE}
+```{r}
 n.samples <- nrow(results$mcmc)
 W.inv.samples <- results$mcmc[, paste0('W.inv.', seq(1:(p^2)))]
 head(W.inv.samples, 5)
