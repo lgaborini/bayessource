@@ -5,10 +5,8 @@
 
 library(testthat)
 
-context('samesource.cpp (Rcpp): Wishart/Inverted Wishart densities')
+context('statistical_functions.cpp: Wishart/Inverted Wishart densities')
 
-# Refresh cpp file without running R code chunks (avoid build-test loop)
-# Rcpp::sourceCpp('samesource.cpp', embeddedR = FALSE)
 
 # Verify 1D case: Wishart is a Chi^2 ----------------------------------------------------------------------
 # p = 1, Sigma = 1:
@@ -40,6 +38,8 @@ Sigma.inv.chol <- solve(Sigma.chol)
 # Generic p-dimensional case: ----------------------------------------------------------------------
 # X ~ Wishart(df, Sigma)    (according to Anderson/Press parametrization: rWishart, dwishart)
 
+
+# Generate some data
 df <- p + round(runif(1, 1, 10))       # Wishart: Press/Anderson, Inverted Wishart: Anderson
 df.Anderson <- df
 df.Press <- df + p + 1        # Inverted Wishart

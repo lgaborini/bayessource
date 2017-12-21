@@ -7,8 +7,7 @@
 library(testthat)
 # library(mvtnorm)
 
-context('samesource.cpp (Rcpp): mathematical functions, logSumExp')
-# source('diwishart_inverse.R')
+context('statistical_functions.cpp: mathematical functions, logSumExp')
 
 # Refresh cpp file without running R code chunks (avoid build-test loop)
 # Rcpp::sourceCpp('samesource.cpp', embeddedR = FALSE)

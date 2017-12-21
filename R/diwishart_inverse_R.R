@@ -14,6 +14,7 @@
 #' @return the density in X
 #' @keywords internal
 #' @seealso \code{\link{diwishart_inverse}}, \code{\link{diwishart}}
+#' @rdname statistical_functions
 #' @template InverseWishart_Press
 diwishart_inverse_R <- function(X.inv, df, Sigma, log = FALSE, is.chol = FALSE) {
    p <- ncol(X.inv)

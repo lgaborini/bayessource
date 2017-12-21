@@ -10,6 +10,7 @@
 #' @param is.chol if TRUE, Sigma and X are the upper Cholesky factors of Sigma and X
 #' @return the density in X
 #' @export
+#' @rdname statistical_functions
 #'
 #' @template Wishart_eqn
 dwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {

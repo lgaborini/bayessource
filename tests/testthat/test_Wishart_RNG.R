@@ -4,10 +4,8 @@
 #    Wishart RNG, consistency with standard library
 
 library(testthat)
-# library(mvtnorm)
 
-context('samesource.cpp (Rcpp): Wishart/Inverted Wishart RNG')
-# source('diwishart_inverse.R')
+context('statistical_functions.cpp: Wishart/Inverted Wishart RNG')
 
 # Refresh cpp file without running R code chunks (avoid build-test loop)
 # Rcpp::sourceCpp('samesource.cpp', embeddedR = FALSE)

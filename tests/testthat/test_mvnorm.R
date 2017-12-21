@@ -4,13 +4,8 @@
 #	multivariate normal (dmvnorm)
 
 library(testthat)
-# library(mvtnorm)
 
-context('samesource.cpp (Rcpp): multivariate normal')
-# source('diwishart_inverse.R')
-
-# Refresh cpp file without running R code chunks (avoid build-test loop)
-# Rcpp::sourceCpp('samesource.cpp', embeddedR = FALSE)
+context('statistical_functions.cpp: multivariate normal')
 
 # Data ----------------------------------------------------------------------
 

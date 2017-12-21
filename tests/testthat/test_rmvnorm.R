@@ -10,7 +10,7 @@ library(testthat)
 library(bayessource)
 
 
-context('samesource.cpp (Rcpp): multivariate normal RNG')
+context('statistical_functions.cpp: multivariate normal RNG')
 
 
 p <- 3

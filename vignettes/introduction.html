@@ -152,8 +152,8 @@ n.iter =<span class="st"> </span><span class="dv">10000</span>
 At the time, this is possible only during the computation of a single marginal likelihood, in this case the one related to the sample from the questioned population.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw">marginalLikelihood</span>(<span class="kw">as.matrix</span>(df.quest), n.iter, B.inv, W.inv.<span class="dv">1</span>, U, nw, mu, burn.in, <span class="dt">output.mcmc =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Notice that <code>results</code> now is a <code>list</code>, where <code>results$value</code> holds the marginal likelihood value, and <code>results$mcmc</code> is the <code>coda</code> object which holds the chain output.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(results<span class="op">$</span>mcmc, <span class="dv">4</span>)
-## Markov Chain Monte Carlo (MCMC) output:
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(results<span class="op">$</span>mcmc, <span class="dv">4</span>)</code></pre></div>
+<pre><code>## Markov Chain Monte Carlo (MCMC) output:
 ## Start = 1001 
 ## End = 1005 
 ## Thinning interval = 1 
@@ -162,7 +162,7 @@ At the time, this is possible only during the computation of a single marginal l
 ## [2,]  0.15320595 -1.3119157 4.145302 1.5008868 1.5008868 0.7770089
 ## [3,]  0.06222307 -1.0049877 4.362410 1.3116315 1.3116315 0.7323424
 ## [4,]  0.12987014 -1.1137403 2.602908 0.8595322 0.8595322 0.6868988
-## [5,]  0.32830751 -1.1711867 1.806805 0.6542523 0.6542523 0.5819349</code></pre></div>
+## [5,]  0.32830751 -1.1711867 1.806805 0.6542523 0.6542523 0.5819349</code></pre>
 <p>Remember that R is column-major: <code>W.inv.1</code> is <span class="math inline">\(W^{-1}_1(1,1)\)</span>, <code>W.inv.2</code> is <span class="math inline">\(W^{-1}_1(2,1)\)</span> and so on.<br />
 Using standard <code>coda</code> tools, we can perform diagnostics, such as summaries:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(coda)

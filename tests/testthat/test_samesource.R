@@ -1,6 +1,6 @@
 # Run test case
 #
-# Actually check that code does not throw
+# Actually check that code does not throw, and sign is reasonable
 #
 
 rm(list = ls())

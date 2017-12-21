@@ -112,6 +112,8 @@ arma::mat rwish(const double v,
    const arma::mat &S,
    const bool is_chol,
    const bool return_chol){
+   // Sample from Wishart
+   // Using Anderson/Press parametrisation.
 
    // Dimension of returned wishart
    unsigned int p = S.n_rows;

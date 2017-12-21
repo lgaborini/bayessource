@@ -14,24 +14,28 @@
 //' Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
 //'
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 double logSumExp(const arma::vec &v);
 
 //' Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
 //'
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 double logSumExpMean(const arma::vec &v);
 
 //' Computes log( cumsum_i( exp(v[i]) ) ) in a stable way.
 //'
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 arma::vec logCumsumExp(const arma::vec &v);
 
 //' Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
 //'
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 arma::vec logCummeanExp(const arma::vec &v);
 
@@ -43,12 +47,14 @@ arma::vec logCummeanExp(const arma::vec &v);
 //'
 //' \code{X.chol.inv <- backsolve(r = X.chol, x = diag(p))}
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 arma::mat inv_triangular(const arma::mat &U);
 
 //' Compute the inverse from the upper Cholesky factor
 //'
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 arma::mat chol2inv(const arma::mat &U_chol);
 
@@ -57,6 +63,7 @@ arma::mat chol2inv(const arma::mat &U_chol);
 //' If \eqn{A = U' U}, compute \eqn{V} where \eqn{A^{(-1)} = V' V}
 //'
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 arma::mat inv_Cholesky_from_Cholesky(const arma::mat &U);
 
@@ -66,6 +73,7 @@ arma::mat inv_Cholesky_from_Cholesky(const arma::mat &U);
 //' If \eqn{A = U' U}, compute log(det(A)) from U
 //'
 //' @keywords internal
+//' @rdname numerical_functions
 // [[Rcpp::export(rng = false)]]
 double ldet_from_Cholesky(const arma::mat &T_chol);
 
@@ -73,7 +81,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol);
 
 //' Generate from multivariate normal.
 //'
-//' Faster than \pkg{mvtnorm}::\code{rmvnorm} (implemented in C).
+//' Faster than \code{rmvnorm} in package \pkg{mvtnorm}. Implemented in C.
 //'
 //' @param n amount of samples to generate from
 //' @param mu column vector for the mean
@@ -81,6 +89,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol);
 //' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 //' @return a nxp matrix of samples
 //' @export
+//' @rdname statistical_functions
 // [[Rcpp::export]]
 arma::mat rmvnorm(const unsigned int n,
                        const arma::colvec &mu,
@@ -89,7 +98,7 @@ arma::mat rmvnorm(const unsigned int n,
 
 //' Multivariate normal density. Assumes symmetry.
 //'
-//' Faster than \code{\link[mvtnorm]{dmvnorm}}. Implemented in C.
+//' Faster than \code{dmvnorm} in package \pkg{mvtnorm}. Implemented in C.
 //'
 //' @param x the observation (nxp)
 //' @param mean mean vector (row vector, 1xp)
@@ -98,6 +107,7 @@ arma::mat rmvnorm(const unsigned int n,
 //' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 //' @return the density in x (nx1)
 //' @export
+//' @rdname statistical_functions
 // [[Rcpp::export(rng = false)]]
 arma::vec dmvnorm(const arma::mat &x,
                        const arma::rowvec &mean,
@@ -115,6 +125,7 @@ arma::vec dmvnorm(const arma::mat &x,
 //' @param return_chol if TRUE, the upper Cholesky factor is returned
 //' @return a single random variate from W(v, S)
 //' @export
+//' @rdname statistical_functions
 //'
 //' @template Wishart_eqn
 // [[Rcpp::export]]
@@ -137,6 +148,7 @@ arma::mat rwish(const double v,
 //' @param logd if TRUE, return the log-density
 //' @param is_chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
 //' @export
+//' @rdname statistical_functions
 //' @template InverseWishart_Press
 //' @seealso \code{\link{diwishart}}, \code{\link{dwishart}}
 // [[Rcpp::export(rng = false)]]
