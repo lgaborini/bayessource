@@ -80,6 +80,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol);
 //' @param Cov covariance matrix
 //' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 //' @return a nxp matrix of samples
+//' 
 //' @export
 // [[Rcpp::export]]
 arma::mat rmvnorm(const unsigned int n,
@@ -97,6 +98,7 @@ arma::mat rmvnorm(const unsigned int n,
 //' @param logd if TRUE, return the log-density
 //' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 //' @return the density in x (nx1)
+//' 
 //' @export
 // [[Rcpp::export(rng = false)]]
 arma::vec dmvnorm(const arma::mat &x,
@@ -114,8 +116,8 @@ arma::vec dmvnorm(const arma::mat &x,
 //' @param is_chol if TRUE, S is the upper Cholesky factor of S
 //' @param return_chol if TRUE, the upper Cholesky factor is returned
 //' @return a single random variate from W(v, S)
+//' 
 //' @export
-//'
 //' @template Wishart_eqn
 // [[Rcpp::export]]
 arma::mat rwish(const double v,
@@ -135,7 +137,8 @@ arma::mat rwish(const double v,
 //' @param df degrees of freedom
 //' @param Sigma scale matrix
 //' @param logd if TRUE, return the log-density
-//' @param is_chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
+//' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv
+//' 
 //' @export
 //' @template InverseWishart_Press
 //' @seealso \code{\link{diwishart}}, \code{\link{dwishart}}

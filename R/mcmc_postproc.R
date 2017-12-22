@@ -14,10 +14,9 @@
 #' @param mcmc.output The coda object
 #' @param compute.ML if TRUE, also compute the posterior means
 #' @param cumulative if TRUE, also compute cumulative posterior means to assess precision
-#'
 #' @return a named list with multidimensional arrays for W, theta, and ML estimates
+#' 
 #' @export
-#' @importFrom magrittr %>%
 mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
    stopifnot(coda::is.mcmc(mcmc.output))
 
@@ -32,7 +31,7 @@ mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
    theta.samples <- mcmc.output[, paste0('theta.', seq(1:p))]
    W.inv.samples <- mcmc.output[, paste0('W.inv.', seq(1:(p^2)))]
    W.inv.samples.cube <- array(W.inv.samples, dim = c(n.samples, p, p))
-   W.samples.cube <- apply(W.inv.samples.cube, 1, solve) %>% t %>% array(dim = c(n.samples, p, p))
+   W.samples.cube <- array(t(apply(W.inv.samples.cube, 1, solve)), dim = c(n.samples, p, p))
 
    list.out <- list(theta.samples = theta.samples, W.samples = W.samples.cube)
 

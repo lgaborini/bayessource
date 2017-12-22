@@ -21,10 +21,9 @@ using namespace Rcpp;
 //' @param nw degrees of freedom
 //' @param mu prior mean
 //' @param burn_in burn-in iterations
-//' @param chain_output output the entire chain
+//' @param chain_output if true, output the entire chain as a list (ML-value, samples from theta, samples from W_inv)
 //' @param verbose if TRUE, be verbose
 //' @param Gibbs_only if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.
-//' @param n_cores if > 1, use OpenMP on the specified amount of cores (experimental).
 //'
 //' @template gaussmv_model
 //' @keywords internal
@@ -40,8 +39,7 @@ Rcpp::List marginalLikelihood_internal(
       const unsigned int burn_in,
       const bool chain_output = false,
       const bool verbose = false,
-      const bool Gibbs_only = false,
-      const unsigned int n_cores = 1){
+      const bool Gibbs_only = false){
 
 
    // try/catch block
@@ -264,6 +262,7 @@ Rcpp::List marginalLikelihood_internal(
    // lpihat_W_star = lpihat_W_star/(n_iter - burn_in);
    // lpihat_theta_star = arma::sum(lpihat_theta_star_samples)/(n_iter - burn_in);
    // lpihat_W_star = arma::sum(lpihat_W_star_samples)/(n_iter - burn_in);
+
    // The correct log-means:
    lpihat_theta_star = logSumExpMean(lpihat_theta_star_samples.subvec(burn_in + 1, n_iter - 1));
    lpihat_W_star = logSumExpMean(lpihat_W_star_samples.subvec(burn_in + 1, n_iter - 1));
@@ -342,7 +341,7 @@ Rcpp::List marginalLikelihood_internal(
       return(List::create(_["value"] = lmhatHp_num));
    }
 
-
+   // dummy, never executed
    return(List::create(_["value"] = 1));
 
    // try/catch block

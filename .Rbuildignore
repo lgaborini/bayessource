@@ -3,3 +3,6 @@
 ^\.git$
 ^\.gitignore$
 ^man-roxygen$
+^.*\.sublime-package$
+^.*\.sublime-workspace$
+^_test_Gibbs\.R$

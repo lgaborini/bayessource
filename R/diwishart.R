@@ -8,9 +8,9 @@
 #' @param log if TRUE, return the log-density
 #' @param is.chol if TRUE, Sigma and X are the upper Cholesky factors of Sigma and X
 #' @return the density in X
+#' 
 #' @export
 #' @seealso \code{\link{diwishart_inverse}}, \code{\link{dwishart}}
-#'
 #' @template InverseWishart_Press
 diwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
    p <- ncol(X)

@@ -16,13 +16,12 @@
 #' @param output.mcmc output the entire chain
 #' @param verbose if TRUE, be verbose
 #' @inheritParams marginalLikelihood_internal
-#'
 #' @return the log-marginal likelihood value, or a list(the log-ml value, coda object with the posterior samples)
+#' 
 #' @export
 #' @seealso marginalLikelihood_internal
 #' @template gaussmv_model
 #' @template InverseWishart_Press
-#'
 marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE) {
 
    # Wrap the C function
@@ -68,13 +67,12 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' @param W.inv.1 prior inverse of within covariance matrix (questioned items)
 #' @param W.inv.2 prior inverse of within covariance matrix (reference items)
 #' @inheritParams marginalLikelihood
-#'
 #' @return the log-LR value
+#' 
 #' @export
 #' @seealso marginalLikelihood
 #' @template gaussmv_model
 #' @template InverseWishart_Press
-#'
 samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
    # Wrap the C functions
    LR.num <- marginalLikelihood_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)

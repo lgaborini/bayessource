@@ -1,3 +1,7 @@
+# bayessource 0.2.6
+
+* Removed dependencies magrittr, matrixStats.
+
 # bayessource 0.2.5
 
 * Removed OpenMP support.

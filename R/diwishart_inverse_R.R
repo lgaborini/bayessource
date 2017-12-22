@@ -12,6 +12,7 @@
 #' @param log if TRUE, return the log-density
 #' @param is.chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
 #' @return the density in X
+#' 
 #' @keywords internal
 #' @seealso \code{\link{diwishart_inverse}}, \code{\link{diwishart}}
 #' @template InverseWishart_Press
