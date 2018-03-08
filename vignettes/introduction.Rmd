@@ -10,6 +10,7 @@ vignette: >
 bibliography: vignette.bib
 ---
 \providecommand{\simiid}{~\overset{iid}{\sim}~}
+\providecommand{\dd}{\text{ d}}
 
 This vignette explains briefly how to use this package.
 
@@ -75,15 +76,22 @@ It is clear that the two samples come from different populations, hence we expec
 The package implements a two-sample Bayesian Hierarchical model with Gaussian multivariate likelihoods, and Inverse-Wishart prior on the covariance matrices.   
 The theoretical details are specified in [@Bozza2008Probabilistic]. 
 
-Let us recall the model definition.
-We note with $X_{ij}$ the $j$-th sample from the $i$-th population, $i = 1,2$.
-The two populations are Gaussians, with means $\theta_i$, and covariances $W_i$.
+
+### Background model
+
+
+Let us recall the model definition.  
+
+We suppose to have background observations from a set of $m$ populations.
+
+We note with $X_{ij}$ the $j$-th sample from the $i$-th population, $i = 1, \ldots, m$.
+Each population is Multivariate Gaussian, with means $\theta_i$, and covariances $W_i$.
 $$
-X_{ij} \; | \; \theta_i, \; W_i \sim \quad N(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
-$$\theta_i \; | \; \mu, B \sim \quad N(\mu, B)$$
+X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
+$$\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)$$
 $$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
 
-where $n_w > 2p$, and $U$ is s.t. $$ E[W_i] = \frac{U}{n_w - 2(p + 1)} $$ (parametrization according to [@Press2012Applied]).
+where $n_w > 2\,p$, and $U$ is s.t. $$ E[W_i] = \frac{U}{n_w - 2(p + 1)} $$ (parametrization according to [@Press2012Applied]).
 
 As the model is Bayesian, we are required to specify the hyperparameters $\mu, B, U, n_w$, as well as the Gibbs chain initialization $W_i$.   
 Notice that inference is propagated by supplying the inverses of covariance matrices, i.e. $B^{-1}$ and $W_i^{-1}$.
@@ -98,9 +106,37 @@ nw <- 2*(p + 1) + 1
 mu <- (mean.quest + mean.ref)/2
 ```
 
-## Log-LR computation
+### Sample model
 
-Once the parameters are specified, we can compute the marginal likelihood (not particularly useful):
+The package has been written to evaluate whether **two** sets of observations come from the same source ($H_p$) or not ($H_d$). 
+Background information (the hyperparameters) is noted with letter $I = \left\{\mu, B, U, n_w \right\}$.  
+
+We note with $Y_{ij}$ the $j$-th sample from the $i$-th considered set, where $i \in [\text{reference}, \text{questioned}]$.   
+Collectively, we shorten $Y_i = \left\{ Y_{ij} \right\}_j$.
+
+## Bayes Factor
+
+The Bayes Factor for this problem can be written as:
+
+$$\text{BF} = \frac{ p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_p) }{p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_d)}$$
+
+Notice that the numerator is a marginal likelihood:
+
+$$p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_p) = \int p( Y_{\text{reference}}, Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W $$
+
+and the denominator is a product of marginal likelihoods:
+
+$$
+p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_d) = 
+p(Y_{\text{reference}} \mid I, H_d) p(Y_{\text{questioned}} \mid I, H_d) = 
+\left( \int p( Y_{\text{reference}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right) 
+\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right) 
+$$
+
+## Computation
+
+The marginal likelihood is computed with the function `marginalLikelihood` using [@Chib1995Marginal].   
+E.g. here we compute $p(Y_{\text{questioned}} \mid I, H_d)$: 
 
 ```{r collapse=TRUE}
 burn.in = 1000
@@ -108,7 +144,8 @@ n.iter = 10000
 marginalLikelihood(as.matrix(df.quest), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, verbose = FALSE)
 ```
 
-and the log-LR value:
+the LR value can be computed as well, now considering two samples: (`W.inv.2` is used only for chain initalisation)
+
 ```{r collapse=TRUE}
 samesource_C(as.matrix(df.quest), as.matrix(df.ref), n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE)
 ```

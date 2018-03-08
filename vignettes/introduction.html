@@ -12,7 +12,7 @@
 
 <meta name="author" content="Lorenzo Gaborini" />
 
-<meta name="date" content="2017-12-21" />
+<meta name="date" content="2018-03-08" />
 
 <title>Introduction</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction</h1>
 <h4 class="author"><em>Lorenzo Gaborini</em></h4>
-<h4 class="date"><em>2017-12-21</em></h4>
+<h4 class="date"><em>2018-03-08</em></h4>
 
 
 
@@ -118,9 +118,13 @@ df.ref &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span cl
 <h2>Model and prior specification</h2>
 <p>The package implements a two-sample Bayesian Hierarchical model with Gaussian multivariate likelihoods, and Inverse-Wishart prior on the covariance matrices.<br />
 The theoretical details are specified in <span class="citation">(Bozza et al. 2008)</span>.</p>
-<p>Let us recall the model definition. We note with <span class="math inline">\(X_{ij}\)</span> the <span class="math inline">\(j\)</span>-th sample from the <span class="math inline">\(i\)</span>-th population, <span class="math inline">\(i = 1,2\)</span>. The two populations are Gaussians, with means <span class="math inline">\(\theta_i\)</span>, and covariances <span class="math inline">\(W_i\)</span>. <span class="math display">\[
-X_{ij} \; | \; \theta_i, \; W_i \sim \quad N(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N(\mu, B)\]</span> <span class="math display">\[W_i \; | \; U, n_w \sim \quad IW(U, n_w)\]</span></p>
-<p>where <span class="math inline">\(n_w &gt; 2p\)</span>, and <span class="math inline">\(U\)</span> is s.t. <span class="math display">\[ E[W_i] = \frac{U}{n_w - 2(p + 1)} \]</span> (parametrization according to <span class="citation">(Press 2012)</span>).</p>
+<div id="background-model" class="section level3">
+<h3>Background model</h3>
+<p>Let us recall the model definition.</p>
+<p>We suppose to have background observations from a set of <span class="math inline">\(m\)</span> populations.</p>
+<p>We note with <span class="math inline">\(X_{ij}\)</span> the <span class="math inline">\(j\)</span>-th sample from the <span class="math inline">\(i\)</span>-th population, <span class="math inline">\(i = 1, \ldots, m\)</span>. Each population is Multivariate Gaussian, with means <span class="math inline">\(\theta_i\)</span>, and covariances <span class="math inline">\(W_i\)</span>. <span class="math display">\[
+X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)\]</span> <span class="math display">\[W_i \; | \; U, n_w \sim \quad IW(U, n_w)\]</span></p>
+<p>where <span class="math inline">\(n_w &gt; 2\,p\)</span>, and <span class="math inline">\(U\)</span> is s.t. <span class="math display">\[ E[W_i] = \frac{U}{n_w - 2(p + 1)} \]</span> (parametrization according to <span class="citation">(Press 2012)</span>).</p>
 <p>As the model is Bayesian, we are required to specify the hyperparameters <span class="math inline">\(\mu, B, U, n_w\)</span>, as well as the Gibbs chain initialization <span class="math inline">\(W_i\)</span>.<br />
 Notice that inference is propagated by supplying the inverses of covariance matrices, i.e. <span class="math inline">\(B^{-1}\)</span> and <span class="math inline">\(W_i^{-1}\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eps &lt;-<span class="st"> </span><span class="fl">0.1</span>
@@ -131,14 +135,36 @@ U &lt;-<span class="st"> </span>eps<span class="op">*</span><span class="kw">dia
 nw &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">*</span>(p <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
 mu &lt;-<span class="st"> </span>(mean.quest <span class="op">+</span><span class="st"> </span>mean.ref)<span class="op">/</span><span class="dv">2</span></code></pre></div>
 </div>
-<div id="log-lr-computation" class="section level2">
-<h2>Log-LR computation</h2>
-<p>Once the parameters are specified, we can compute the marginal likelihood (not particularly useful):</p>
+<div id="sample-model" class="section level3">
+<h3>Sample model</h3>
+<p>The package has been written to evaluate whether <strong>two</strong> sets of observations come from the same source (<span class="math inline">\(H_p\)</span>) or not (<span class="math inline">\(H_d\)</span>). Background information (the hyperparameters) is noted with letter <span class="math inline">\(I = \left\{\mu, B, U, n_w \right\}\)</span>.</p>
+<p>We note with <span class="math inline">\(Y_{ij}\)</span> the <span class="math inline">\(j\)</span>-th sample from the <span class="math inline">\(i\)</span>-th considered set, where <span class="math inline">\(i \in [\text{reference}, \text{questioned}]\)</span>.<br />
+Collectively, we shorten <span class="math inline">\(Y_i = \left\{ Y_{ij} \right\}_j\)</span>.</p>
+</div>
+</div>
+<div id="bayes-factor" class="section level2">
+<h2>Bayes Factor</h2>
+<p>The Bayes Factor for this problem can be written as:</p>
+<p><span class="math display">\[\text{BF} = \frac{ p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_p) }{p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_d)}\]</span></p>
+<p>Notice that the numerator is a marginal likelihood:</p>
+<p><span class="math display">\[p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_p) = \int p( Y_{\text{reference}}, Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) {\text{ d}}\theta {\text{ d}}W \]</span></p>
+<p>and the denominator is a product of marginal likelihoods:</p>
+<p><span class="math display">\[
+p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_d) = 
+p(Y_{\text{reference}} \mid I, H_d) p(Y_{\text{questioned}} \mid I, H_d) = 
+\left( \int p( Y_{\text{reference}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) {\text{ d}}\theta {\text{ d}}W \right) 
+\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) {\text{ d}}\theta {\text{ d}}W \right) 
+\]</span></p>
+</div>
+<div id="computation" class="section level2">
+<h2>Computation</h2>
+<p>The marginal likelihood is computed with the function <code>marginalLikelihood</code> using <span class="citation">(Chib 1995)</span>.<br />
+E.g. here we compute <span class="math inline">\(p(Y_{\text{questioned}} \mid I, H_d)\)</span>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">burn.in =<span class="st"> </span><span class="dv">1000</span>
 n.iter =<span class="st"> </span><span class="dv">10000</span>
 <span class="kw">marginalLikelihood</span>(<span class="kw">as.matrix</span>(df.quest), n.iter, B.inv, W.inv.<span class="dv">1</span>, U, nw, mu, burn.in, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
 ## [1] -80.5086</code></pre></div>
-<p>and the log-LR value:</p>
+<p>the LR value can be computed as well, now considering two samples: (<code>W.inv.2</code> is used only for chain initalisation)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">samesource_C</span>(<span class="kw">as.matrix</span>(df.quest), <span class="kw">as.matrix</span>(df.ref), n.iter, B.inv, W.inv.<span class="dv">1</span>, W.inv.<span class="dv">2</span>, U, nw, mu, burn.in, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
 ## [1] -8.670725</code></pre></div>
 <p>Notice how low it is compared to a subset of original data:</p>
@@ -236,6 +262,9 @@ W.inv.samples &lt;-<span class="st"> </span>results<span class="op">$</span>mcmc
 <div id="refs" class="references">
 <div id="ref-Bozza2008Probabilistic">
 <p>Bozza, Silvia, Franco Taroni, Raymond Marquis, and Matthieu Schmittbuhl. 2008. “Probabilistic Evaluation of Handwriting Evidence: Likelihood Ratio for Authorship.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 57 (3): 329–41. doi:<a href="https://doi.org/10.1111/j.1467-9876.2007.00616.x">10.1111/j.1467-9876.2007.00616.x</a>.</p>
+</div>
+<div id="ref-Chib1995Marginal">
+<p>Chib, Siddhartha. 1995. “Marginal Likelihood from the Gibbs Output.” <em>Journal of the American Statistical Association</em> 90 (432): 1313–21. <a href="http://amstat.tandfonline.com/doi/abs/10.1080/01621459.1995.10476635" class="uri">http://amstat.tandfonline.com/doi/abs/10.1080/01621459.1995.10476635</a>.</p>
 </div>
 <div id="ref-Press2012Applied">
 <p>Press, S James. 2012. <em>Applied Multivariate Analysis: Using Bayesian and Frequentist Methods of Inference</em>. Courier Corporation.</p>
