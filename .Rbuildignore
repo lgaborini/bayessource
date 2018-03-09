@@ -6,3 +6,4 @@
 ^.*\.sublime-package$
 ^.*\.sublime-workspace$
 ^_test_Gibbs\.R$
+^bayessource.sublime-project$
