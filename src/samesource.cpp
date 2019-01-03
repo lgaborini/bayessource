@@ -16,7 +16,7 @@ using namespace Rcpp;
 //' @param X the dataset
 //' @param n_iter number of MC iterations
 //' @param B_inv prior inverse of between covariance matrix
-//' @param W_inv prior inverse of within covariance matrix
+//' @param W_inv initialization for prior inverse of within covariance matrix
 //' @param U covariance matrix for the mean
 //' @param nw degrees of freedom
 //' @param mu prior mean
