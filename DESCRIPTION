@@ -13,7 +13,14 @@ Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 0.12.10), RcppArmadillo, coda
 LinkingTo: Rcpp, RcppArmadillo
-Suggests: testthat, knitr,
-    rmarkdown, mvtnorm, microbenchmark, ggplot2, MCMCpack
-RoxygenNote: 6.0.1
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
+    mvtnorm,
+    microbenchmark,
+    ggplot2,
+    MCMCpack,
+    covr
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
