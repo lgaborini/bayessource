@@ -8,7 +8,7 @@ Authors@R: c(person("Lorenzo", "Gaborini", role = c("aut", "cre"),
 Description: 
     Bayesian approach to evaluate whether two datasets come from the same population.
     Currently implements a Gibbs sampler for the Multivariate Normal - Inverse Wishart model.
-License: Proprietary
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: Rcpp (>= 0.12.10), RcppArmadillo, coda
