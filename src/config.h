@@ -19,6 +19,7 @@
 #endif
 
 //' Check whether Cholesky speedup is used.
+//' @keywords internal
 // [[Rcpp::export(rng = false)]]
 bool isCholeskyOn();
 
