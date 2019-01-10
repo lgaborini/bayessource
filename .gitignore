@@ -1,8 +1,13 @@
 /.Rproj.user/
-/man/
-inst/doc
+/inst/doc
 /src-i386/
 /src-x64/
 .Rproj.user
 *.sublime-workspace
 *.sublime-project
+/src/*.o
+/src/*.dll
+/src/*.so
+/src/RcppExports.cpp
+/src/RcppExports.o
+/R/RcppExports.R

@@ -1,4 +1,0 @@
-*.o
-*.dll
-/RcppExports.cpp
-*.so
