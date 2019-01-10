@@ -16,6 +16,10 @@ remotes::install_github('lgaborini/bayessource')
 
 [![Travis build status](https://travis-ci.org/lgaborini/bayessource.svg?branch=master)](https://travis-ci.org/lgaborini/bayessource) [![Codecov test coverage](https://codecov.io/gh/lgaborini/bayessource/branch/master/graph/badge.svg)](https://codecov.io/gh/lgaborini/bayessource?branch=master)
 
+## Documentation
+
+Documentation is available on [GitHub pages](https://lgaborini.github.io/bayessource).
+
 ## References
 
 Bozza, Taroni, Marquis, Schmittbuhl, “Probabilistic Evaluation of Handwriting Evidence: Likelihood Ratio for Authorship.” Journal of the Royal Statistical Society: Series C (Applied Statistics) 57, no. 3 (June 1, 2008): 329–41. https://doi.org/10.1111/j.1467-9876.2007.00616.x.
