@@ -8,6 +8,6 @@
 /src/*.o
 /src/*.dll
 /src/*.so
-/src/RcppExports.cpp
+# /src/RcppExports.cpp
 /src/RcppExports.o
-/R/RcppExports.R
+# /R/RcppExports.R
