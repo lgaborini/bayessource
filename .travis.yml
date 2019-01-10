@@ -8,3 +8,5 @@ after_success:
 r_binary_packages:
    - tidyverse
    - Rcpp
+before_script:
+   - Rscript -e 'Rcpp::compileAttributes()'
