@@ -5,8 +5,5 @@ sudo: false
 cache: packages
 after_success:
    - Rscript -e 'covr::codecov()'
-r_binary_packages:
-   - tidyverse
-   - Rcpp
 before_script:
    - Rscript -e 'Rcpp::compileAttributes()'
