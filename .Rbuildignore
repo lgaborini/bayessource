@@ -1,3 +1,5 @@
+^docs$
+^_pkgdown\.yml$
 ^codecov\.yml$
 ^\.travis\.yml$
 ^.*\.Rproj$
@@ -10,3 +12,4 @@
 ^_test_Gibbs\.R$
 ^bayessource.sublime-project$
 ^README\.md$
+^docs/$
