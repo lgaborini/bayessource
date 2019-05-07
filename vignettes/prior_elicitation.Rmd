@@ -1,0 +1,154 @@
+---
+title: "Prior elicitation"
+author: "Lorenzo Gaborini"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Prior elicitation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+source('knitr_markup.R')
+bmatrix.digits <- 4
+```
+
+## Test case
+
+Let's generate a test dataset with known parameters.      
+We will use some supporting functions:
+
+```{r}
+library(bayessource)
+
+# Generate n random integers in {min, ..., max}
+randi <- function(n, min, max) { round(runif(n, min, max)) }
+
+#' Generate random invertible symmetric pxp matrix
+#'
+#' @param p 
+#' @param M 
+#' @param alpha regularization
+#'
+#' @return
+randinvmat <- function(p, M = 3, alpha = 1) {
+   mat <- matrix(randi(p^2, -M, M), nrow = p, ncol = p)
+   t(mat) %*% mat + diag(p) * alpha
+}
+```
+## Data generation
+
+We will generate the data according to the model.
+
+```{r}
+p <- 4      # number of variables
+m <- 10     # number of sources
+n <- 20     # number of items per source
+
+list_exact <- list()
+```
+
+Upper hierarchical level:
+
+```{r}
+list_exact$B.exact <- randinvmat(p)      # Between covariance mtx
+list_exact$U.exact <- randinvmat(p)      # Inverted Wishart parameter
+list_exact$mu.exact <- randi(p, 0, 10)   # Mean of means
+list_exact$nw.exact <- 2*(p + 1) + 1     # dof for Inverted Wishart, as small as possible
+```
+
+Middle hierarchical level:    
+
+- source means ($\theta_i$) 
+- within covariance matrices $W_i$
+
+```{r}
+theta.sources.exact <- list()
+for (i in seq(m)) {
+  theta.sources.exact[[i]] <- mvtnorm::rmvnorm(1, list_exact$mu.exact, list_exact$B.exact)
+}
+W.sources.exact <- list()
+for (i in seq(m)) {
+  # W.sources[[i]] <- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])
+  W.sources.exact[[i]] <- riwish_Press(list_exact$nw.exact, list_exact$U.exact)
+}
+```
+
+Lower hierarchical level: raw data
+
+```{r}
+df <- list()
+for (i in seq(m)) {
+  # The data
+  df[[i]] <- rmvnorm(n, theta.sources.exact[[i]], W.sources.exact[[i]])
+  # The source (last column)
+  df[[i]] <- cbind(df[[i]], i)
+}
+
+df <- data.frame(do.call(rbind, df))
+colnames(df) <- paste(c(paste0('v', seq(1:p)), 'source'))
+```
+
+The item column is the last one (`p + 1`).
+
+### Visualization
+
+First two components across sources
+
+```{r}
+library(ggplot2)
+
+ggplot(data = df, aes(x = v1, y = v2, col = factor(source))) +
+   geom_point(size = 1) +
+   scale_colour_discrete('Source')
+```
+
+## Prior elicitation
+
+The package supplies the function `make_priors_and_init`.
+
+Suppose that `df` represents a background dataset.  
+We can use it to elicit the model hyperparameters:
+
+```{r}
+
+col.variables <- 1:p
+col.item <- p + 1
+
+use.priors <- 'ML'
+use.init <- 'random'
+
+priors <- make_priors_and_init(df, col.variables, col.item, use.priors, use.init)
+names(priors)
+```
+
+We obtain:
+
+```{r}
+bmatrix(as.matrix(priors$mu), pre = '\\mu =', digits = bmatrix.digits)
+bmatrix(priors$B.inv, pre = 'B^{-1} =', digits = bmatrix.digits)
+```
+
+Hyperpriors for the within covariance matrices:
+$$ W_i \sim IW(n_w, U) $$
+$$ n_w = `r priors$nw` $$
+```{r}
+bmatrix(priors$U, pre = 'U =', digits = bmatrix.digits)
+```
+
+Initialisation:    
+Within covariance matrices and their inverses:
+```{r}
+bmatrix(priors$W.inv.1, pre = 'W^{-1}_1 =', digits = bmatrix.digits)
+bmatrix(priors$W.inv.2, pre = 'W^{-1}_2 =', digits = bmatrix.digits)
+bmatrix(solve(priors$W.inv.1), pre = 'W_1 =', digits = bmatrix.digits)
+bmatrix(solve(priors$W.inv.2), pre = 'W_2 =', digits = bmatrix.digits)
+```
+```
+

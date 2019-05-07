@@ -86,12 +86,14 @@ We suppose to have background observations from a set of $m$ populations.
 
 We note with $X_{ij}$ the $j$-th sample from the $i$-th population, $i = 1, \ldots, m$.
 Each population is Multivariate Gaussian, with means $\theta_i$, and covariances $W_i$.
-$$
-X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
+
+$$X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
 $$\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)$$
 $$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
 
 where $n_w > 2\,p$, and $U$ is s.t. $$ E[W_i] = \frac{U}{n_w - 2(p + 1)} $$ (parametrization according to [@Press2012Applied]).
+
+### Prior elicitation
 
 As the model is Bayesian, we are required to specify the hyperparameters $\mu, B, U, n_w$, as well as the Gibbs chain initialization $W_i$.   
 Notice that inference is propagated by supplying the inverses of covariance matrices, i.e. $B^{-1}$ and $W_i^{-1}$.
@@ -105,6 +107,14 @@ U <- eps*diag(p)
 nw <- 2*(p + 1) + 1
 mu <- (mean.quest + mean.ref)/2
 ```
+
+The package proves the function `make_priors_and_init` to supply these parameters based on a background dataset.    
+It returns a list containing estimates for $\mu$, $B^{-1}$, $U$, the initialization for $W_i^{-1}$, and the smallest possible $n_w$ such that the matrices are invertible. 
+
+```{r}
+
+```
+
 
 ### Sample model
 
