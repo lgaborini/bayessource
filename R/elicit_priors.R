@@ -2,7 +2,8 @@
 #'
 #' Elicit priors and initialization from background dataset.
 #'
-#' Here we fix the hyperparameters for priors on $\theta_i$ and $W_i$, i.e., $B$, $U$, $\mu$ and $n_w$.
+#'
+#' Here we fix the hyperparameters for priors on $theta_i$ and $W_i$, i.e., $B$, $U$, $mu$ and $n_w$.
 #'
 #' An appropriate initialization value for $W^{-1}_i$, $i=1,2$ is also generated.
 #' Notice that we have three chains in the LR computations, the same initialization is used thrice.
@@ -38,15 +39,14 @@
 #' - `nw`: the Inverted Wishart dof
 #' - `W.inv.1`, `W.inv.2`: the within cov initializations, as inverses
 #'
-#'
 #' @param df.background the background dataset
 #' @param col.variables columns with variables
 #' @param col.item column with item id
 #' @param use.priors see details
 #' @param use.init see details
 #' @param ... additional variables for priors, init
-#' @return a list of variables
 #' @export
+#' @return a list of variables
 make_priors_and_init <- function(df.background, col.variables, col.item, use.priors = 'ML', use.init = 'random', ...) {
 
    stopifnot(use.priors %in% c('ML', 'vague'))

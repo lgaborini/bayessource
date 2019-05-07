@@ -22,12 +22,22 @@ make_priors_and_init(df.background, col.variables, col.item,
 }
 \value{
 a list of variables
+## Chain initialization
+
+Here we initialize the chain by supplying $W_1^{-1}$ and $W_2^{-1}$.
+The $\theta_i$ are generated accordingly to the model.
+
+Three methods:
+
+- sample from the hierarchical model using the hyperparameters $n_w$, $U$
+- initialize from fixed values
+- cheat and use the known values
 }
 \description{
 Elicit priors and initialization from background dataset.
 }
 \details{
-Here we fix the hyperparameters for priors on $\theta_i$ and $W_i$, i.e., $B$, $U$, $\mu$ and $n_w$.
+Here we fix the hyperparameters for priors on $theta_i$ and $W_i$, i.e., $B$, $U$, $mu$ and $n_w$.
 
 An appropriate initialization value for $W^{-1}_i$, $i=1,2$ is also generated.
 Notice that we have three chains in the LR computations, the same initialization is used thrice.
