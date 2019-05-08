@@ -1,10 +1,11 @@
-# bayessource 0.3.0.9000
+# bayessource 0.2.6.9000
 
 * Add prior and init elicitation functions.
 * Add vignette for prior elicitation.
 * Using Roxygen with Markdown. Add Rdpack dependency to generate references with Bibtex.
 * Add runtime checks for matrix invertibility.
 * CRITICAL: fix prior matrices estimation.
+* Removed dplyr Suggests.
 
 # bayessource 0.2.6
 

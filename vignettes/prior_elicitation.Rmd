@@ -15,9 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-suppressPackageStartupMessages(library(here))
-
-source(here('vignettes', 'knitr_markup.R'))
+source('knitr_markup.R')
 bmatrix.digits <- 4
 ```
 
@@ -69,7 +67,7 @@ $$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
 ```{r}
 p <- 4      # number of variables
 m <- 100     # number of sources
-n <- 5000     # number of items per source
+n <- 500     # number of items per source
 ```
 
 Upper hierarchical level: generate $\mu$, $n_w$, $B$, $U$
@@ -123,11 +121,10 @@ First two components across sources:
 
 ```{r example-plot, fig.width=8}
 library(ggplot2)
-suppressPackageStartupMessages(library(dplyr))
 
-df %>% 
-  sample_frac(0.25) %>% 
-  ggplot(aes(x = v1, y = v2, col = factor(source))) +
+df_sub <- df[sample(1:nrow(df), nrow(df) * 0.05, replace = FALSE), ]
+
+ggplot(df_sub, aes(x = v1, y = v2, col = factor(source))) +
   geom_point(size = 1, show.legend = FALSE) +
   labs(x = 'x1', y = 'x2', title = 'Raw data across sources: first two components', 
        subtitle = paste('Color = source; ', m, 'sources, ', n, 'observations per source'))

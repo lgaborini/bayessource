@@ -1,7 +1,7 @@
 Package: bayessource
 Type: Package
 Title: Bayesian approach to evaluate whether two datasets come from the same population
-Version: 0.3.0.9000
+Version: 0.2.6.9000
 Authors@R: c(person("Lorenzo", "Gaborini", role = c("aut", "cre"),
                      email = "lorenzo.gaborini@gmail.com"),
               person("Silvia", "Bozza", role = c("ctb", "cph")))
@@ -21,9 +21,7 @@ Suggests:
     microbenchmark,
     ggplot2,
     MCMCpack,
-    covr,
-    here,
-    dplyr
+    covr
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
