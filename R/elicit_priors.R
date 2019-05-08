@@ -15,25 +15,25 @@
 #' - `'ML'`: maximum likelihood estimation
 #' - `'vague'`: low-information priors
 #'
-#'   `U` is `alpha*diag(p)`, B is `beta*diag(p)`, `mu` is `mu0`.    
+#'   `U` is `alpha*diag(p)`, B is `beta*diag(p)`, `mu` is `mu0`.
 #'   By default `alpha = 1, beta = 1, mu0 = 0`
 #'
-#' The Wishart dofs `nw` are set as small as possible without losing full rank:   
+#' The Wishart dofs `nw` are set as small as possible without losing full rank:
 #' \eqn{nw = 2*(p + 1) + 1}
 #'
 #' @section Initialization:
 #'
 #' `use.init`:
 #' - `'random'`: initialize according to the model
-#' - `'vague'`: low-information initialization   
+#' - `'vague'`: low-information initialization
 #'   \eqn{W_i} is `alpha_init + beta_init *diag(p)`
 #'
 #' Some constants can be changed by passing the new values to `...` :
 #'
-#' - `use.priors = 'vague'`:   
+#' - `use.priors = 'vague'`:
 #'    `alpha = 1, beta = 1, mu0 = 0`
 #'
-#' - `use.init = 'vague'`:   
+#' - `use.init = 'vague'`:
 #'    `alpha_init = 1, beta_init = 100`
 #'
 #' @section Returns:
@@ -74,16 +74,16 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
       WB <- two.level.multivariate.calculate.UC(df.background, col.variables, col.item)
 
       mu <- t(WB$all.means)
-      B.inv <- solve(WB$B)
+      B.inv <- chol2inv(chol(WB$B))
       nw <- nw.min
 
       ## ML prior for W
       ## W ~ IW(nw, U)
       ## We have W0 (sample estimate for W?)
       ## Set U prior s.t.
-      ## E[W] = U / (nw - 2*(p + 1)) = W0        # Press
+      ## E[W] = U / (nw - 2*p - 2) = W0        # Press
 
-      U <- WB$W * (nw - 2*(p + 1))           # mean of Inverse Wishart (Press)
+      U <- WB$W * (nw - 2*p - 2)           # mean of Inverse Wishart (Press)
 
    }
 
@@ -129,7 +129,7 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 
       # W.1 <- riwish(nw.exact, U)
       W.1 <- riwish_Press(nw, U)
-      W.inv.1 <- solve(W.1)
+      W.inv.1 <- chol2inv(chol(W.1))
 
       # is there a better option?
       W.inv.2 <- W.inv.1
@@ -144,7 +144,7 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 
       # W.1 is a covariance matrix, not a precision!
       W.1 <- dots.now$alpha_init*matrix(1, p, p) + dots.now$beta_init*diag(p)
-      W.inv.1 <- solve(W.1)
+      W.inv.1 <- chol2inv(chol(W.1))
       W.inv.2 <- W.inv.1
       rm(W.1)
    }
@@ -160,7 +160,7 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 #'
 #' Returns minimum value for degrees of freedom such that Inverted Wishart has a mean..
 #'
-#' Uses Press parametrization.
+#' Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 #'
 #' \deqn{X ~ IW(nw, S)}, with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
 #' Then:
@@ -168,10 +168,10 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 #'
 #' Finally, the minimum dof $v$ is $ nw = 2*(p + 1) + 1 $.
 #'
-#' @references J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
 #' @param p dimension
 #' @return minimum dof
 #' @export
+#' @references \insertAllCited{}
 get_minimum_nw_IW <- function(p) {
    if (p < 1) { stop('p must be >= 1')}
 
@@ -183,7 +183,7 @@ get_minimum_nw_IW <- function(p) {
 
 #' Generate random sample from Inverted Wishart.
 #'
-#' Using Press parametrization.
+#' Using \insertCite{Press2012Applied}{bayessource} parametrization.
 #'
 #' Uses \pkg{MCMCpack}::riwish.
 #'
@@ -192,6 +192,7 @@ get_minimum_nw_IW <- function(p) {
 #' @return a single random variate from IW(v, S)
 #' @template InverseWishart_Press
 #' @export
+#' @references \insertAllCited{}
 riwish_Press <- function(v, S){
    p <- nrow(S)
    stopifnot(v > 2*p)

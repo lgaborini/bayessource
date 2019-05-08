@@ -27,7 +27,17 @@
 marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE) {
 
    # Wrap the C function
-   result <- marginalLikelihood_internal(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, chain_output = output.mcmc, verbose = verbose, Gibbs_only = Gibbs_only)
+   result <- marginalLikelihood_internal(X = X,
+                                         n_iter = n.iter,
+                                         B_inv = B.inv,
+                                         W_inv = W.inv,
+                                         U = U,
+                                         nw = nw,
+                                         mu = mu,
+                                         burn_in = burn.in,
+                                         chain_output = output.mcmc,
+                                         verbose = verbose,
+                                         Gibbs_only = Gibbs_only)
 
    if (output.mcmc) {
       # Build the coda object using the chain outputs
@@ -78,9 +88,30 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
 
    # Wrap the C functions
-   LR.num <- marginalLikelihood_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
-   LR.den.1 <- marginalLikelihood_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
-   LR.den.2 <- marginalLikelihood_internal(ref, n.iter, B.inv, W.inv.2, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
+   LR.num <- marginalLikelihood_internal(X = rbind(quest, ref),
+                                         B_inv = B.inv,
+                                         W_inv = W.inv.1,
+                                         U = U, nw = nw,
+                                         mu = mu,
+                                         burn_in = burn.in, n_iter = n.iter,
+                                         chain_output = FALSE, verbose = verbose)
+
+   LR.den.1 <- marginalLikelihood_internal(X = quest,
+                                           B_inv = B.inv,
+                                           W_inv = W.inv.1,
+                                           U = U, nw = nw,
+                                           mu = mu,
+                                           burn_in = burn.in, n_iter = n.iter,
+                                           chain_output = FALSE, verbose = verbose)
+
+   LR.den.2 <- marginalLikelihood_internal(X = ref,
+                                           B_inv = B.inv,
+                                           W_inv = W.inv.2,
+                                           U = U, nw = nw,
+                                           mu = mu,
+                                           burn_in = burn.in, n_iter = n.iter,
+                                           chain_output = FALSE, verbose = verbose)
+
 
    LR.num$value - LR.den.1$value - LR.den.2$value
 }

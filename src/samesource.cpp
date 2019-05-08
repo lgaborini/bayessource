@@ -49,6 +49,29 @@ Rcpp::List marginalLikelihood_internal(
    unsigned int nr = X.n_rows;
    unsigned int p = X.n_cols;
 
+   // Priors
+   arma::mat B = arma::inv_sympd(B_inv);
+
+   // PARAMETER CHECKS
+
+   // Checks for covariance and scale matrices: must be symmetric positive definites
+   if (!U.is_sympd()) {
+      Rcout << U << endl;
+      Rcpp::stop("U is not sym-pd!");
+   }
+   if (!W_inv.is_sympd()) {
+      Rcout << W_inv << endl;
+      Rcpp::stop("W_inv is not sym-pd!");
+   }
+   if (!B_inv.is_sympd()) {
+      Rcout << B_inv << endl;
+      Rcpp::stop("B_inv is not sym-pd!");
+   }
+   if (!B.is_sympd()) {
+      Rcout << B << endl;
+      Rcpp::stop("B is not sym-pd!");
+   }
+
    // GIBBS SAMPLER
 
    // Sample from Wishart using stats::rWishart
@@ -56,9 +79,6 @@ Rcpp::List marginalLikelihood_internal(
 
    // Posterior dof
    double nwstar = nr + nw;
-
-   // Priors
-   arma::mat B = arma::inv_sympd(B_inv);
 
    // Gibbs updates
    arma::mat B_upd_g;
@@ -104,7 +124,7 @@ Rcpp::List marginalLikelihood_internal(
    }
 
    // Initialize Gibbs chain
-   // chain over theta_g (mu_upd_g, B_upd_g), W_inv_g (U_upd_g)
+   // chain over theta_g ~ (mu_upd_g, B_upd_g), W_inv_g ~ (U_upd_g)
    //
    // We initialize W_inv_g from the hyperprior parameter W_inv
    // B, mu are updated using the posterior formulae
@@ -122,6 +142,7 @@ Rcpp::List marginalLikelihood_internal(
    for (arma::uword i = 0; i < n_iter; ++i){
       // if (verbose && (i % interrupt_mod == 0)) Rcout << ".";
 
+      // Updated posteriors for B and mu
       B_upd_g = arma::inv_sympd(B_inv + nr * W_inv_g);
       mu_upd_g = B_upd_g * (B_inv * mu + nr * W_inv_g * bary.t());
 
@@ -175,8 +196,8 @@ Rcpp::List marginalLikelihood_internal(
       }
 
       if (logf > logf_star){
-         // if (verbose)
-         //    Rcout << "[iter " << i << "] New maximum: " << logf << ", previous: " << logf_star << ", delta: " << logf - logf_star << endl;
+         if (verbose)
+            Rcout << "[iter " << i << "] New maximum: " << logf << ", previous: " << logf_star << ", delta: " << logf - logf_star << endl;
          theta_star = theta_g;
          logf_star = logf;
          if (USE_CHOLESKY){
@@ -185,11 +206,6 @@ Rcpp::List marginalLikelihood_internal(
             W_inv_star = W_inv_g;
          }
       }
-
-      // Update priors with posteriors
-      // U_g = U_upd_g;
-      // B_inv_g = B_upd_inv_g;
-      // mu_g = mu_upd_g;
 
       // Check for user interrupt
       if (i % interrupt_mod == 0) {
