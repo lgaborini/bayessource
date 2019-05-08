@@ -160,7 +160,7 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 #'
 #' Returns minimum value for degrees of freedom such that Inverted Wishart has a mean..
 #'
-#' Uses Press[1] parametrization.
+#' Uses Press parametrization.
 #'
 #' \deqn{X ~ IW(nw, S)}, with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
 #' Then:
@@ -168,8 +168,7 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 #'
 #' Finally, the minimum dof $v$ is $ nw = 2*(p + 1) + 1 $.
 #'
-#' @references [1]S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
-#'
+#' @references J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
 #' @param p dimension
 #' @return minimum dof
 #' @export

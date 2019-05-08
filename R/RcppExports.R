@@ -31,6 +31,7 @@ marginalLikelihood_internal <- function(X, n_iter, B_inv, W_inv, U, nw, mu, burn
 #' Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
 #'
 #' @keywords internal
+#' @noMd
 logSumExp <- function(v) {
     .Call('_bayessource_logSumExp', PACKAGE = 'bayessource', v)
 }
@@ -38,13 +39,15 @@ logSumExp <- function(v) {
 #' Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
 #'
 #' @keywords internal
+#' @noMd
 logSumExpMean <- function(v) {
     .Call('_bayessource_logSumExpMean', PACKAGE = 'bayessource', v)
 }
 
-#' Computes log( cumsum_i( exp(v[i]) ) ) in a stable way.
+#' Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.
 #'
 #' @keywords internal
+#' @noMd
 logCumsumExp <- function(v) {
     .Call('_bayessource_logCumsumExp', PACKAGE = 'bayessource', v)
 }
@@ -52,6 +55,7 @@ logCumsumExp <- function(v) {
 #' Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
 #'
 #' @keywords internal
+#' @noMd
 logCummeanExp <- function(v) {
     .Call('_bayessource_logCummeanExp', PACKAGE = 'bayessource', v)
 }
@@ -102,7 +106,7 @@ ldet_from_Cholesky <- function(T_chol) {
 #' @param Cov covariance matrix
 #' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 #' @return a nxp matrix of samples
-#' 
+#'
 #' @export
 rmvnorm <- function(n, mu, Cov, is_chol = FALSE) {
     .Call('_bayessource_rmvnorm', PACKAGE = 'bayessource', n, mu, Cov, is_chol)
@@ -118,7 +122,7 @@ rmvnorm <- function(n, mu, Cov, is_chol = FALSE) {
 #' @param logd if TRUE, return the log-density
 #' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 #' @return the density in x (nx1)
-#' 
+#'
 #' @export
 dmvnorm <- function(x, mean, Cov, logd = FALSE, is_chol = FALSE) {
     .Call('_bayessource_dmvnorm', PACKAGE = 'bayessource', x, mean, Cov, logd, is_chol)
@@ -133,9 +137,10 @@ dmvnorm <- function(x, mean, Cov, logd = FALSE, is_chol = FALSE) {
 #' @param is_chol if TRUE, S is the upper Cholesky factor of S
 #' @param return_chol if TRUE, the upper Cholesky factor is returned
 #' @return a single random variate from W(v, S)
-#' 
+#'
 #' @export
 #' @template Wishart_eqn
+#' @references \insertAllCited{}
 rwish <- function(v, S, is_chol = FALSE, return_chol = FALSE) {
     .Call('_bayessource_rwish', PACKAGE = 'bayessource', v, S, is_chol, return_chol)
 }
@@ -152,10 +157,11 @@ rwish <- function(v, S, is_chol = FALSE, return_chol = FALSE) {
 #' @param Sigma scale matrix
 #' @param logd if TRUE, return the log-density
 #' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv
-#' 
+#'
 #' @export
 #' @template InverseWishart_Press
 #' @seealso \code{\link{diwishart}}, \code{\link{dwishart}}
+#' @references \insertAllCited{}
 diwishart_inverse <- function(X_inv, df, Sigma, logd = FALSE, is_chol = FALSE) {
     .Call('_bayessource_diwishart_inverse', PACKAGE = 'bayessource', X_inv, df, Sigma, logd, is_chol)
 }

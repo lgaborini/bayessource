@@ -22,6 +22,7 @@
 #' @seealso marginalLikelihood_internal
 #' @template gaussmv_model
 #' @template InverseWishart_Press
+#' @references \insertAllCited{}
 #' @md
 marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE) {
 
@@ -73,7 +74,9 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' @seealso marginalLikelihood
 #' @template gaussmv_model
 #' @template InverseWishart_Press
+#' @references \insertAllCited{}
 samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
+
    # Wrap the C functions
    LR.num <- marginalLikelihood_internal(rbind(quest, ref), n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)
    LR.den.1 <- marginalLikelihood_internal(quest, n.iter, B.inv, W.inv.1, U, nw, mu, burn.in, chain_output = FALSE, verbose = verbose)

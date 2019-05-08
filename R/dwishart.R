@@ -12,6 +12,7 @@
 #' 
 #' @export
 #' @template Wishart_eqn
+#' @references \insertAllCited{}
 dwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
    p <- ncol(X)
 

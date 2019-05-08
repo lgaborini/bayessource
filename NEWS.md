@@ -2,7 +2,7 @@
 
 * Add prior and init elicitation functions.
 * Add vignette for prior elicitation.
-* Using Roxygen with Markdown.
+* Using Roxygen with Markdown. Add Rdpack dependency to generate references with Bibtex.
 
 # bayessource 0.2.6
 

@@ -14,24 +14,28 @@
 //' Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
 //'
 //' @keywords internal
+//' @noMd
 // [[Rcpp::export(rng = false)]]
 double logSumExp(const arma::vec &v);
 
 //' Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
 //'
 //' @keywords internal
+//' @noMd
 // [[Rcpp::export(rng = false)]]
 double logSumExpMean(const arma::vec &v);
 
-//' Computes log( cumsum_i( exp(v[i]) ) ) in a stable way.
+//' Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.
 //'
 //' @keywords internal
+//' @noMd
 // [[Rcpp::export(rng = false)]]
 arma::vec logCumsumExp(const arma::vec &v);
 
 //' Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
 //'
 //' @keywords internal
+//' @noMd
 // [[Rcpp::export(rng = false)]]
 arma::vec logCummeanExp(const arma::vec &v);
 
@@ -80,7 +84,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol);
 //' @param Cov covariance matrix
 //' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 //' @return a nxp matrix of samples
-//' 
+//'
 //' @export
 // [[Rcpp::export]]
 arma::mat rmvnorm(const unsigned int n,
@@ -98,7 +102,7 @@ arma::mat rmvnorm(const unsigned int n,
 //' @param logd if TRUE, return the log-density
 //' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 //' @return the density in x (nx1)
-//' 
+//'
 //' @export
 // [[Rcpp::export(rng = false)]]
 arma::vec dmvnorm(const arma::mat &x,
@@ -116,9 +120,10 @@ arma::vec dmvnorm(const arma::mat &x,
 //' @param is_chol if TRUE, S is the upper Cholesky factor of S
 //' @param return_chol if TRUE, the upper Cholesky factor is returned
 //' @return a single random variate from W(v, S)
-//' 
+//'
 //' @export
 //' @template Wishart_eqn
+//' @references \insertAllCited{}
 // [[Rcpp::export]]
 arma::mat rwish(const double v,
    const arma::mat &S,
@@ -138,10 +143,11 @@ arma::mat rwish(const double v,
 //' @param Sigma scale matrix
 //' @param logd if TRUE, return the log-density
 //' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv
-//' 
+//'
 //' @export
 //' @template InverseWishart_Press
 //' @seealso \code{\link{diwishart}}, \code{\link{dwishart}}
+//' @references \insertAllCited{}
 // [[Rcpp::export(rng = false)]]
 double diwishart_inverse(const arma::mat &X_inv,
                        const double &df,

@@ -35,7 +35,7 @@ marginalLikelihood_internal(X, n_iter, B_inv, W_inv, U, nw, mu, burn_in,
 Fast Bayesian same source hypothesis. Gaussian MV.
 To be called by the R wrapper.
 }
-\section{Normal-Inverse-Wishart model\link{Bozza2008}}{
+\section{Normal-Inverse-Wishart model\insertCite{Bozza2008Probabilistic}{bayessource}}{
 
 
 Observation level:
@@ -51,7 +51,4 @@ Hyperparameters:
 A Gibbs sampler supplies theta, W^{(-1)}.
 }
 
-\references{
-\link{Bozza2008} S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.
-}
 \keyword{internal}

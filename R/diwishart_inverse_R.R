@@ -16,6 +16,7 @@
 #' @keywords internal
 #' @seealso \code{\link{diwishart_inverse}}, \code{\link{diwishart}}
 #' @template InverseWishart_Press
+#' @references \insertAllCited{}
 diwishart_inverse_R <- function(X.inv, df, Sigma, log = FALSE, is.chol = FALSE) {
    p <- ncol(X.inv)
 

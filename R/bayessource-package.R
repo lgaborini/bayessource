@@ -6,5 +6,6 @@
 #' @name bayessource
 #' @import coda
 #' @importFrom Rcpp evalCpp
+#' @importFrom Rdpack reprompt
 #' @useDynLib bayessource
 NULL

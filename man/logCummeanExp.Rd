@@ -2,11 +2,11 @@
 % Please edit documentation in R/RcppExports.R
 \name{logCummeanExp}
 \alias{logCummeanExp}
-\title{Computes log( cummean_i( exp(v\link{i}) ) ) in a stable way.}
+\title{Computes log( cummean_i( exp(v[i]) ) ) in a stable way.}
 \usage{
 logCummeanExp(v)
 }
 \description{
-Computes log( cummean_i( exp(v\link{i}) ) ) in a stable way.
+Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
 }
 \keyword{internal}

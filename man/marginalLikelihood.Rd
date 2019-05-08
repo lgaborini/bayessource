@@ -38,7 +38,7 @@ Implemented in C.
 See \code{\link{diwishart_inverse}} for the parametrization of the Inverted Wishart.
 See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 }
-\section{Normal-Inverse-Wishart model\link{Bozza2008}}{
+\section{Normal-Inverse-Wishart model\insertCite{Bozza2008Probabilistic}{bayessource}}{
 
 
 Observation level:
@@ -57,7 +57,7 @@ A Gibbs sampler supplies theta, W^{(-1)}.
 \section{Inverted Wishart parametrization (Press)}{
 
 
-Uses Press\link{Press2012} parametrization.
+Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 
 \deqn{X ~ IW(v, S)}
 with \eqn{S = pxp} matrix, \eqn{v > 2p} (the degrees of freedom).
@@ -67,9 +67,7 @@ Then:
 }
 
 \references{
-\link{Bozza2008} S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.
-
-\link{Press2012} S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
+\insertAllCited{}
 }
 \seealso{
 marginalLikelihood_internal

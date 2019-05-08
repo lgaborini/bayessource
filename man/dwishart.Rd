@@ -26,7 +26,7 @@ Density of X ~ Wishart(df, Sigma).
 \section{Wishart parametrization}{
 
 
-Uses Press/Anderson\link{Press2012,Anderson2003} parametrization.
+Uses \insertCite{Press2012Applied,Anderson2003introduction}{bayessource} parametrization.
 
 \deqn{X ~ W(v, S)}
 with \eqn{S = pxp} matrix, \eqn{v >= p} (the degrees of freedom).
@@ -36,7 +36,5 @@ Then:
 }
 
 \references{
-\link{Press2012} S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
-
-\link{Anderson2003} T. W. Anderson, An introduction to multivariate statistical analysis, 3rd ed. Hoboken, N.J: Wiley-Interscience, 2003.
+\insertAllCited{}
 }

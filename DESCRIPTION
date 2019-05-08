@@ -11,7 +11,7 @@ Description:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 0.12.10), RcppArmadillo, coda
+Imports: Rcpp (>= 0.12.10), RcppArmadillo, coda, Rdpack
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: 
     testthat,
@@ -27,3 +27,4 @@ Suggests:
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
+RdMacros: Rdpack
