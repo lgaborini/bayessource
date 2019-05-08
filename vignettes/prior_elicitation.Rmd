@@ -21,7 +21,7 @@ bmatrix.digits <- 4
 
 ## Test case
 
-```{r}
+```{r loading}
 set.seed(1337)
 
 library(bayessource)
@@ -32,7 +32,7 @@ requireNamespace('mvtnorm')
 Let's generate a test dataset with known parameters.      
 We will use some supporting functions:
 
-```{r}
+```{r functions}
 # Generate n random integers in {min, ..., max}
 randi <- function(n, min, max) { round(runif(n, min, max)) }
 
@@ -64,7 +64,7 @@ $$X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j 
 $$\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)$$
 $$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
 
-```{r}
+```{r parameters}
 p <- 4      # number of variables
 m <- 100     # number of sources
 n <- 500     # number of items per source
@@ -72,10 +72,10 @@ n <- 500     # number of items per source
 
 Upper hierarchical level: generate $\mu$, $n_w$, $B$, $U$
 
-```{r}
+```{r upper-gen}
 list_exact <- list()
 list_exact$B.exact <- randinvmat(p, alpha=2)      # Between Covariance matrix
-list_exact$U.exact <- randinvmat(p, alpha=2)      # Inverted Wishart parameter
+list_exact$U.exact <- randinvmat(p, alpha=2)      # Inverted Wishart scale matrix
 list_exact$mu.exact <- randi(p, 0, 10)   # mean of means
 list_exact$nw.exact <- 2*(p + 1) + 1     # dof for Inverted Wishart, as small as possible
 ```
@@ -85,7 +85,7 @@ Middle hierarchical level: for every source generate
 - source means: $\theta_i$
 - within covariance matrices: $W_i$
 
-```{r}
+```{r mid-gen}
 theta.sources.exact <- list()
 for (i in seq(m)) {
   theta.sources.exact[[i]] <- mvtnorm::rmvnorm(1, list_exact$mu.exact, list_exact$B.exact)
@@ -100,7 +100,7 @@ for (i in seq(m)) {
 
 Lower hierarchical level: raw data from every source
 
-```{r}
+```{r data-gen}
 df <- list()
 for (i in seq(m)) {
   # The data
@@ -111,6 +111,8 @@ for (i in seq(m)) {
 
 df <- data.frame(do.call(rbind, df))
 colnames(df) <- paste(c(paste0('v', seq(1:p)), 'source'))
+
+head(df)
 ```
 
 The item column is the last one (`p + 1`).
@@ -119,7 +121,7 @@ The item column is the last one (`p + 1`).
 
 First two components across sources:
 
-```{r example-plot, fig.width=8}
+```{r example-plot, fig.width=7}
 library(ggplot2)
 
 df_sub <- df[sample(1:nrow(df), nrow(df) * 0.05, replace = FALSE), ]
@@ -137,7 +139,7 @@ The package supplies the function `make_priors_and_init`.
 Suppose that `df` represents a background dataset.  
 We can use it to elicit the model hyperparameters:
 
-```{r}
+```{r priors}
 col.variables <- 1:p
 col.item <- p + 1
 
@@ -151,7 +153,9 @@ names(priors)
 
 ### Hyperpriors on mean
 
-- hyperprior for the between mean $\mu$
+$$\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)$$
+
+- Hyperprior for the between mean $\mu$:
 
 ```{r, results='asis'}
 bmatrix(as.matrix(priors$mu), pre = '\\mu =', digits = bmatrix.digits)
@@ -177,10 +181,13 @@ bmatrix(solve_sympd(list_exact$B.exact), pre = 'B^{-1} =', digits = bmatrix.digi
 
 ### Hyperpriors on within covariance matrix
 
-- Inverse of Inverted Wishart scale matrix:
-
 $$ W_i \sim IW(n_w, U) $$
-$$ n_w = `r priors$nw` $$
+
+- Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance)
+
+$$n_w = `r priors$nw`$$
+
+- Inverted Wishart scale matrix:
 
 ```{r, results='asis'}
 bmatrix(priors$U, pre = 'U =', digits = bmatrix.digits)
