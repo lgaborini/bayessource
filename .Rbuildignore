@@ -10,4 +10,4 @@
 ^docs$
 ^man-roxygen$
 ^README\.md$
-
+..Rcheck
