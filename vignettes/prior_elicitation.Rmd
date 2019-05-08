@@ -15,9 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-library(here)
-
-source(here('vignettes', 'knitr_markup.R'))
+source('knitr_markup.R')
 bmatrix.digits <- 4
 ```
 
