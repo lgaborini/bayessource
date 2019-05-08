@@ -71,9 +71,12 @@ two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.i
       group.means[i.item, ] <- means
 
       # sum the within and between item means
-      S.this <- t(means - all.means) %*% (means - all.means) * n.replicates
+      S.this <- t(means - all.means) %*% (means - all.means)
       S <- S + S.this
 
+      # Covariance for this item, without normalization factor
+      # = sum of squares to the item means
+      #
       # sum for all measurements
       Cov.this <- cov(tempdat)*(n.replicates - 1)
       Sw <- Sw + Cov.this

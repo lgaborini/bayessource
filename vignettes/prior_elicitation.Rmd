@@ -41,15 +41,6 @@ randi <- function(n, min, max) { round(runif(n, min, max)) }
 #' Generate random invertible symmetric pxp matrix
 #'
 #' @param p matrix size
-#' @param M max entry value
-#' @param alpha regularization
-randinvmat <- function(p, M = 3, alpha = 1) {
-   mat <- matrix(randi(p^2, -M, M), nrow = p, ncol = p)
-   t(mat) %*% mat + diag(p) * alpha
-}
-#' Generate random invertible symmetric pxp matrix
-#'
-#' @param p matrix size
 #' @param alpha regularization > 0
 randinvmat <- function(p, M = 5, alpha = NULL) {
   stopifnot(p > 0)
@@ -77,8 +68,8 @@ $$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
 
 ```{r}
 p <- 4      # number of variables
-m <- 10     # number of sources
-n <- 200     # number of items per source
+m <- 100     # number of sources
+n <- 5000     # number of items per source
 ```
 
 Upper hierarchical level: generate $\mu$, $n_w$, $B$, $U$
@@ -130,7 +121,7 @@ The item column is the last one (`p + 1`).
 
 First two components across sources:
 
-```{r, fig.width=8, eval=FALSE}
+```{r example-plot, fig.width=8}
 library(ggplot2)
 suppressPackageStartupMessages(library(dplyr))
 
@@ -211,13 +202,6 @@ Within covariance matrices and their inverses: we initialize the chain with
 ```{r, results='asis'}
 bmatrix(priors$W.inv.1, pre = 'W^{-1}_1 =', digits = bmatrix.digits)
 bmatrix(priors$W.inv.2, pre = 'W^{-1}_2 =', digits = bmatrix.digits)
-```
-
-In non-inverted form:
-
-```{r, results='asis'}
-bmatrix(solve_sympd(priors$W.inv.1), pre = 'W_1 =', digits = bmatrix.digits)
-bmatrix(solve_sympd(priors$W.inv.2), pre = 'W_2 =', digits = bmatrix.digits)
 ```
 
 ## Usage

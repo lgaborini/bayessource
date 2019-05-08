@@ -4,6 +4,7 @@
 * Add vignette for prior elicitation.
 * Using Roxygen with Markdown. Add Rdpack dependency to generate references with Bibtex.
 * Add runtime checks for matrix invertibility.
+* CRITICAL: fix prior matrices estimation.
 
 # bayessource 0.2.6
 
