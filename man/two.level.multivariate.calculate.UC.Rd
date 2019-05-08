@@ -9,9 +9,9 @@ two.level.multivariate.calculate.UC(population, idx.variables, idx.item)
 \arguments{
 \item{population}{matrix or dataframe containing data columns, item column and other columns}
 
-\item{idx.item}{item column (index or character vector)}
+\item{idx.variables}{data columns (indexes or character vectors)}
 
-\item{variables}{data columns (indexes or character vectors)}
+\item{idx.item}{item column (index or character vector)}
 }
 \value{
 list with items:

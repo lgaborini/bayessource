@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^.*\.sublime-package$
+^.*\.sublime-project$
 ^.*\.sublime-workspace$
 ^\.git$
 ^\.gitignore$

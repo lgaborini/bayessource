@@ -15,9 +15,10 @@
 #' This function is RNG-free.
 #'
 #' @param population matrix or dataframe containing data columns, item column and other columns
-#' @param variables data columns (indexes or character vectors)
+#' @param idx.variables data columns (indexes or character vectors)
 #' @param idx.item item column (index or character vector)
-#'
+#' @importFrom stats cov
+#' @importFrom utils modifyList
 #' @return list with items:
 #' - `group.means` (matrix, row*variable)
 #' - `all.means` (vector)

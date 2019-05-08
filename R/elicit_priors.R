@@ -92,7 +92,7 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 
       dots.default <- list(alpha = 1, beta = 1, mu0 = 0)
       # Modified optional parameters
-      dots.now <- modifyList(dots.default, dots)
+      dots.now <- utils::modifyList(dots.default, dots)
 
       # Generic priors
       # U is the prior on the Within covariance matrix
@@ -140,7 +140,7 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
    if (use.init == 'vague') {
 
       dots.default <- list(alpha_init = 1, beta_init = 100)
-      dots.now <- modifyList(dots.default, dots)
+      dots.now <- utils::modifyList(dots.default, dots)
 
       # W.1 is a covariance matrix, not a precision!
       W.1 <- dots.now$alpha_init*matrix(1, p, p) + dots.now$beta_init*diag(p)
