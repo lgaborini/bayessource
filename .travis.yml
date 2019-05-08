@@ -3,7 +3,24 @@
 language: R
 sudo: false
 cache: packages
+
+r_github_packages:
+   - r-lib/pkgdown
+
 after_success:
    - Rscript -e 'covr::codecov()'
+
 before_script:
    - Rscript -e 'Rcpp::compileAttributes()'
+
+after_script:
+   - echo "Detected tarball: $PKG_TARBALL"
+
+deploy:
+   provider: script
+   script:
+      Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
+   skip_cleanup: true
+   on:
+      branch: master
+
