@@ -24,7 +24,7 @@
 #' - `all.means` (vector)
 #' - `W` (the within covariance matrix)
 #' - `B` (the between covariance matrix)
-#'
+#' @keywords internal
 two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.item) {
 
    # define how many unique items are in the population
