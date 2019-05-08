@@ -9,6 +9,7 @@ r_github_packages:
 
 after_success:
    - Rscript -e 'covr::codecov()'
+   - Rscript -e 'pkgdown::build_site()'
 
 before_script:
    - Rscript -e 'Rcpp::compileAttributes()'
@@ -17,10 +18,11 @@ after_script:
    - echo "Detected tarball: $PKG_TARBALL"
 
 deploy:
-   provider: script
-   script:
-      Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
-   skip_cleanup: true
-   on:
-      branch: master
+   - provider: pages
+      skip-cleanup: true
+      github-token: $GITHUB_TOKEN
+      keep-history: false
+      local-dir: docs
+      on:
+         branch: master
 
