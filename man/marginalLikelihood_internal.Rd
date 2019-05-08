@@ -35,15 +35,15 @@ marginalLikelihood_internal(X, n_iter, B_inv, W_inv, U, nw, mu, burn_in,
 Fast Bayesian same source hypothesis. Gaussian MV.
 To be called by the R wrapper.
 }
-\section{Normal-Inverse-Wishart model[Bozza2008]}{
+\section{Normal-Inverse-Wishart model\link{Bozza2008}}{
 
 
 Observation level:
-\deqn{X_{ij} ~ N(theta_i, W_i)} (i = population, j = items in population)
+\deqn{X_{ij} ~ N_p(theta_i, W_i)} (i = population, j = items in population)
 
 Group level:
-\deqn{theta_i ~ N(\mu, B)}
-\deqn{W_i ~ IW(nw, U)}
+\deqn{theta_i ~ N_p(\mu, B)}
+\deqn{W_i ~ IW_p(nw, U)}
 
 Hyperparameters:
 \eqn{B, U, nw, \mu}
@@ -52,6 +52,6 @@ A Gibbs sampler supplies theta, W^{(-1)}.
 }
 
 \references{
-[Bozza2008] S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.
+\link{Bozza2008} S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.
 }
 \keyword{internal}

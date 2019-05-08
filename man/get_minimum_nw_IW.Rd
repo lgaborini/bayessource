@@ -16,7 +16,7 @@ minimum dof
 Returns minimum value for degrees of freedom such that Inverted Wishart has a mean..
 }
 \details{
-Uses Press[1] parametrization.
+Uses Press\link{1} parametrization.
 
 \deqn{X ~ IW(nw, S)}, with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
 Then:
@@ -25,5 +25,5 @@ Then:
 Finally, the minimum dof $v$ is $ nw = 2*(p + 1) + 1 $.
 }
 \references{
-[1]S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
+\link{1}S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
 }

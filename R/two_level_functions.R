@@ -19,10 +19,10 @@
 #' @param idx.item item column (index or character vector)
 #'
 #' @return list with items:
-#' - group.means (matrix, row*variable)
-#' - all.means (vector)
-#' - W (the within covariance matrix)
-#' - B (the between covariance matrix)
+#' - `group.means` (matrix, row*variable)
+#' - `all.means` (vector)
+#' - `W` (the within covariance matrix)
+#' - `B` (the between covariance matrix)
 #'
 two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.item) {
 

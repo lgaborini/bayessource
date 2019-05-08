@@ -15,28 +15,34 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-source('knitr_markup.R')
+suppressPackageStartupMessages(library(here))
+
+source(here('vignettes', 'knitr_markup.R'))
 bmatrix.digits <- 4
 ```
 
 ## Test case
 
+```{r}
+set.seed(1337)
+
+library(bayessource)
+requireNamespace('mvtnorm')
+```
+
+
 Let's generate a test dataset with known parameters.      
 We will use some supporting functions:
 
 ```{r}
-library(bayessource)
-
 # Generate n random integers in {min, ..., max}
 randi <- function(n, min, max) { round(runif(n, min, max)) }
 
 #' Generate random invertible symmetric pxp matrix
 #'
-#' @param p 
-#' @param M 
+#' @param p matrix size
+#' @param M max entry value
 #' @param alpha regularization
-#'
-#' @return
 randinvmat <- function(p, M = 3, alpha = 1) {
    mat <- matrix(randi(p^2, -M, M), nrow = p, ncol = p)
    t(mat) %*% mat + diag(p) * alpha
@@ -44,29 +50,32 @@ randinvmat <- function(p, M = 3, alpha = 1) {
 ```
 ## Data generation
 
-We will generate the data according to the model.
+We will generate the data according to the model: for sources $i = 1, \ldots, m$,
+
+$$X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
+$$\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)$$
+$$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
 
 ```{r}
 p <- 4      # number of variables
 m <- 10     # number of sources
-n <- 20     # number of items per source
-
-list_exact <- list()
+n <- 200     # number of items per source
 ```
 
-Upper hierarchical level:
+Upper hierarchical level: generate $\mu$, $n_w$, $B$, $U$
 
 ```{r}
-list_exact$B.exact <- randinvmat(p)      # Between covariance mtx
+list_exact <- list()
+list_exact$B.exact <- randinvmat(p)      # Between Covariance matrix
 list_exact$U.exact <- randinvmat(p)      # Inverted Wishart parameter
-list_exact$mu.exact <- randi(p, 0, 10)   # Mean of means
+list_exact$mu.exact <- randi(p, 0, 10)   # mean of means
 list_exact$nw.exact <- 2*(p + 1) + 1     # dof for Inverted Wishart, as small as possible
 ```
 
-Middle hierarchical level:    
+Middle hierarchical level: for every source generate
 
-- source means ($\theta_i$) 
-- within covariance matrices $W_i$
+- source means: $\theta_i$
+- within covariance matrices: $W_i$
 
 ```{r}
 theta.sources.exact <- list()
@@ -75,18 +84,19 @@ for (i in seq(m)) {
 }
 W.sources.exact <- list()
 for (i in seq(m)) {
-  # W.sources[[i]] <- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])
-  W.sources.exact[[i]] <- riwish_Press(list_exact$nw.exact, list_exact$U.exact)
+  # Equivalents:
+  # W.sources.exact[[i]] <- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])
+  W.sources.exact[[i]] <- bayessource::riwish_Press(list_exact$nw.exact, list_exact$U.exact)
 }
 ```
 
-Lower hierarchical level: raw data
+Lower hierarchical level: raw data from every source
 
 ```{r}
 df <- list()
 for (i in seq(m)) {
   # The data
-  df[[i]] <- rmvnorm(n, theta.sources.exact[[i]], W.sources.exact[[i]])
+  df[[i]] <- mvtnorm::rmvnorm(n, theta.sources.exact[[i]], W.sources.exact[[i]])
   # The source (last column)
   df[[i]] <- cbind(df[[i]], i)
 }
@@ -99,14 +109,18 @@ The item column is the last one (`p + 1`).
 
 ### Visualization
 
-First two components across sources
+First two components across sources:
 
-```{r}
+```{r, fig.width=8}
 library(ggplot2)
+suppressPackageStartupMessages(library(dplyr))
 
-ggplot(data = df, aes(x = v1, y = v2, col = factor(source))) +
-   geom_point(size = 1) +
-   scale_colour_discrete('Source')
+df %>% 
+  sample_frac(0.25) %>% 
+  ggplot(aes(x = v1, y = v2, col = factor(source))) +
+  geom_point(size = 1, show.legend = FALSE) +
+  labs(x = 'x1', y = 'x2', title = 'Raw data across sources: first two components', 
+       subtitle = paste('Color = source; ', m, 'sources, ', n, 'observations per source'))
 ```
 
 ## Prior elicitation
@@ -117,7 +131,6 @@ Suppose that `df` represents a background dataset.
 We can use it to elicit the model hyperparameters:
 
 ```{r}
-
 col.variables <- 1:p
 col.item <- p + 1
 
@@ -128,27 +141,83 @@ priors <- make_priors_and_init(df, col.variables, col.item, use.priors, use.init
 names(priors)
 ```
 
-We obtain:
 
-```{r}
+### Hyperpriors on mean
+
+- hyperprior for the between mean $\mu$
+
+```{r, results='asis'}
 bmatrix(as.matrix(priors$mu), pre = '\\mu =', digits = bmatrix.digits)
+```
+
+Exact: 
+
+```{r, results='asis'}
+bmatrix(as.matrix(list_exact$mu.exact), pre = '\\mu =', digits = bmatrix.digits)
+```
+
+- Hyperprior for the between covariance matrix $B$:
+
+```{r, results='asis'}
 bmatrix(priors$B.inv, pre = 'B^{-1} =', digits = bmatrix.digits)
 ```
 
-Hyperpriors for the within covariance matrices:
+Exact: 
+
+```{r, results='asis'}
+bmatrix(solve(list_exact$B.exact), pre = 'B^{-1} =', digits = bmatrix.digits)
+```
+
+### Hyperpriors on within covariance matrix
+
+- Inverse of Inverted Wishart scale matrix:
+
 $$ W_i \sim IW(n_w, U) $$
 $$ n_w = `r priors$nw` $$
-```{r}
+
+```{r, results='asis'}
 bmatrix(priors$U, pre = 'U =', digits = bmatrix.digits)
 ```
 
-Initialisation:    
-Within covariance matrices and their inverses:
-```{r}
+Exact: 
+
+```{r, results='asis'}
+bmatrix(list_exact$U.exact, pre = 'U =', digits = bmatrix.digits)
+```
+
+## Initialisation
+
+Within covariance matrices and their inverses: we initialize the chain with
+
+```{r, results='asis'}
 bmatrix(priors$W.inv.1, pre = 'W^{-1}_1 =', digits = bmatrix.digits)
 bmatrix(priors$W.inv.2, pre = 'W^{-1}_2 =', digits = bmatrix.digits)
+```
+
+In non-inverted form:
+
+```{r, results='asis'}
 bmatrix(solve(priors$W.inv.1), pre = 'W_1 =', digits = bmatrix.digits)
 bmatrix(solve(priors$W.inv.2), pre = 'W_2 =', digits = bmatrix.digits)
 ```
+
+## Usage
+
+The list returned by `make_priors_and_init` can be used in calls to `marginalLikelihood` and `samesource_C`:
+
+```{r, eval=FALSE}
+
+priors <- make_priors_and_init(df, col.variables, col.item, use.priors, use.init)
+
+mtx_data <- as.matrix(df[, col.variables])
+
+ml <- marginalLikelihood(mtx_data, n.iter = 1000, burn.in = 100,
+                   B.inv = priors$B.inv, 
+                   W.inv = priors$W.inv.1, 
+                   U = priors$U, 
+                   nw = priors$nw, 
+                   mu = priors$mu)
+
 ```
+
 

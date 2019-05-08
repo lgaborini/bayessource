@@ -1,3 +1,9 @@
+# bayessource 0.3.0.9000
+
+* Add prior and init elicitation functions.
+* Add vignette for prior elicitation.
+* Using Roxygen with Markdown.
+
 # bayessource 0.2.6
 
 * Removed dependencies magrittr, matrixStats.

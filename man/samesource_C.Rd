@@ -38,15 +38,15 @@ Implemented in C.
 See \code{\link[bayessource]{diwishart_inverse}} for the parametrization of the Inverted Wishart.
 See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 }
-\section{Normal-Inverse-Wishart model[Bozza2008]}{
+\section{Normal-Inverse-Wishart model\link{Bozza2008}}{
 
 
 Observation level:
-\deqn{X_{ij} ~ N(theta_i, W_i)} (i = population, j = items in population)
+\deqn{X_{ij} ~ N_p(theta_i, W_i)} (i = population, j = items in population)
 
 Group level:
-\deqn{theta_i ~ N(\mu, B)}
-\deqn{W_i ~ IW(nw, U)}
+\deqn{theta_i ~ N_p(\mu, B)}
+\deqn{W_i ~ IW_p(nw, U)}
 
 Hyperparameters:
 \eqn{B, U, nw, \mu}
@@ -57,7 +57,7 @@ A Gibbs sampler supplies theta, W^{(-1)}.
 \section{Inverted Wishart parametrization (Press)}{
 
 
-Uses Press[Press2012] parametrization.
+Uses Press\link{Press2012} parametrization.
 
 \deqn{X ~ IW(v, S)}
 with \eqn{S = pxp} matrix, \eqn{v > 2p} (the degrees of freedom).
@@ -67,9 +67,9 @@ Then:
 }
 
 \references{
-[Bozza2008] S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.
+\link{Bozza2008} S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.
 
-[Press2012] S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
+\link{Press2012} S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
 }
 \seealso{
 marginalLikelihood

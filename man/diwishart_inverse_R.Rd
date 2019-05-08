@@ -30,7 +30,7 @@ Computes the pdf p_X(x) by knowing x^(-1)
 \section{Inverted Wishart parametrization (Press)}{
 
 
-Uses Press[Press2012] parametrization.
+Uses Press\link{Press2012} parametrization.
 
 \deqn{X ~ IW(v, S)}
 with \eqn{S = pxp} matrix, \eqn{v > 2p} (the degrees of freedom).
@@ -40,7 +40,7 @@ Then:
 }
 
 \references{
-[Press2012] S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
+\link{Press2012} S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.
 }
 \seealso{
 \code{\link{diwishart_inverse}}, \code{\link{diwishart}}

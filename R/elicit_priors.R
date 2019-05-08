@@ -1,35 +1,42 @@
 #' Elicit priors and initialization from background dataset
 #'
-#' Elicit priors and initialization from background dataset.
+#' Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
 #'
 #'
-#' Here we fix the hyperparameters for priors on $theta_i$ and $W_i$, i.e., $B$, $U$, $mu$ and $n_w$.
+#' Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
 #'
-#' An appropriate initialization value for $W^{-1}_i$, $i=1,2$ is also generated.
+#' An appropriate initialization value for \eqn{W^{-1}_i}, \eqn{i=1,2} is also generated.
+#'
 #' Notice that we have three chains in the LR computations, the same initialization is used thrice.
 #'
-#' ### Priors
+#' @section Priors:
 #'
-#' - use.priors = 'ML': maximum likelihood estimation
-#' - use.priors = 'vague': low-information priors
-#'    (U is alpha*diag(p), B is beta*diag(p), mu is mu0)
+#' `use.priors`:
+#' - `'ML'`: maximum likelihood estimation
+#' - `'vague'`: low-information priors
 #'
-#' The Wishart dofs `nw` are set as small as possible without losing full rank:
-#'    $$nw = 2*(p + 1) + 1$$
+#'   `U` is `alpha*diag(p)`, B is `beta*diag(p)`, `mu` is `mu0`.    
+#'   By default `alpha = 1, beta = 1, mu0 = 0`
 #'
-#' ### Initialization
+#' The Wishart dofs `nw` are set as small as possible without losing full rank:   
+#' \eqn{nw = 2*(p + 1) + 1}
 #'
-#' - use.init = 'random': initialize according to the model
-#' - use.init = 'vague': low-information initialization (W_i is constant(alpha) + beta*diag(p))
+#' @section Initialization:
 #'
-#' Some constants can be changed by passing the new values to ... :
+#' `use.init`:
+#' - `'random'`: initialize according to the model
+#' - `'vague'`: low-information initialization   
+#'   \eqn{W_i} is `alpha_init + beta_init *diag(p)`
 #'
-#' - use.priors = 'vague':
-#'    alpha = 1, beta = 1, mu0 = 0
-#' - use.init = 'vague':
-#'    alpha = 1, beta = 100
+#' Some constants can be changed by passing the new values to `...` :
 #'
-#' ### Returns
+#' - `use.priors = 'vague'`:   
+#'    `alpha = 1, beta = 1, mu0 = 0`
+#'
+#' - `use.init = 'vague'`:   
+#'    `alpha_init = 1, beta_init = 100`
+#'
+#' @section Returns:
 #'
 #' A list of variables:
 #'
@@ -39,14 +46,15 @@
 #' - `nw`: the Inverted Wishart dof
 #' - `W.inv.1`, `W.inv.2`: the within cov initializations, as inverses
 #'
+#' @export
 #' @param df.background the background dataset
 #' @param col.variables columns with variables
 #' @param col.item column with item id
 #' @param use.priors see details
 #' @param use.init see details
 #' @param ... additional variables for priors, init
-#' @export
 #' @return a list of variables
+#' @md
 make_priors_and_init <- function(df.background, col.variables, col.item, use.priors = 'ML', use.init = 'random', ...) {
 
    stopifnot(use.priors %in% c('ML', 'vague'))
@@ -104,16 +112,16 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
    priors$B.inv <- B.inv
    priors$nw <- nw
 
-   #' ## Chain initialization
-   #'
-   #' Here we initialize the chain by supplying $W_1^{-1}$ and $W_2^{-1}$.
-   #' The $\theta_i$ are generated accordingly to the model.
-   #'
-   #' Three methods:
-   #'
-   #' - sample from the hierarchical model using the hyperparameters $n_w$, $U$
-   #' - initialize from fixed values
-   #' - cheat and use the known values
+   # ## Chain initialization
+   #
+   # Here we initialize the chain by supplying $W_1^{-1}$ and $W_2^{-1}$.
+   # The $\theta_i$ are generated accordingly to the model.
+   #
+   # Three methods:
+   #
+   # - sample from the hierarchical model using the hyperparameters $n_w$, $U$
+   # - initialize from fixed values
+   # - cheat and use the known values
 
    # Initialize according to the model
    # Warning: RNG is used here!
@@ -131,11 +139,11 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
    # Initialize at a fixed value
    if (use.init == 'vague') {
 
-      dots.default <- list(alpha = 1, beta = 100)
+      dots.default <- list(alpha_init = 1, beta_init = 100)
       dots.now <- modifyList(dots.default, dots)
 
       # W.1 is a covariance matrix, not a precision!
-      W.1 <- dots.now$alpha*matrix(1, p, p) + dots.now$beta*diag(p)
+      W.1 <- dots.now$alpha_init*matrix(1, p, p) + dots.now$beta_init*diag(p)
       W.inv.1 <- solve(W.1)
       W.inv.2 <- W.inv.1
       rm(W.1)
@@ -184,6 +192,7 @@ get_minimum_nw_IW <- function(p) {
 #' @param S the scale matrix (pxp)
 #' @return a single random variate from IW(v, S)
 #' @template InverseWishart_Press
+#' @export
 riwish_Press <- function(v, S){
    p <- nrow(S)
    stopifnot(v > 2*p)

@@ -15,10 +15,12 @@ two.level.multivariate.calculate.UC(population, idx.variables, idx.item)
 }
 \value{
 list with items:
-- group.means (matrix, row*variable)
-- all.means (vector)
-- W (the within covariance matrix)
-- B (the between covariance matrix)
+\itemize{
+\item \code{group.means} (matrix, row*variable)
+\item \code{all.means} (vector)
+\item \code{W} (the within covariance matrix)
+\item \code{B} (the between covariance matrix)
+}
 }
 \description{
 Two-level function: item is chosen with the third parameter.
