@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model. — marginalLikelihood • bayessource</title>
+<title>Elicit priors and initialization from background dataset — make_priors_and_init • bayessource</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,9 @@
 
 
 
-<meta property="og:title" content="Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model. — marginalLikelihood" />
+<meta property="og:title" content="Elicit priors and initialization from background dataset — make_priors_and_init" />
 
-<meta property="og:description" content="Implemented in C.
-See diwishart_inverse for the parametrization of the Inverted Wishart.
-See marginalLikelihood_internal for further documentation." />
+<meta property="og:description" content="Here we fix the hyperparameters for priors on \(theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(mu\) and \(n_w\)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,111 +112,96 @@ See marginalLikelihood_internal for further documentation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.</h1>
+    <h1>Elicit priors and initialization from background dataset</h1>
     
-    <div class="hidden name"><code>marginalLikelihood.Rd</code></div>
+    <div class="hidden name"><code>make_priors_and_init.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Implemented in C.
-See <code><a href='diwishart_inverse.html'>diwishart_inverse</a></code> for the parametrization of the Inverted Wishart.
-See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a></code> for further documentation.</p>
+    <p>Here we fix the hyperparameters for priors on \(theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(mu\) and \(n_w\).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>marginalLikelihood</span>(<span class='no'>X</span>, <span class='no'>n.iter</span>, <span class='no'>B.inv</span>, <span class='no'>W.inv</span>, <span class='no'>U</span>, <span class='no'>nw</span>, <span class='no'>mu</span>, <span class='no'>burn.in</span>,
-  <span class='kw'>output.mcmc</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>Gibbs_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>make_priors_and_init</span>(<span class='no'>df.background</span>, <span class='no'>col.variables</span>, <span class='no'>col.item</span>,
+  <span class='kw'>use.priors</span> <span class='kw'>=</span> <span class='st'>"ML"</span>, <span class='kw'>use.init</span> <span class='kw'>=</span> <span class='st'>"random"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>X</th>
-      <td><p>the dataset</p></td>
+      <th>df.background</th>
+      <td><p>the background dataset</p></td>
     </tr>
     <tr>
-      <th>n.iter</th>
-      <td><p>number of MC iterations</p></td>
+      <th>col.variables</th>
+      <td><p>columns with variables</p></td>
     </tr>
     <tr>
-      <th>B.inv</th>
-      <td><p>prior inverse of between covariance matrix</p></td>
+      <th>col.item</th>
+      <td><p>column with item id</p></td>
     </tr>
     <tr>
-      <th>W.inv</th>
-      <td><p>prior inverse of within covariance matrix</p></td>
+      <th>use.priors</th>
+      <td><p>see details</p></td>
     </tr>
     <tr>
-      <th>U</th>
-      <td><p>covariance matrix for the mean</p></td>
+      <th>use.init</th>
+      <td><p>see details</p></td>
     </tr>
     <tr>
-      <th>nw</th>
-      <td><p>degrees of freedom</p></td>
-    </tr>
-    <tr>
-      <th>mu</th>
-      <td><p>prior mean</p></td>
-    </tr>
-    <tr>
-      <th>burn.in</th>
-      <td><p>burn-in iterations</p></td>
-    </tr>
-    <tr>
-      <th>output.mcmc</th>
-      <td><p>output the entire chain</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>if TRUE, be verbose</p></td>
-    </tr>
-    <tr>
-      <th>Gibbs_only</th>
-      <td><p>if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.</p></td>
+      <th>...</th>
+      <td><p>additional variables for priors, init</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the log-marginal likelihood value, or a list(the log-ml value, <code>coda</code> object with the posterior samples)</p>
+    <p>a list of variables</p>
     
-    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-et-al-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-et-al-"></a>Normal-Inverse-Wishart model(Bozza et al. 2008)
-</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Here we fix the hyperparameters for priors on \(theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(mu\) and \(n_w\).</p>
+<p>An appropriate initialization value for \(W^{-1}_i\), \(i=1,2\) is also generated.</p>
+<p>Notice that we have three chains in the LR computations, the same initialization is used thrice.</p>
+    
+    <h2 class="hasAnchor" id="priors"><a class="anchor" href="#priors"></a>Priors</h2>
 
     
-    <p>Observation level:
-$$X_{ij} ~ N_p(theta_i, W_i)$$ (i = population, j = items in population)</p>
-<p>Group level:
-$$theta_i ~ N_p(\mu, B)$$
-$$W_i ~ IW_p(nw, U)$$</p>
-<p>Hyperparameters:
-\(B, U, nw, \mu\)</p>
-<p>A Gibbs sampler supplies theta, W^(-1).</p>
+    <p><code>use.priors</code>:</p><ul>
+<li><p><code>'ML'</code>: maximum likelihood estimation</p></li>
+<li><p><code>'vague'</code>: low-information priors</p>
+<p><code>U</code> is <code>alpha*diag(p)</code>, B is <code>beta*diag(p)</code>, <code>mu</code> is <code>mu0</code>.
+By default <code>alpha = 1, beta = 1, mu0 = 0</code></p></li>
+</ul>
+    <p>The Wishart dofs <code>nw</code> are set as small as possible without losing full rank:
+\(nw = 2*(p + 1) + 1\)</p>
     
-    <h2 class="hasAnchor" id="inverted-wishart-parametrization-press-"><a class="anchor" href="#inverted-wishart-parametrization-press-"></a>Inverted Wishart parametrization (Press)</h2>
+    <h2 class="hasAnchor" id="initialization"><a class="anchor" href="#initialization"></a>Initialization</h2>
 
     
-    <p>Uses (Press 2012)
- parametrization.</p>
-<p>$$X ~ IW(v, S)$$
-with \(S = pxp\) matrix, \(v &gt; 2p\) (the degrees of freedom).</p>
-<p>Then:
-$$E[X] = S / (v - 2(p + 1))$$</p>
+    <p><code>use.init</code>:</p><ul>
+<li><p><code>'random'</code>: initialize according to the model</p></li>
+<li><p><code>'vague'</code>: low-information initialization
+\(W_i\) is <code>alpha_init + beta_init *diag(p)</code></p></li>
+</ul>
+    <p>Some constants can be changed by passing the new values to <code>...</code> :</p><ul>
+<li><p><code>use.priors = 'vague'</code>:
+<code>alpha = 1, beta = 1, mu0 = 0</code></p></li>
+<li><p><code>use.init = 'vague'</code>:
+<code>alpha_init = 1, beta_init = 100</code></p></li>
+</ul>
     
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <h2 class="hasAnchor" id="returns"><a class="anchor" href="#returns"></a>Returns</h2>
 
-    <p>Bozza S, Taroni F, Marquis R, Schmittbuhl M (2008).
-&#8220;Probabilistic Evaluation of Handwriting Evidence: Likelihood Ratio for Authorship.&#8221;
-<em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em>, <b>57</b>(3), 329-341.
-ISSN 1467-9876, doi: <a href='http://doi.org/10.1111/j.1467-9876.2007.00616.x'>10.1111/j.1467-9876.2007.00616.x</a>
-.<br /><br /> Press SJ (2012).
-<em>Applied Multivariate Analysis: Using Bayesian and Frequentist Methods of Inference</em>.
-Courier Corporation.</p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>marginalLikelihood_internal</p></div>
+    <p>A list of variables:</p><ul>
+<li><p><code>mu</code>: the global mean</p></li>
+<li><p><code>B.inv</code>: the between prior covariance, as the inverse</p></li>
+<li><p><code>U</code>: the Inverted Wishart scale matrix</p></li>
+<li><p><code>nw</code>: the Inverted Wishart dof</p></li>
+<li><p><code>W.inv.1</code>, <code>W.inv.2</code>: the within cov initializations, as inverses</p></li>
+</ul>
     
 
   </div>
@@ -229,14 +212,13 @@ Courier Corporation.</p>
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#normal-inverse-wishart-model-bozza-et-al-">Normal-Inverse-Wishart model(Bozza et al. 2008)
-</a></li>
+      <li><a href="#details">Details</a></li>
 
-      <li><a href="#inverted-wishart-parametrization-press-">Inverted Wishart parametrization (Press)</a></li>
+      <li><a href="#priors">Priors</a></li>
 
-      <li><a href="#references">References</a></li>
+      <li><a href="#initialization">Initialization</a></li>
 
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#returns">Returns</a></li>
           </ul>
 
   </div>

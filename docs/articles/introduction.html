@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6.9000</span>
       </span>
     </div>
 
@@ -55,6 +55,9 @@
 <li>
       <a href="../articles/introduction.html">Introduction</a>
     </li>
+    <li>
+      <a href="../articles/prior_elicitation.html">Prior elicitation</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -76,7 +79,7 @@
       <h1>Introduction</h1>
                         <h4 class="author">Lorenzo Gaborini</h4>
             
-            <h4 class="date">2019-01-10</h4>
+            <h4 class="date">2019-05-08</h4>
       
       
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -140,9 +143,13 @@ The theoretical details are specified in <span class="citation">(Bozza et al. 20
 <a href="#background-model" class="anchor"></a>Background model</h3>
 <p>Let us recall the model definition.</p>
 <p>We suppose to have background observations from a set of <span class="math inline">\(m\)</span> populations.</p>
-<p>We note with <span class="math inline">\(X_{ij}\)</span> the <span class="math inline">\(j\)</span>-th sample from the <span class="math inline">\(i\)</span>-th population, <span class="math inline">\(i = 1, \ldots, m\)</span>. Each population is Multivariate Gaussian, with means <span class="math inline">\(\theta_i\)</span>, and covariances <span class="math inline">\(W_i\)</span>. <span class="math display">\[
-X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)\]</span> <span class="math display">\[W_i \; | \; U, n_w \sim \quad IW(U, n_w)\]</span></p>
+<p>We note with <span class="math inline">\(X_{ij}\)</span> the <span class="math inline">\(j\)</span>-th sample from the <span class="math inline">\(i\)</span>-th population, <span class="math inline">\(i = 1, \ldots, m\)</span>. Each population is Multivariate Gaussian, with means <span class="math inline">\(\theta_i\)</span>, and covariances <span class="math inline">\(W_i\)</span>.</p>
+<p><span class="math display">\[X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)\]</span> <span class="math display">\[W_i \; | \; U, n_w \sim \quad IW(U, n_w)\]</span></p>
 <p>where <span class="math inline">\(n_w &gt; 2\,p\)</span>, and <span class="math inline">\(U\)</span> is s.t. <span class="math display">\[ E[W_i] = \frac{U}{n_w - 2(p + 1)} \]</span> (parametrization according to <span class="citation">(Press 2012)</span>).</p>
+</div>
+<div id="prior-elicitation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#prior-elicitation" class="anchor"></a>Prior elicitation</h3>
 <p>As the model is Bayesian, we are required to specify the hyperparameters <span class="math inline">\(\mu, B, U, n_w\)</span>, as well as the Gibbs chain initialization <span class="math inline">\(W_i\)</span>.<br>
 Notice that inference is propagated by supplying the inverses of covariance matrices, i.e. <span class="math inline">\(B^{-1}\)</span> and <span class="math inline">\(W_i^{-1}\)</span>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">eps &lt;-<span class="st"> </span><span class="fl">0.1</span></a>
@@ -152,6 +159,8 @@ Notice that inference is propagated by supplying the inverses of covariance matr
 <a class="sourceLine" id="cb3-5" title="5">U &lt;-<span class="st"> </span>eps<span class="op">*</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/diag">diag</a></span>(p)</a>
 <a class="sourceLine" id="cb3-6" title="6">nw &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">*</span>(p <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
 <a class="sourceLine" id="cb3-7" title="7">mu &lt;-<span class="st"> </span>(mean.quest <span class="op">+</span><span class="st"> </span>mean.ref)<span class="op">/</span><span class="dv">2</span></a></code></pre></div>
+<p>The package proves the function <code>make_priors_and_init</code> to supply these parameters based on a background dataset.<br>
+It returns a list containing estimates for <span class="math inline">\(\mu\)</span>, <span class="math inline">\(B^{-1}\)</span>, <span class="math inline">\(U\)</span>, the initialization for <span class="math inline">\(W_i^{-1}\)</span>, and the smallest possible <span class="math inline">\(n_w\)</span> such that the matrices are invertible.</p>
 </div>
 <div id="sample-model" class="section level3">
 <h3 class="hasAnchor">
@@ -243,7 +252,7 @@ Using standard <code>coda</code> tools, we can perform diagnostics, such as summ
 ## W.inv.4  0.3647  0.55710  0.6783  0.8103  1.1113</code></pre>
 <p>and traceplots:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">traceplot</span>(results<span class="op">$</span>mcmc)</a></code></pre></div>
-<p><img src="introduction_files/figure-html/unnamed-chunk-11-1.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-11-2.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-11-3.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-11-4.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-11-5.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-11-6.png" width="700"></p>
+<p><img src="introduction_files/figure-html/unnamed-chunk-12-1.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-12-2.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-12-3.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-12-4.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-12-5.png" width="700"><img src="introduction_files/figure-html/unnamed-chunk-12-6.png" width="700"></p>
 <p>We can recover the original matrices by hand, reshaping the desired columns (e.g. for <code>W.inv</code>) into a matrix/3D array:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">n.samples &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(results<span class="op">$</span>mcmc)</a>
 <a class="sourceLine" id="cb13-2" title="2">W.inv.samples &lt;-<span class="st"> </span>results<span class="op">$</span>mcmc[, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">'W.inv.'</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">1</span><span class="op">:</span>(p<span class="op">^</span><span class="dv">2</span>)))]</a>

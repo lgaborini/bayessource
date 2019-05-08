@@ -65,7 +65,7 @@ See marginalLikelihood_internal for further documentation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6.9000</span>
       </span>
     </div>
 
@@ -89,6 +89,9 @@ See marginalLikelihood_internal for further documentation." />
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/prior_elicitation.html">Prior elicitation</a>
     </li>
   </ul>
 </li>
@@ -180,14 +183,15 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
 
     <p>the log-LR value</p>
     
-    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-"></a>Normal-Inverse-Wishart model[Bozza2008]</h2>
+    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-et-al-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-et-al-"></a>Normal-Inverse-Wishart model(Bozza et al. 2008)
+</h2>
 
     
     <p>Observation level:
-$$X_{ij} ~ N(theta_i, W_i)$$ (i = population, j = items in population)</p>
+$$X_{ij} ~ N_p(theta_i, W_i)$$ (i = population, j = items in population)</p>
 <p>Group level:
-$$theta_i ~ N(\mu, B)$$
-$$W_i ~ IW(nw, U)$$</p>
+$$theta_i ~ N_p(\mu, B)$$
+$$W_i ~ IW_p(nw, U)$$</p>
 <p>Hyperparameters:
 \(B, U, nw, \mu\)</p>
 <p>A Gibbs sampler supplies theta, W^(-1).</p>
@@ -195,7 +199,8 @@ $$W_i ~ IW(nw, U)$$</p>
     <h2 class="hasAnchor" id="inverted-wishart-parametrization-press-"><a class="anchor" href="#inverted-wishart-parametrization-press-"></a>Inverted Wishart parametrization (Press)</h2>
 
     
-    <p>Uses Press[Press2012] parametrization.</p>
+    <p>Uses (Press 2012)
+ parametrization.</p>
 <p>$$X ~ IW(v, S)$$
 with \(S = pxp\) matrix, \(v &gt; 2p\) (the degrees of freedom).</p>
 <p>Then:
@@ -203,8 +208,13 @@ $$E[X] = S / (v - 2(p + 1))$$</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>[Bozza2008] S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.</p>
-<p>[Press2012] S. J. Press, Applied multivariate analysis: using Bayesian and frequentist methods of inference. Courier Corporation, 2012.</p>
+    <p>Bozza S, Taroni F, Marquis R, Schmittbuhl M (2008).
+&#8220;Probabilistic Evaluation of Handwriting Evidence: Likelihood Ratio for Authorship.&#8221;
+<em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em>, <b>57</b>(3), 329-341.
+ISSN 1467-9876, doi: <a href='http://doi.org/10.1111/j.1467-9876.2007.00616.x'>10.1111/j.1467-9876.2007.00616.x</a>
+.<br /><br /> Press SJ (2012).
+<em>Applied Multivariate Analysis: Using Bayesian and Frequentist Methods of Inference</em>.
+Courier Corporation.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -219,7 +229,8 @@ $$E[X] = S / (v - 2(p + 1))$$</p>
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#normal-inverse-wishart-model-bozza-">Normal-Inverse-Wishart model[Bozza2008]</a></li>
+      <li><a href="#normal-inverse-wishart-model-bozza-et-al-">Normal-Inverse-Wishart model(Bozza et al. 2008)
+</a></li>
 
       <li><a href="#inverted-wishart-parametrization-press-">Inverted Wishart parametrization (Press)</a></li>
 

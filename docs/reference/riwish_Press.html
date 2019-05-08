@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model. — marginalLikelihood • bayessource</title>
+<title>Generate random sample from Inverted Wishart. — riwish_Press • bayessource</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,10 @@
 
 
 
-<meta property="og:title" content="Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model. — marginalLikelihood" />
+<meta property="og:title" content="Generate random sample from Inverted Wishart. — riwish_Press" />
 
-<meta property="og:description" content="Implemented in C.
-See diwishart_inverse for the parametrization of the Inverted Wishart.
-See marginalLikelihood_internal for further documentation." />
+<meta property="og:description" content="Using (Press 2012)
+ parametrization." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,87 +113,40 @@ See marginalLikelihood_internal for further documentation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.</h1>
+    <h1>Generate random sample from Inverted Wishart.</h1>
     
-    <div class="hidden name"><code>marginalLikelihood.Rd</code></div>
+    <div class="hidden name"><code>riwish_Press.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Implemented in C.
-See <code><a href='diwishart_inverse.html'>diwishart_inverse</a></code> for the parametrization of the Inverted Wishart.
-See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a></code> for further documentation.</p>
+    <p>Using (Press 2012)
+ parametrization.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>marginalLikelihood</span>(<span class='no'>X</span>, <span class='no'>n.iter</span>, <span class='no'>B.inv</span>, <span class='no'>W.inv</span>, <span class='no'>U</span>, <span class='no'>nw</span>, <span class='no'>mu</span>, <span class='no'>burn.in</span>,
-  <span class='kw'>output.mcmc</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>Gibbs_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>riwish_Press</span>(<span class='no'>v</span>, <span class='no'>S</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>X</th>
-      <td><p>the dataset</p></td>
+      <th>v</th>
+      <td><p>dof (\(&gt; 2p\))</p></td>
     </tr>
     <tr>
-      <th>n.iter</th>
-      <td><p>number of MC iterations</p></td>
-    </tr>
-    <tr>
-      <th>B.inv</th>
-      <td><p>prior inverse of between covariance matrix</p></td>
-    </tr>
-    <tr>
-      <th>W.inv</th>
-      <td><p>prior inverse of within covariance matrix</p></td>
-    </tr>
-    <tr>
-      <th>U</th>
-      <td><p>covariance matrix for the mean</p></td>
-    </tr>
-    <tr>
-      <th>nw</th>
-      <td><p>degrees of freedom</p></td>
-    </tr>
-    <tr>
-      <th>mu</th>
-      <td><p>prior mean</p></td>
-    </tr>
-    <tr>
-      <th>burn.in</th>
-      <td><p>burn-in iterations</p></td>
-    </tr>
-    <tr>
-      <th>output.mcmc</th>
-      <td><p>output the entire chain</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>if TRUE, be verbose</p></td>
-    </tr>
-    <tr>
-      <th>Gibbs_only</th>
-      <td><p>if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.</p></td>
+      <th>S</th>
+      <td><p>the scale matrix (pxp)</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the log-marginal likelihood value, or a list(the log-ml value, <code>coda</code> object with the posterior samples)</p>
+    <p>a single random variate from IW(v, S)</p>
     
-    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-et-al-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-et-al-"></a>Normal-Inverse-Wishart model(Bozza et al. 2008)
-</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    
-    <p>Observation level:
-$$X_{ij} ~ N_p(theta_i, W_i)$$ (i = population, j = items in population)</p>
-<p>Group level:
-$$theta_i ~ N_p(\mu, B)$$
-$$W_i ~ IW_p(nw, U)$$</p>
-<p>Hyperparameters:
-\(B, U, nw, \mu\)</p>
-<p>A Gibbs sampler supplies theta, W^(-1).</p>
+    <p>Uses <span class="pkg">MCMCpack</span>::riwish.</p>
     
     <h2 class="hasAnchor" id="inverted-wishart-parametrization-press-"><a class="anchor" href="#inverted-wishart-parametrization-press-"></a>Inverted Wishart parametrization (Press)</h2>
 
@@ -208,17 +160,9 @@ $$E[X] = S / (v - 2(p + 1))$$</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Bozza S, Taroni F, Marquis R, Schmittbuhl M (2008).
-&#8220;Probabilistic Evaluation of Handwriting Evidence: Likelihood Ratio for Authorship.&#8221;
-<em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em>, <b>57</b>(3), 329-341.
-ISSN 1467-9876, doi: <a href='http://doi.org/10.1111/j.1467-9876.2007.00616.x'>10.1111/j.1467-9876.2007.00616.x</a>
-.<br /><br /> Press SJ (2012).
+    <p>Press SJ (2012).
 <em>Applied Multivariate Analysis: Using Bayesian and Frequentist Methods of Inference</em>.
 Courier Corporation.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>marginalLikelihood_internal</p></div>
     
 
   </div>
@@ -229,14 +173,11 @@ Courier Corporation.</p>
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#normal-inverse-wishart-model-bozza-et-al-">Normal-Inverse-Wishart model(Bozza et al. 2008)
-</a></li>
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#inverted-wishart-parametrization-press-">Inverted Wishart parametrization (Press)</a></li>
 
       <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

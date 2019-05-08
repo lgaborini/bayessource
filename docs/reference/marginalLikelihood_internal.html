@@ -66,7 +66,7 @@ To be called by the R wrapper." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6.9000</span>
       </span>
     </div>
 
@@ -90,6 +90,9 @@ To be called by the R wrapper." />
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/introduction.html">Introduction</a>
+    </li>
+    <li>
+      <a href="../articles/prior_elicitation.html">Prior elicitation</a>
     </li>
   </ul>
 </li>
@@ -177,21 +180,18 @@ To be called by the R wrapper.</p>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-"></a>Normal-Inverse-Wishart model[Bozza2008]</h2>
+    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-et-al-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-et-al-"></a>Normal-Inverse-Wishart model(Bozza et al. 2008)
+</h2>
 
     
     <p>Observation level:
-$$X_{ij} ~ N(theta_i, W_i)$$ (i = population, j = items in population)</p>
+$$X_{ij} ~ N_p(theta_i, W_i)$$ (i = population, j = items in population)</p>
 <p>Group level:
-$$theta_i ~ N(\mu, B)$$
-$$W_i ~ IW(nw, U)$$</p>
+$$theta_i ~ N_p(\mu, B)$$
+$$W_i ~ IW_p(nw, U)$$</p>
 <p>Hyperparameters:
 \(B, U, nw, \mu\)</p>
 <p>A Gibbs sampler supplies theta, W^(-1).</p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>[Bozza2008] S. Bozza, F. Taroni, R. Marquis, and M. Schmittbuhl, “Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship,” Journal of the Royal Statistical Society: Series C (Applied Statistics), vol. 57, no. 3, pp. 329–341, Jun. 2008.</p>
     
 
   </div>
@@ -200,9 +200,8 @@ $$W_i ~ IW(nw, U)$$</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#normal-inverse-wishart-model-bozza-">Normal-Inverse-Wishart model[Bozza2008]</a></li>
-
-      <li><a href="#references">References</a></li>
+      <li><a href="#normal-inverse-wishart-model-bozza-et-al-">Normal-Inverse-Wishart model(Bozza et al. 2008)
+</a></li>
           </ul>
 
   </div>
