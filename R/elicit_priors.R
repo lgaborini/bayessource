@@ -185,8 +185,6 @@ get_minimum_nw_IW <- function(p) {
 #'
 #' Using \insertCite{Press2012Applied}{bayessource} parametrization.
 #'
-#' Uses \pkg{MCMCpack}::riwish.
-#'
 #' @param v dof (\eqn{> 2p})
 #' @param S the scale matrix (pxp)
 #' @return a single random variate from IW(v, S)
@@ -194,8 +192,37 @@ get_minimum_nw_IW <- function(p) {
 #' @export
 #' @references \insertAllCited{}
 riwish_Press <- function(v, S){
+
+   # Define this function like this:
+   #
+   #     p <- nrow(S)
+   #     stopifnot(v > 2*p)
+   #     v.Anderson <- v - p - 1
+   #     return(MCMCpack::riwish(v.Anderson, S))
+   #
+   # Then these calls are equivalent:
+   #
+   #     bayessource::riwish_Press(v, S)
+   #     W.sources.exact[[i]] <- solve(rWishart(1, v.Anderson, solve(S))[,,1])
+   #
+   #
+
    p <- nrow(S)
    stopifnot(v > 2*p)
-   v.Anderson <- v - p - 1
-   return(MCMCpack::riwish(v.Anderson, S))
+   v_Anderson <- v - p - 1
+
+   # solve(stats::rWishart(1, v, solve(S))[,,1])
+   inv_pd(stats::rWishart(1, v_Anderson, inv_pd(S))[,,1])
+}
+
+
+#' Compute the inverse of a positive-definite matrix
+#'
+#' Compute the inverse of a positive-definite matrix using Cholesky composition.
+#'
+#' @param X a positive definite matrix
+#' @return the inverse of X
+#' @export
+inv_pd <- function(X) {
+   chol2inv(chol(X))
 }

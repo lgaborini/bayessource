@@ -17,9 +17,6 @@ a single random variate from IW(v, S)
 \description{
 Using \insertCite{Press2012Applied}{bayessource} parametrization.
 }
-\details{
-Uses \pkg{MCMCpack}::riwish.
-}
 \section{Inverted Wishart parametrization (Press)}{
 
 

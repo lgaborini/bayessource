@@ -20,7 +20,6 @@ Suggests:
     mvtnorm,
     microbenchmark,
     ggplot2,
-    MCMCpack,
     covr,
     xtable,
     tibble

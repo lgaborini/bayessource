@@ -25,7 +25,7 @@ Sigma.inv.chol <- solve(Sigma.chol)
 # Wishart RNG tests ---------------------------------------------------------
 # X ~ Wishart(df, Sigma)    (according to Anderson/Press parametrization: rWishart, dwishart)
 
-df <- p + round(runif(1, 1, 10))			# Wishart: Press/Anderson, Inverted Wishart: Anderson
+df <- p + round(runif(1, 2, 10))			# Wishart: Press/Anderson, Inverted Wishart: Anderson
 df.Anderson <- df
 df.Press <- df + p + 1			# Inverted Wishart
 
@@ -102,6 +102,57 @@ is.lower <- (rwish.mean - z * sd.mc.error) >  wishart.mean.exact
 test.result <- all(is.upper & is.lower)
 
 test_that(paste('rwish converges to the mean, confidence', 1 - alpha),
+          expect_true(test.result))
+
+
+
+
+# Inverted Wishart RNG: consistency tests ------------------------------------------
+# Press parametrization
+#
+# Cannot fix the RNG seed, as RNGs are called in different orders
+#
+# Generate from W ~ IW(v, Sigma)
+#   v > 2*(p + 1)
+#   (v_Anderson = v - p - 1)
+#
+# Then:
+#
+#   E[W] = Sigma / (v - 2(p + 1))
+#
+# Variances from:
+#   https://en.wikipedia.org/wiki/Inverse-Wishart_distribution#Moments
+
+# Exact mean
+iwishart.mean.exact <- Sigma / (df.Press - 2*(p + 1))
+# Exact variances (only the diagonal)
+iwishart.variances.exact <- 2*diag(Sigma)^2 / ((df.Anderson - p - 1)^2 * (df.Anderson - p - 3))
+
+n.samples <- 10000
+
+riwish.samples <- replicate(n.samples, riwish_Press(df.Press, Sigma), simplify = FALSE)
+riwish.mean <- apply(simplify2array(riwish.samples), c(1,2), mean)
+
+# MC error: sigma/N
+sd.mc.error <- sqrt(iwishart.variances.exact / n.samples)
+
+n.comp <- p
+
+alpha.0 <- 0.01
+alpha <- alpha.0 / n.comp       # Bonferroni correction
+# alpha <- alpha.0
+z <- qnorm(alpha/2)
+
+# Confidence interval
+# (mean_sample - mean_true)/sd.mc.error ~ N(0, 1)
+#
+# H0: MC converges to the mean
+# H1: MC converges to some other value
+is.upper <- (riwish.mean + z * sd.mc.error) <  iwishart.mean.exact
+is.lower <- (riwish.mean - z * sd.mc.error) >  iwishart.mean.exact
+test.result <- all(is.upper & is.lower)
+
+test_that(paste('riwish converges to the mean, confidence', 1 - alpha),
           expect_true(test.result))
 
 

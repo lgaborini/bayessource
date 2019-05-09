@@ -39,6 +39,10 @@ test_that('Rcpp::chol2inv is correct.', {
 	expect_equal(bayessource:::chol2inv(X.chol), X.inv)
 })
 
+test_that('inv_pd is correct.', {
+   expect_equal(base::solve(X), inv_pd(X))
+})
+
 X.inv.chol.arma <- bayessource:::inv_Cholesky_from_Cholesky(X.chol)
 test_that('Rcpp::inv_Cholesky_from_Cholesky is correct.',
 	expect_equal(X.inv.chol, X.inv.chol.arma)
@@ -51,7 +55,7 @@ test_that('Rcpp::ldet_from_Cholesky is correct.',
 	expect_equal(ldetX, ldetX.chol)
 )
 
-test_that('inv_sympd_tol is correct.', {
+test_that('Rcpp::inv_sympd_tol is correct.', {
 	expect_equal(X.inv, bayessource:::inv_sympd_tol(X))
 })
 
