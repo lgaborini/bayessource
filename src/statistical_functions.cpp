@@ -39,8 +39,8 @@ arma::mat inv_triangular(const arma::mat &U){
    return(arma::solve(arma::trimatu(U), arma::eye(arma::size(U))));
 }
 
-arma::mat inv_sympd_chol(const arma::mat &U_sympd){
-   return chol2inv(arma::chol(U_sympd));
+arma::mat inv_sympd_tol(const arma::mat &U_sympd){
+   return arma::inv_sympd(arma::symmatu(U_sympd));
 }
 
 arma::mat chol2inv(const arma::mat &U_chol){

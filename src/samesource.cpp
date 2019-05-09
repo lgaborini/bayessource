@@ -50,7 +50,7 @@ Rcpp::List marginalLikelihood_internal(
    unsigned int p = X.n_cols;
 
    // Priors
-   arma::mat B = inv_sympd_chol(B_inv);
+   arma::mat B = inv_sympd_tol(B_inv);
 
    // PARAMETER CHECKS
 
@@ -143,7 +143,7 @@ Rcpp::List marginalLikelihood_internal(
       // if (verbose && (i % interrupt_mod == 0)) Rcout << ".";
 
       // Updated posteriors for B and mu
-      B_upd_g = inv_sympd_chol(B_inv + nr * W_inv_g);
+      B_upd_g = inv_sympd_tol(B_inv + nr * W_inv_g);
       mu_upd_g = B_upd_g * (B_inv * mu + nr * W_inv_g * bary.t());
 
       if (USE_CHOLESKY){
@@ -163,8 +163,8 @@ Rcpp::List marginalLikelihood_internal(
          W_inv_g_chol = rwish(nwstar, inv_Cholesky_from_Cholesky(U_upd_g_chol), true, true);
       } else {
          // Using stats::rWishart (verified, same result!)
-         // W_inv_g = Rcpp::as<arma::cube>(rWishart(1, nwstar, inv_sympd_chol(U_upd_g))).slice(0);
-         W_inv_g = rwish(nwstar, inv_sympd_chol(U_upd_g), false, false);
+         // W_inv_g = Rcpp::as<arma::cube>(rWishart(1, nwstar, inv_sympd_tol(U_upd_g))).slice(0);
+         W_inv_g = rwish(nwstar, inv_sympd_tol(U_upd_g), false, false);
       }
 
 
@@ -192,7 +192,7 @@ Rcpp::List marginalLikelihood_internal(
       if (USE_CHOLESKY){
          logf = arma::sum(dmvnorm(X, theta_g, inv_Cholesky_from_Cholesky(W_inv_g_chol), true, true));
       } else {
-         logf = arma::sum(dmvnorm(X, theta_g, inv_sympd_chol(W_inv_g), true, false));
+         logf = arma::sum(dmvnorm(X, theta_g, inv_sympd_tol(W_inv_g), true, false));
       }
 
       if (logf > logf_star){
