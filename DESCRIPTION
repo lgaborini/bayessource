@@ -22,7 +22,8 @@ Suggests:
     ggplot2,
     MCMCpack,
     covr,
-    xtable
+    xtable,
+    tibble
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
