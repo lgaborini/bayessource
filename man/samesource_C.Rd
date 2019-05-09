@@ -5,7 +5,7 @@
 \title{Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.}
 \usage{
 samesource_C(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
-  burn.in, verbose = FALSE)
+  burn.in, verbose = FALSE, marginals = FALSE)
 }
 \arguments{
 \item{quest}{the questioned dataset}
@@ -29,9 +29,11 @@ samesource_C(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
 \item{burn.in}{burn-in iterations}
 
 \item{verbose}{if TRUE, be verbose}
+
+\item{marginals}{return the marginal likelihoods in the LR formula (default: FALSE)}
 }
 \value{
-the log-LR value
+the log-LR value, or a list with the marginals: \code{list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)}
 }
 \description{
 Implemented in C.

@@ -1,4 +1,4 @@
-# bayessource 0.2.6.9000
+# bayessource 0.3
 
 * Add prior and init elicitation functions.
 * Add vignette for prior elicitation.
@@ -8,6 +8,7 @@
 * Removed dplyr Suggests.
 * Fix incompatibility with tibbles.
 * Updated to conform to tolerance in new RcppArmadillo `inv_sympd`: introduced tolerant function `inv_sympd_chol`.
+* `samesource_C` gains parameter `marginals`: if `TRUE`, return also all log-marginals in the BF calculation.
 
 # bayessource 0.2.6
 

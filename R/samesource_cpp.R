@@ -54,12 +54,19 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 
       mcmc.data <- cbind(
          theta.mtx,
-         W.inv.mtx)
+         W.inv.mtx
+      )
+
+      coda_object <- coda::mcmc(
+        data = mcmc.data[(burn.in + 1):n.iter, ], 
+        start = (burn.in + 1), 
+        end = nrow(mcmc.data)
+      )
 
       return(
          list(
             value = result$value,
-            mcmc = coda::mcmc(data = mcmc.data[(burn.in + 1):n.iter, ], start = (burn.in + 1), end = nrow(mcmc.data))
+            mcmc = coda_object
       ))
    } else {
       return(result$value)
@@ -78,17 +85,18 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' @param ref the reference dataset
 #' @param W.inv.1 prior inverse of within covariance matrix (questioned items)
 #' @param W.inv.2 prior inverse of within covariance matrix (reference items)
+#' @param marginals return the marginal likelihoods in the LR formula (default: FALSE)
 #' @inheritParams marginalLikelihood
-#' @return the log-LR value
+#' @return the log-LR value, or a list with the marginals: `list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)`
 #' @export
 #' @seealso marginalLikelihood
 #' @template gaussmv_model
 #' @template InverseWishart_Press
 #' @references \insertAllCited{}
-samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE) {
+samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE, marginals = FALSE) {
 
    # Wrap the C functions
-   LR.num <- marginalLikelihood_internal(X = rbind(quest, ref),
+   log_ml_Hp <- marginalLikelihood_internal(X = rbind(quest, ref),
                                          B_inv = B.inv,
                                          W_inv = W.inv.1,
                                          U = U, nw = nw,
@@ -96,7 +104,7 @@ samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
                                          burn_in = burn.in, n_iter = n.iter,
                                          chain_output = FALSE, verbose = verbose)
 
-   LR.den.1 <- marginalLikelihood_internal(X = quest,
+   log_ml_Hd_quest <- marginalLikelihood_internal(X = quest,
                                            B_inv = B.inv,
                                            W_inv = W.inv.1,
                                            U = U, nw = nw,
@@ -104,7 +112,7 @@ samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
                                            burn_in = burn.in, n_iter = n.iter,
                                            chain_output = FALSE, verbose = verbose)
 
-   LR.den.2 <- marginalLikelihood_internal(X = ref,
+   log_ml_Hd_ref <- marginalLikelihood_internal(X = ref,
                                            B_inv = B.inv,
                                            W_inv = W.inv.2,
                                            U = U, nw = nw,
@@ -112,6 +120,17 @@ samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
                                            burn_in = burn.in, n_iter = n.iter,
                                            chain_output = FALSE, verbose = verbose)
 
+   log_LR <- log_ml_Hp$value - log_ml_Hd_quest$value - log_ml_Hd_ref$value
 
-   LR.num$value - LR.den.1$value - LR.den.2$value
+   if (marginals) {
+      return(list(
+         value = log_LR, 
+         log_ml_Hp = log_ml_Hp$value,
+         log_ml_Hd_ref = log_ml_Hd_ref$value,
+         log_ml_Hd_quest = log_ml_Hd_quest$value
+      ))
+   } else {
+      return(log_LR)
+   }
+   
 }
