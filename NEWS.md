@@ -7,6 +7,7 @@
 * CRITICAL: fix prior matrices estimation.
 * Removed dplyr Suggests.
 * Fix incompatibility with tibbles.
+* Updated to conform to tolerance in new RcppArmadillo `inv_sympd`: introduced tolerant function `inv_sympd_chol`.
 
 # bayessource 0.2.6
 

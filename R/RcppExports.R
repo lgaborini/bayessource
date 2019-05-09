@@ -72,6 +72,16 @@ inv_triangular <- function(U) {
     .Call('_bayessource_inv_triangular', PACKAGE = 'bayessource', U)
 }
 
+#' Compute the inverse of a symmetric positive definite matrix
+#'
+#' Compute the inverse of a symmetric positive definite matrix. 
+#' Does not output warnings on default tolerance.
+#'
+#' @keywords internal
+inv_sympd_chol <- function(U_sympd) {
+    .Call('_bayessource_inv_sympd_chol', PACKAGE = 'bayessource', U_sympd)
+}
+
 #' Compute the inverse from the upper Cholesky factor
 #'
 #' @keywords internal

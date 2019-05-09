@@ -48,6 +48,11 @@ test_that('Rcpp::ldet_from_Cholesky is correct.',
 	expect_equal(ldetX, ldetX.chol)
 )
 
+test_that('inv_sympd_chol is correct.', {
+	expect_equal(X.inv, bayessource:::inv_sympd_chol(X))
+})
+
+
 
 
 # Rcpp: logsumexp ---------------------------------------------------------

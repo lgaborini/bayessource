@@ -50,6 +50,16 @@ arma::vec logCummeanExp(const arma::vec &v);
 // [[Rcpp::export(rng = false)]]
 arma::mat inv_triangular(const arma::mat &U);
 
+
+//' Compute the inverse of a symmetric positive definite matrix
+//'
+//' Compute the inverse of a symmetric positive definite matrix. 
+//' Does not output warnings on default tolerance.
+//'
+//' @keywords internal
+// [[Rcpp::export(rng = false)]]
+arma::mat inv_sympd_chol(const arma::mat &U_sympd);
+
 //' Compute the inverse from the upper Cholesky factor
 //'
 //' @keywords internal

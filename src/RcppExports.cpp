@@ -86,6 +86,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// inv_sympd_chol
+arma::mat inv_sympd_chol(const arma::mat& U_sympd);
+RcppExport SEXP _bayessource_inv_sympd_chol(SEXP U_sympdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type U_sympd(U_sympdSEXP);
+    rcpp_result_gen = Rcpp::wrap(inv_sympd_chol(U_sympd));
+    return rcpp_result_gen;
+END_RCPP
+}
 // chol2inv
 arma::mat chol2inv(const arma::mat& U_chol);
 RcppExport SEXP _bayessource_chol2inv(SEXP U_cholSEXP) {
@@ -181,6 +191,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_bayessource_logCumsumExp", (DL_FUNC) &_bayessource_logCumsumExp, 1},
     {"_bayessource_logCummeanExp", (DL_FUNC) &_bayessource_logCummeanExp, 1},
     {"_bayessource_inv_triangular", (DL_FUNC) &_bayessource_inv_triangular, 1},
+    {"_bayessource_inv_sympd_chol", (DL_FUNC) &_bayessource_inv_sympd_chol, 1},
     {"_bayessource_chol2inv", (DL_FUNC) &_bayessource_chol2inv, 1},
     {"_bayessource_inv_Cholesky_from_Cholesky", (DL_FUNC) &_bayessource_inv_Cholesky_from_Cholesky, 1},
     {"_bayessource_ldet_from_Cholesky", (DL_FUNC) &_bayessource_ldet_from_Cholesky, 1},
