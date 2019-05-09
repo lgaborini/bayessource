@@ -6,6 +6,7 @@
 * Add runtime checks for matrix invertibility.
 * CRITICAL: fix prior matrices estimation.
 * Removed dplyr Suggests.
+* Fix incompatibility with tibbles.
 
 # bayessource 0.2.6
 

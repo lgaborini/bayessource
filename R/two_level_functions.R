@@ -27,11 +27,17 @@
 #' @keywords internal
 two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.item) {
 
+   # Convert to matrix
+   mtx_population <- as.matrix(population[, idx.variables])
+
+   # Convert items to factor
+   item_population <- as.matrix(population[, idx.item])
+
    # define how many unique items are in the population
-   all.items <- unique(population[, idx.item])
+   all.items <- as.vector(unique(item_population))
    n.items <- length(all.items)
 
-   variable.names <- colnames(population[, idx.variables])
+   variable.names <- colnames(population)[idx.variables]
    n.variables <- length(idx.variables)
    if (n.variables < 2) {
       stop("cannot handle fewer than two variables with this function")
@@ -46,7 +52,8 @@ two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.i
    colnames(Sw) <- variable.names
    S <- Sw
 
-   all.means <- matrix(apply(population[, idx.variables], 2, mean), nrow = 1)
+   all.means <- matrix(colMeans(mtx_population), nrow = 1)
+   # all.means <- matrix(apply(population[, idx.variables], 2, mean), nrow = 1)
    colnames(all.means) <- variable.names
 
    # dummy within group means
@@ -57,15 +64,18 @@ two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.i
    colnames(group.means) <- variable.names
 
    n.pop <- dim(population)[1]
+
    # for each unique item
    for (i.item in 1:n.items) {
 
+      this_item <- all.items[i.item]
+
       # which rows refer to repeated measurements on the same item
-      idx.replicates <- which(population[, idx.item] == all.items[i.item])
+      idx.replicates <- which(item_population == this_item)
       n.replicates <- length(idx.replicates)
 
       # pick out the measurements for the item
-      tempdat <- as.matrix(population[idx.replicates, idx.variables])
+      tempdat <- mtx_population[idx.replicates, ]
 
       # assign values to the group means for the population
       means <- colMeans(tempdat)
