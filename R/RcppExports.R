@@ -74,12 +74,13 @@ inv_triangular <- function(U) {
 
 #' Compute the inverse of a symmetric positive definite matrix
 #'
-#' Compute the inverse of a symmetric positive definite matrix. 
-#' Does not output warnings on default tolerance.
-#'
+#' Compute the inverse of a symmetric positive definite matrix.   
+#' Does not output warnings on default symmetry tolerance: basically, symmetry is forced.
+#' 
+#' @references https://github.com/RcppCore/RcppArmadillo/issues/257
 #' @keywords internal
-inv_sympd_chol <- function(U_sympd) {
-    .Call('_bayessource_inv_sympd_chol', PACKAGE = 'bayessource', U_sympd)
+inv_sympd_tol <- function(U_sympd) {
+    .Call('_bayessource_inv_sympd_tol', PACKAGE = 'bayessource', U_sympd)
 }
 
 #' Compute the inverse from the upper Cholesky factor

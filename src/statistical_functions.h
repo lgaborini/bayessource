@@ -53,9 +53,10 @@ arma::mat inv_triangular(const arma::mat &U);
 
 //' Compute the inverse of a symmetric positive definite matrix
 //'
-//' Compute the inverse of a symmetric positive definite matrix. 
+//' Compute the inverse of a symmetric positive definite matrix.   
 //' Does not output warnings on default symmetry tolerance: basically, symmetry is forced.
-//'
+//' 
+//' @references https://github.com/RcppCore/RcppArmadillo/issues/257
 //' @keywords internal
 // [[Rcpp::export(rng = false)]]
 arma::mat inv_sympd_tol(const arma::mat &U_sympd);

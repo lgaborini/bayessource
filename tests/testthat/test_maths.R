@@ -20,8 +20,11 @@ seed <- round(runif(1, 1, 100))
 
 # Inverses and Cholesky ---------------------------------------------------
 # p <- 8
+
+# X is sympd
 X <- matrix(rnorm(p^2), ncol = p, nrow = p)
 X <- t(X) %*% X + diag(p)
+
 X.inv <- solve(X)
 X.chol <- chol(X)
 X.inv.chol <- chol(X.inv)
