@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • bayessource</title>
+<title>Compute the inverse of a symmetric positive definite matrix — inv_sympd_tol • bayessource</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,7 +31,11 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Compute the inverse of a symmetric positive definite matrix — inv_sympd_tol" />
+
+<meta property="og:description" content="Compute the inverse of a symmetric positive definite matrix.
+Does not output warnings on default symmetry tolerance: basically, symmetry is forced." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -48,7 +52,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -110,81 +114,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+    <h1>Compute the inverse of a symmetric positive definite matrix</h1>
+    
+    <div class="hidden name"><code>inv_sympd_tol.Rd</code></div>
     </div>
 
-    <div id="bayessource-0-2-6-9000" class="section level1">
-<h1 class="page-header">
-<a href="#bayessource-0-2-6-9000" class="anchor"></a>bayessource 0.2.6.9000</h1>
-<ul>
-<li>Add prior and init elicitation functions.</li>
-<li>Add vignette for prior elicitation.</li>
-<li>Using Roxygen with Markdown. Add Rdpack dependency to generate references with Bibtex.</li>
-<li>Add runtime checks for matrix invertibility.</li>
-<li>CRITICAL: fix prior matrices estimation.</li>
-<li>Removed dplyr Suggests.</li>
-<li>Fix incompatibility with tibbles.</li>
-<li>Updated to conform to tolerance in new RcppArmadillo <code>inv_sympd</code>: introduced tolerant function <code>inv_sympd_chol</code>.</li>
-</ul>
-</div>
-    <div id="bayessource-0-2-6" class="section level1">
-<h1 class="page-header">
-<a href="#bayessource-0-2-6" class="anchor"></a>bayessource 0.2.6</h1>
-<ul>
-<li>Removed dependencies magrittr, matrixStats.</li>
-</ul>
-</div>
-    <div id="bayessource-0-2-5" class="section level1">
-<h1 class="page-header">
-<a href="#bayessource-0-2-5" class="anchor"></a>bayessource 0.2.5</h1>
-<ul>
-<li>Removed OpenMP support.</li>
-<li>Modified vignette.</li>
-<li>Added unit test to check sign of LR in known conditions.</li>
-</ul>
-</div>
-    <div id="bayessource-0-2-4" class="section level1">
-<h1 class="page-header">
-<a href="#bayessource-0-2-4" class="anchor"></a>bayessource 0.2.4</h1>
-<ul>
-<li>Added information if Wishart is degenerate.</li>
-<li>Added 1D Wishart test.</li>
-<li>Added <code><a href="../reference/rmvnorm.html">bayessource::rmvnorm</a></code> RNG test.</li>
-</ul>
-</div>
-    <div id="bayessource-0-2-3" class="section level1">
-<h1 class="page-header">
-<a href="#bayessource-0-2-3" class="anchor"></a>bayessource 0.2.3</h1>
-<ul>
-<li>Fixed OpenMP support (now RcppArmadillo does not complain anymore).</li>
-<li>Fixed dependencies.</li>
-<li>Added <code>Rcpp::checkUserInterrupt()</code> to MCMC loops.</li>
-</ul>
-</div>
-    <div id="bayessource-0-2-2" class="section level1">
-<h1 class="page-header">
-<a href="#bayessource-0-2-2" class="anchor"></a>bayessource 0.2.2</h1>
-<ul>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Compute the inverse of a symmetric positive definite matrix.
+Does not output warnings on default symmetry tolerance: basically, symmetry is forced.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>inv_sympd_tol</span>(<span class='no'>U_sympd</span>)</pre>
+        
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>https://github.com/RcppCore/RcppArmadillo/issues/257</p>
+    
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#bayessource-0-2-6-9000">0.2.6.9000</a></li>
-        <li><a href="#bayessource-0-2-6">0.2.6</a></li>
-        <li><a href="#bayessource-0-2-5">0.2.5</a></li>
-        <li><a href="#bayessource-0-2-4">0.2.4</a></li>
-        <li><a href="#bayessource-0-2-3">0.2.3</a></li>
-        <li><a href="#bayessource-0-2-2">0.2.2</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      
+      <li><a href="#references">References</a></li>
+          </ul>
 
+  </div>
 </div>
 
       <footer>
