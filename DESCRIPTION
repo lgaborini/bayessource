@@ -18,7 +18,6 @@ Suggests:
     knitr,
     rmarkdown,
     mvtnorm,
-    microbenchmark,
     ggplot2,
     covr,
     xtable,
