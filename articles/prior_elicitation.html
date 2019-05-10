@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <h1>Prior elicitation</h1>
                         <h4 class="author">Lorenzo Gaborini</h4>
             
-            <h4 class="date">2019-05-09</h4>
+            <h4 class="date">2019-05-10</h4>
       
       
       <div class="hidden name"><code>prior_elicitation.Rmd</code></div>
@@ -166,13 +166,13 @@ We will use some supporting functions:</p>
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(df) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'v'</span>, <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span><span class="op">:</span>p)), <span class="st">'source'</span>))</a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(df)</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;         v1         v2         v3       v4 source</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 1 7.469499  0.4957342  2.5385219 3.896217      1</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 2 7.558600 -1.0233873  4.3096948 4.944321      1</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 3 7.069807  4.0731989 -0.3855136 1.190706      1</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 4 7.475307 -0.5468936  0.9135918 2.729407      1</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; 5 6.421070  0.7888383  3.1431059 2.563542      1</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; 6 6.785213  0.4836733  3.1779949 3.208826      1</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;         v1        v2         v3       v4 source</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; 1 7.783807 2.3526976  1.1456413 3.235036      1</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; 2 7.478913 4.1146210  0.8399942 1.533766      1</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; 3 7.490046 3.7630065  0.6714497 1.734876      1</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; 4 7.228848 0.7886417 -0.5594819 3.323668      1</span></a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; 5 7.354987 1.7059334  1.9262933 2.380303      1</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; 6 6.920879 2.4161567  3.0941613 1.858068      1</span></a></code></pre></div>
 <p>The item column is the last one (<code>p + 1</code>).</p>
 <div id="visualization" class="section level3">
 <h3 class="hasAnchor">
@@ -218,10 +218,10 @@ We can use it to elicit the model hyperparameters:</p>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">bmatrix</span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(priors<span class="op">$</span>mu), <span class="dt">pre =</span> <span class="st">'</span><span class="ch">\\</span><span class="st">mu ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
 <p><span class="math display">\[ \mu = \begin{bmatrix}
-  6.8433 \\ 
-  2.0367 \\ 
-  0.8760 \\ 
-  3.0164 \\ 
+  6.8288 \\ 
+  2.0473 \\ 
+  0.8846 \\ 
+  2.9926 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">bmatrix</span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(list_exact<span class="op">$</span>mu.exact), <span class="dt">pre =</span> <span class="st">'</span><span class="ch">\\</span><span class="st">mu ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
@@ -236,10 +236,10 @@ We can use it to elicit the model hyperparameters:</p>
 </ul>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>B.inv, <span class="dt">pre =</span> <span class="st">'B^{-1} ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
 <p><span class="math display">\[ B^{-1} = \begin{bmatrix}
-  1.1402 &amp; 0.9907 &amp; -0.7688 &amp; -0.0829 \\ 
-  0.9907 &amp; 2.1191 &amp; -0.8502 &amp; 0.1742 \\ 
-  -0.7688 &amp; -0.8502 &amp; 0.8426 &amp; -0.0993 \\ 
-  -0.0829 &amp; 0.1742 &amp; -0.0993 &amp; 0.1968 \\ 
+  1.1238 &amp; 0.9870 &amp; -0.7478 &amp; -0.0710 \\ 
+  0.9870 &amp; 2.1015 &amp; -0.8342 &amp; 0.1850 \\ 
+  -0.7478 &amp; -0.8342 &amp; 0.8177 &amp; -0.1066 \\ 
+  -0.0710 &amp; 0.1850 &amp; -0.1066 &amp; 0.1953 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">bmatrix</span>(<span class="kw">solve_sympd</span>(list_exact<span class="op">$</span>B.exact), <span class="dt">pre =</span> <span class="st">'B^{-1} ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
@@ -263,10 +263,10 @@ We can use it to elicit the model hyperparameters:</p>
 </ul>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>U, <span class="dt">pre =</span> <span class="st">'U ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
 <p><span class="math display">\[ U = \begin{bmatrix}
-  1.3071 &amp; 1.4024 &amp; -1.6232 &amp; 0.5583 \\ 
-  1.4024 &amp; 10.9605 &amp; -3.9357 &amp; -1.6787 \\ 
-  -1.6232 &amp; -3.9357 &amp; 12.1624 &amp; 2.7959 \\ 
-  0.5583 &amp; -1.6787 &amp; 2.7959 &amp; 3.7453 \\ 
+  1.6633 &amp; 1.1123 &amp; -1.3456 &amp; 1.6272 \\ 
+  1.1123 &amp; 8.8548 &amp; -1.6904 &amp; -0.6213 \\ 
+  -1.3456 &amp; -1.6904 &amp; 13.1649 &amp; 2.2322 \\ 
+  1.6272 &amp; -0.6213 &amp; 2.2322 &amp; 5.0199 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">bmatrix</span>(list_exact<span class="op">$</span>U.exact, <span class="dt">pre =</span> <span class="st">'U ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
@@ -284,17 +284,17 @@ We can use it to elicit the model hyperparameters:</p>
 <p>Within covariance matrices and their inverses: we initialize the chain with</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>W.inv<span class="fl">.1</span>, <span class="dt">pre =</span> <span class="st">'W^{-1}_1 ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
 <p><span class="math display">\[ W^{-1}_1 = \begin{bmatrix}
-  11.8982 &amp; -1.5039 &amp; 1.4628 &amp; -2.3473 \\ 
-  -1.5039 &amp; 0.6949 &amp; 0.1810 &amp; 0.0420 \\ 
-  1.4628 &amp; 0.1810 &amp; 0.6568 &amp; -0.8203 \\ 
-  -2.3473 &amp; 0.0420 &amp; -0.8203 &amp; 2.0838 \\ 
+  8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
+  -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
+  0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
+  -5.1136 &amp; 0.6541 &amp; -1.1145 &amp; 4.6794 \\ 
    \end{bmatrix}  \]</span></p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>W.inv<span class="fl">.2</span>, <span class="dt">pre =</span> <span class="st">'W^{-1}_2 ='</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
 <p><span class="math display">\[ W^{-1}_2 = \begin{bmatrix}
-  11.8982 &amp; -1.5039 &amp; 1.4628 &amp; -2.3473 \\ 
-  -1.5039 &amp; 0.6949 &amp; 0.1810 &amp; 0.0420 \\ 
-  1.4628 &amp; 0.1810 &amp; 0.6568 &amp; -0.8203 \\ 
-  -2.3473 &amp; 0.0420 &amp; -0.8203 &amp; 2.0838 \\ 
+  8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
+  -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
+  0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
+  -5.1136 &amp; 0.6541 &amp; -1.1145 &amp; 4.6794 \\ 
    \end{bmatrix}  \]</span></p>
 </div>
 <div id="usage" class="section level2">

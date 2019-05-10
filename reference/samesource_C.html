@@ -66,7 +66,7 @@ See marginalLikelihood_internal for further documentation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3</span>
       </span>
     </div>
 
@@ -129,7 +129,7 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
     </div>
 
     <pre class="usage"><span class='fu'>samesource_C</span>(<span class='no'>quest</span>, <span class='no'>ref</span>, <span class='no'>n.iter</span>, <span class='no'>B.inv</span>, <span class='no'>W.inv.1</span>, <span class='no'>W.inv.2</span>, <span class='no'>U</span>, <span class='no'>nw</span>, <span class='no'>mu</span>,
-  <span class='no'>burn.in</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='no'>burn.in</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>marginals</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,11 +178,15 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
       <th>verbose</th>
       <td><p>if TRUE, be verbose</p></td>
     </tr>
+    <tr>
+      <th>marginals</th>
+      <td><p>return the marginal likelihoods in the LR formula (default: FALSE)</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the log-LR value</p>
+    <p>the log-LR value, or a list with the marginals: <code><a href='https://rdrr.io/r/base/list.html'>list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)</a></code></p>
     
     <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-et-al-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-et-al-"></a>Normal-Inverse-Wishart model(Bozza et al. 2008)
 </h2>
