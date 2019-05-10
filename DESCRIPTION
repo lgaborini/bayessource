@@ -11,7 +11,7 @@ Description:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 0.12.10), RcppArmadillo, coda, Rdpack
+Imports: Rcpp (>= 0.12.10), RcppArmadillo (>= 0.9.300.2.0), coda, Rdpack
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: 
     testthat,

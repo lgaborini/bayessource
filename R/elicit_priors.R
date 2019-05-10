@@ -218,7 +218,7 @@ riwish_Press <- function(v, S){
 
 #' Compute the inverse of a positive-definite matrix
 #'
-#' Compute the inverse of a positive-definite matrix using Cholesky composition.
+#' Compute the inverse of a positive-definite matrix using Cholesky decomposition.
 #'
 #' @param X a positive definite matrix
 #' @return the inverse of X
