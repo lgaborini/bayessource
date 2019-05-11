@@ -87,7 +87,7 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' @param W.inv.2 prior inverse of within covariance matrix (reference items)
 #' @param marginals return the marginal likelihoods in the LR formula (default: FALSE)
 #' @inheritParams marginalLikelihood
-#' @return the log-LR value, or a list with the marginals: `list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)`
+#' @return the log-BF value (base e), or a list with the log-BF and the marginals: `list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)`
 #' @export
 #' @seealso marginalLikelihood
 #' @template gaussmv_model
@@ -120,17 +120,17 @@ samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
                                            burn_in = burn.in, n_iter = n.iter,
                                            chain_output = FALSE, verbose = verbose)
 
-   log_LR <- log_ml_Hp$value - log_ml_Hd_quest$value - log_ml_Hd_ref$value
+   log_BF <- log_ml_Hp$value - log_ml_Hd_quest$value - log_ml_Hd_ref$value
 
    if (marginals) {
       return(list(
-         value = log_LR, 
+         value = log_BF, 
          log_ml_Hp = log_ml_Hp$value,
          log_ml_Hd_ref = log_ml_Hd_ref$value,
          log_ml_Hd_quest = log_ml_Hd_quest$value
       ))
    } else {
-      return(log_LR)
+      return(log_BF)
    }
    
 }
