@@ -1,3 +1,8 @@
+# bayessource 0.3.1
+
+* Fig bug in `make_priors_and_init` when a background item is seen only once.    
+  Now warns or fails gracefully.
+
 # bayessource 0.3
 
 * Add prior and init elicitation functions.

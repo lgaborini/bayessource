@@ -33,7 +33,7 @@ samesource_C(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
 \item{marginals}{return the marginal likelihoods in the LR formula (default: FALSE)}
 }
 \value{
-the log-LR value, or a list with the marginals: \code{list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)}
+the log-BF value (base e), or a list with the log-BF and the marginals: \code{list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)}
 }
 \description{
 Implemented in C.

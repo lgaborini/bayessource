@@ -13,5 +13,5 @@ inv_pd(X)
 the inverse of X
 }
 \description{
-Compute the inverse of a positive-definite matrix using Cholesky composition.
+Compute the inverse of a positive-definite matrix using Cholesky decomposition.
 }

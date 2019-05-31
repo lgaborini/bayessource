@@ -4,7 +4,8 @@
 \alias{two.level.multivariate.calculate.UC}
 \title{Calculate Between/Within covariance matrices}
 \usage{
-two.level.multivariate.calculate.UC(population, idx.variables, idx.item)
+two.level.multivariate.calculate.UC(population, idx.variables, idx.item,
+  singular.action = "skip")
 }
 \arguments{
 \item{population}{matrix or dataframe containing data columns, item column and other columns}
@@ -12,6 +13,8 @@ two.level.multivariate.calculate.UC(population, idx.variables, idx.item)
 \item{idx.variables}{data columns (indexes or character vectors)}
 
 \item{idx.item}{item column (index or character vector)}
+
+\item{singular.action}{action to take when one of the items is observed once; one of \code{'skip'} (default) or \code{'fail'}}
 }
 \value{
 list with items:
@@ -26,9 +29,10 @@ list with items:
 Two-level function: item is chosen with the third parameter.
 }
 \details{
+Items who are observed only once cannot contribute to within covariance estimation.
+In that case, either we skip its contribute (default) or fail.
+
 Multivariate functions supporting paper:
 Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl
-
-This function is RNG-free.
 }
 \keyword{internal}
