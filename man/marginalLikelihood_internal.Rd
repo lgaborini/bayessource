@@ -5,8 +5,19 @@
 \title{Fast Bayesian same source hypothesis. Gaussian MV.
 To be called by the R wrapper.}
 \usage{
-marginalLikelihood_internal(X, n_iter, B_inv, W_inv, U, nw, mu, burn_in,
-  chain_output = FALSE, verbose = FALSE, Gibbs_only = FALSE)
+marginalLikelihood_internal(
+  X,
+  n_iter,
+  B_inv,
+  W_inv,
+  U,
+  nw,
+  mu,
+  burn_in,
+  chain_output = FALSE,
+  verbose = FALSE,
+  Gibbs_only = FALSE
+)
 }
 \arguments{
 \item{X}{the dataset}

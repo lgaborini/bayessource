@@ -4,8 +4,14 @@
 \alias{make_priors_and_init}
 \title{Elicit priors and initialization from background dataset}
 \usage{
-make_priors_and_init(df.background, col.variables, col.item,
-  use.priors = "ML", use.init = "random", ...)
+make_priors_and_init(
+  df.background,
+  col.variables,
+  col.item,
+  use.priors = "ML",
+  use.init = "random",
+  ...
+)
 }
 \arguments{
 \item{df.background}{the background dataset}
@@ -42,7 +48,7 @@ Notice that we have three chains in the LR computations, the same initialization
 \item \code{'vague'}: low-information priors
 
 \code{U} is \code{alpha*diag(p)}, B is \code{beta*diag(p)}, \code{mu} is \code{mu0}.
-By default \code{alpha = 1, beta = 1, mu0 = 0}
+By default \verb{alpha = 1, beta = 1, mu0 = 0}
 }
 
 The Wishart dofs \code{nw} are set as small as possible without losing full rank:
@@ -62,9 +68,9 @@ The Wishart dofs \code{nw} are set as small as possible without losing full rank
 Some constants can be changed by passing the new values to \code{...} :
 \itemize{
 \item \code{use.priors = 'vague'}:
-\code{alpha = 1, beta = 1, mu0 = 0}
+\verb{alpha = 1, beta = 1, mu0 = 0}
 \item \code{use.init = 'vague'}:
-\code{alpha_init = 1, beta_init = 100}
+\verb{alpha_init = 1, beta_init = 100}
 }
 }
 

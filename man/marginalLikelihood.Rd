@@ -4,8 +4,19 @@
 \alias{marginalLikelihood}
 \title{Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.}
 \usage{
-marginalLikelihood(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in,
-  output.mcmc = FALSE, verbose = FALSE, Gibbs_only = FALSE)
+marginalLikelihood(
+  X,
+  n.iter,
+  B.inv,
+  W.inv,
+  U,
+  nw,
+  mu,
+  burn.in,
+  output.mcmc = FALSE,
+  verbose = FALSE,
+  Gibbs_only = FALSE
+)
 }
 \arguments{
 \item{X}{the dataset}

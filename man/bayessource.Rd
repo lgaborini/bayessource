@@ -3,7 +3,6 @@
 \docType{package}
 \name{bayessource}
 \alias{bayessource}
-\alias{bayessource-package}
 \title{bayessource}
 \description{
 Bayesian approach to evaluate whether two datasets come from the same population.

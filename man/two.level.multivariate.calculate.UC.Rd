@@ -4,8 +4,12 @@
 \alias{two.level.multivariate.calculate.UC}
 \title{Calculate Between/Within covariance matrices}
 \usage{
-two.level.multivariate.calculate.UC(population, idx.variables, idx.item,
-  singular.action = "skip")
+two.level.multivariate.calculate.UC(
+  population,
+  idx.variables,
+  idx.item,
+  singular.action = "skip"
+)
 }
 \arguments{
 \item{population}{matrix or dataframe containing data columns, item column and other columns}

@@ -11,3 +11,4 @@
 ^man-roxygen$
 ^README\.md$
 ..Rcheck
+^LICENSE\.md$

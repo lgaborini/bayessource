@@ -4,8 +4,20 @@
 \alias{samesource_C}
 \title{Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.}
 \usage{
-samesource_C(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
-  burn.in, verbose = FALSE, marginals = FALSE)
+samesource_C(
+  quest,
+  ref,
+  n.iter,
+  B.inv,
+  W.inv.1,
+  W.inv.2,
+  U,
+  nw,
+  mu,
+  burn.in,
+  verbose = FALSE,
+  marginals = FALSE
+)
 }
 \arguments{
 \item{quest}{the questioned dataset}
