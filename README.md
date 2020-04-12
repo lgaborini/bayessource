@@ -14,7 +14,11 @@ It must be installed using `devtools` or `remotes` from this repository:
 remotes::install_github('lgaborini/bayessource')
 ```
 
-[![Travis build status](https://travis-ci.org/lgaborini/bayessource.svg?branch=master)](https://travis-ci.org/lgaborini/bayessource) [![Codecov test coverage](https://codecov.io/gh/lgaborini/bayessource/branch/master/graph/badge.svg)](https://codecov.io/gh/lgaborini/bayessource?branch=master) [![DOI](https://zenodo.org/badge/163959964.svg)](https://zenodo.org/badge/latestdoi/163959964)
+<!-- badges: start -->
+[![R build status](https://github.com/lgaborini/bayessource/workflows/R-CMD-check/badge.svg)](https://github.com/lgaborini/bayessource/actions) [![Codecov test coverage](https://codecov.io/gh/lgaborini/bayessource/branch/master/graph/badge.svg)](https://codecov.io/gh/lgaborini/bayessource?branch=master) [![DOI](https://zenodo.org/badge/163959964.svg)](https://zenodo.org/badge/latestdoi/163959964)
+
+<!-- badges: end -->
+
 
 ## Documentation
 

@@ -21,7 +21,7 @@ Suggests:
     covr,
     xtable,
     tibble
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
