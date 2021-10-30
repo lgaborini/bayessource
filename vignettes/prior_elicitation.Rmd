@@ -11,11 +11,11 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+   collapse = TRUE,
+   comment = "#>"
 )
 
-source('knitr_markup.R')
+source("knitr_markup.R")
 bmatrix.digits <- 4
 ```
 
@@ -25,7 +25,7 @@ bmatrix.digits <- 4
 set.seed(1337)
 
 library(bayessource)
-requireNamespace('mvtnorm')
+requireNamespace("mvtnorm")
 ```
 
 
@@ -34,83 +34,92 @@ We will use some supporting functions:
 
 ```{r functions}
 # Generate n random integers in {min, ..., max}
-randi <- function(n, min, max) { round(runif(n, min, max)) }
+randi <- function(n, min, max) {
+   round(runif(n, min, max))
+}
 
 #' Generate random invertible symmetric pxp matrix
 #'
 #' @param p matrix size
 #' @param alpha regularization > 0
 randinvmat <- function(p, M = 5, alpha = NULL) {
-  stopifnot(p > 0)
-  stopifnot(M > 0)
-  if (is.null(alpha)) {
-    alpha <- p + 1
-  } else {
-    stopifnot(alpha > 0)
-  }
-  M * stats::rWishart(1, p + alpha, diag(p))[,,1]/(p + alpha)
+   stopifnot(p > 0)
+   stopifnot(M > 0)
+   if (is.null(alpha)) {
+      alpha <- p + 1
+   } else {
+      stopifnot(alpha > 0)
+   }
+   M * stats::rWishart(1, p + alpha, diag(p))[, , 1] / (p + alpha)
 }
 
-# Compute inverse of X if X is sympd
+# Compute inverse of X if X is symmetric-positive definite
 solve_sympd <- function(X) {
-  chol2inv(chol(X))
+   chol2inv(chol(X))
 }
 ```
 ## Data generation
 
 We will generate the data according to the model: for sources $i = 1, \ldots, m$,
 
-$$X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
-$$\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)$$
-$$W_i \; | \; U, n_w \sim \quad IW(U, n_w)$$
+$$X_{ij} \mid \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
+$$\theta_i \mid \mu, B \sim \quad N_p(\mu, B)$$
+$$W_i \mid U, n_w \sim \quad IW(U, n_w)$$
 
 ```{r parameters}
-p <- 4      # number of variables
-m <- 100     # number of sources
-n <- 500     # number of items per source
+p <- 4 # number of variables
+m <- 100 # number of sources
+n <- 500 # number of items per source
 ```
 
-Upper hierarchical level: generate $\mu$, $n_w$, $B$, $U$
+Upper hierarchical level: choose some generating hyperparameters $\mu$, $n_w$, $B$, $U$
 
 ```{r upper-gen}
 list_exact <- list()
-list_exact$B.exact <- randinvmat(p, alpha=2)      # Between Covariance matrix
-list_exact$U.exact <- randinvmat(p, alpha=2)      # Inverted Wishart scale matrix
-list_exact$mu.exact <- randi(p, 0, 10)   # mean of means
-list_exact$nw.exact <- 2*(p + 1) + 1     # dof for Inverted Wishart, as small as possible
+list_exact$B.exact <- randinvmat(p, alpha = 2) # Between Covariance matrix
+list_exact$U.exact <- randinvmat(p, alpha = 2) # Inverted Wishart scale matrix
+list_exact$mu.exact <- randi(p, 0, 10) # mean of means
+list_exact$nw.exact <- 2 * (p + 1) + 1 # dof for Inverted Wishart, as small as possible
 ```
 
-Middle hierarchical level: for every source generate
+Middle hierarchical level: for each $i$-th source generate
 
-- source means: $\theta_i$
-- within covariance matrices: $W_i$
+- true source mean: $\theta_i$
+- true within-source covariance matrix: $W_i$
 
 ```{r mid-gen}
 theta.sources.exact <- list()
+
 for (i in seq(m)) {
-  theta.sources.exact[[i]] <- mvtnorm::rmvnorm(1, list_exact$mu.exact, list_exact$B.exact)
+   theta.sources.exact[[i]] <- mvtnorm::rmvnorm(1, list_exact$mu.exact, list_exact$B.exact)
 }
+
+# Sample from an inverted Wishart
 W.sources.exact <- list()
 for (i in seq(m)) {
-  # Equivalents:
-  # W.sources.exact[[i]] <- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])
-  W.sources.exact[[i]] <- bayessource::riwish_Press(list_exact$nw.exact, list_exact$U.exact)
+   # ours:
+   W.sources.exact[[i]] <- bayessource::riwish_Press(list_exact$nw.exact, list_exact$U.exact)
+   # R:
+   # W.sources.exact[[i]] <- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])
 }
 ```
 
-Lower hierarchical level: raw data from every source
+Lower hierarchical level: generate raw data from every source
 
 ```{r data-gen}
 df <- list()
 for (i in seq(m)) {
-  # The data
-  df[[i]] <- mvtnorm::rmvnorm(n, theta.sources.exact[[i]], W.sources.exact[[i]])
-  # The source (last column)
-  df[[i]] <- cbind(df[[i]], i)
+   # Sample data from the i-th source
+   # returned as a matrix
+   df[[i]] <- mvtnorm::rmvnorm(n, theta.sources.exact[[i]], W.sources.exact[[i]])
+   # Store the true source in the last column
+   df[[i]] <- cbind(df[[i]], i)
 }
 
+# Convert to a dataframe
+# columns v_1, v_2, ..., v_p, source
 df <- data.frame(do.call(rbind, df))
-colnames(df) <- paste(c(paste0('v', seq(1:p)), 'source'))
+colnames(df) <- paste(c(paste0("v", seq(1:p)), "source"))
 
 head(df)
 ```
@@ -119,7 +128,7 @@ The item column is the last one (`p + 1`).
 
 ### Visualization
 
-First two components across sources:
+Show the first two components across sources:
 
 ```{r example-plot, fig.width=7}
 library(ggplot2)
@@ -127,9 +136,13 @@ library(ggplot2)
 df_sub <- df[sample(1:nrow(df), nrow(df) * 0.05, replace = FALSE), ]
 
 ggplot(df_sub, aes(x = v1, y = v2, col = factor(source))) +
-  geom_point(size = 1, show.legend = FALSE) +
-  labs(x = 'x1', y = 'x2', title = 'Raw data across sources: first two components', 
-       subtitle = paste('Color = source; ', m, 'sources, ', n, 'observations per source'))
+   geom_point(size = 1, show.legend = FALSE) +
+   labs(
+      x = "x1",
+      y = "x2",
+      title = "Raw data across sources: first two components",
+      subtitle = paste("Color = source; ", m, "sources, ", n, "observations per source")
+   )
 ```
 
 ## Prior elicitation
@@ -137,14 +150,15 @@ ggplot(df_sub, aes(x = v1, y = v2, col = factor(source))) +
 The package supplies the function `make_priors_and_init`.
 
 Suppose that `df` represents a background dataset.  
-We can use it to elicit the model hyperparameters:
+We can use it to elicit the model hyperparameters using the estimators described in [@Bozza2008Probabilistic].  
+It also chooses an initialization value for the Gibbs sampler.
 
 ```{r priors}
 col.variables <- 1:p
 col.item <- p + 1
 
-use.priors <- 'ML'
-use.init <- 'random'
+use.priors <- "ML"
+use.init <- "random"
 
 priors <- make_priors_and_init(df, col.variables, col.item, use.priors, use.init)
 names(priors)
@@ -153,59 +167,59 @@ names(priors)
 
 ### Hyperpriors on mean
 
-$$\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)$$
+$$\theta_i \mid \mu, B \sim \quad N_p(\mu, B)$$
 
 - Hyperprior for the between mean $\mu$:
 
 ```{r, results='asis'}
-bmatrix(as.matrix(priors$mu), pre = '\\mu =', digits = bmatrix.digits)
+bmatrix(as.matrix(priors$mu), pre = "\\mu =", digits = bmatrix.digits)
 ```
 
 Exact: 
 
 ```{r, results='asis'}
-bmatrix(as.matrix(list_exact$mu.exact), pre = '\\mu =', digits = bmatrix.digits)
+bmatrix(as.matrix(list_exact$mu.exact), pre = "\\mu =", digits = bmatrix.digits)
 ```
 
 - Hyperprior for the between covariance matrix $B$:
 
 ```{r, results='asis'}
-bmatrix(priors$B.inv, pre = 'B^{-1} =', digits = bmatrix.digits)
+bmatrix(priors$B.inv, pre = "B^{-1} =", digits = bmatrix.digits)
 ```
 
 Exact: 
 
 ```{r, results='asis'}
-bmatrix(solve_sympd(list_exact$B.exact), pre = 'B^{-1} =', digits = bmatrix.digits)
+bmatrix(solve_sympd(list_exact$B.exact), pre = "B^{-1} =", digits = bmatrix.digits)
 ```
 
 ### Hyperpriors on within covariance matrix
 
 $$ W_i \sim IW(n_w, U) $$
 
-- Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance)
+- Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance) s.t. the expected value of $W_i$ is defined
 
 $$n_w = `r priors$nw`$$
 
 - Inverted Wishart scale matrix:
 
 ```{r, results='asis'}
-bmatrix(priors$U, pre = 'U =', digits = bmatrix.digits)
+bmatrix(priors$U, pre = "U =", digits = bmatrix.digits)
 ```
 
 Exact: 
 
 ```{r, results='asis'}
-bmatrix(list_exact$U.exact, pre = 'U =', digits = bmatrix.digits)
+bmatrix(list_exact$U.exact, pre = "U =", digits = bmatrix.digits)
 ```
 
 ## Initialisation
 
-Within covariance matrices and their inverses: we initialize the chain with
+Within-source covariance matrices and their inverses: we initialize the chain with
 
 ```{r, results='asis'}
-bmatrix(priors$W.inv.1, pre = 'W^{-1}_1 =', digits = bmatrix.digits)
-bmatrix(priors$W.inv.2, pre = 'W^{-1}_2 =', digits = bmatrix.digits)
+bmatrix(priors$W.inv.1, pre = "W^{-1}_1 =", digits = bmatrix.digits)
+bmatrix(priors$W.inv.2, pre = "W^{-1}_2 =", digits = bmatrix.digits)
 ```
 
 ## Usage
@@ -217,12 +231,17 @@ priors <- make_priors_and_init(df, col.variables, col.item, use.priors, use.init
 
 mtx_data <- as.matrix(df[, col.variables])
 
-ml <- marginalLikelihood(X = mtx_data, n.iter = 1000, burn.in = 100,
-                   B.inv = priors$B.inv, 
-                   W.inv = priors$W.inv.1, 
-                   U = priors$U, 
-                   nw = priors$nw, 
-                   mu = priors$mu)
+ml <- marginalLikelihood(
+   X = mtx_data,
+   n.iter = 1000,
+   burn.in = 100,
+   B.inv = priors$B.inv,
+   W.inv = priors$W.inv.1,
+   U = priors$U,
+   nw = priors$nw,
+   mu = priors$mu
+)
 ```
 
 
+## References

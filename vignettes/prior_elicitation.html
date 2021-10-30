@@ -1,45 +1,64 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Lorenzo Gaborini" />
 
-<meta name="date" content="2019-05-08" />
+<meta name="date" content="2021-10-30" />
 
 <title>Prior elicitation</title>
 
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -48,9 +67,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -96,7 +115,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -107,189 +126,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#header {
-text-align: center;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
 
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -303,134 +141,148 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Prior elicitation</h1>
 <h4 class="author">Lorenzo Gaborini</h4>
-<h4 class="date">2019-05-08</h4>
+<h4 class="date">2021-10-30</h4>
 
 
 
 <div id="test-case" class="section level2">
 <h2>Test case</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">set.seed</span>(<span class="dv">1337</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(bayessource)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">requireNamespace</span>(<span class="st">&#39;mvtnorm&#39;</span>)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; Loading required namespace: mvtnorm</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1337</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayessource)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">requireNamespace</span>(<span class="st">&quot;mvtnorm&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required namespace: mvtnorm</span></span></code></pre></div>
 <p>Let’s generate a test dataset with known parameters.<br />
 We will use some supporting functions:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Generate n random integers in {min, ..., max}</span></a>
-<a class="sourceLine" id="cb2-2" title="2">randi &lt;-<span class="st"> </span><span class="cf">function</span>(n, min, max) { <span class="kw">round</span>(<span class="kw">runif</span>(n, min, max)) }</a>
-<a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&#39; Generate random invertible symmetric pxp matrix</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&#39;</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&#39; @param p matrix size</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&#39; @param alpha regularization &gt; 0</span></a>
-<a class="sourceLine" id="cb2-8" title="8">randinvmat &lt;-<span class="st"> </span><span class="cf">function</span>(p, <span class="dt">M =</span> <span class="dv">5</span>, <span class="dt">alpha =</span> <span class="ot">NULL</span>) {</a>
-<a class="sourceLine" id="cb2-9" title="9">  <span class="kw">stopifnot</span>(p <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb2-10" title="10">  <span class="kw">stopifnot</span>(M <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb2-11" title="11">  <span class="cf">if</span> (<span class="kw">is.null</span>(alpha)) {</a>
-<a class="sourceLine" id="cb2-12" title="12">    alpha &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-13" title="13">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb2-14" title="14">    <span class="kw">stopifnot</span>(alpha <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb2-15" title="15">  }</a>
-<a class="sourceLine" id="cb2-16" title="16">  M <span class="op">*</span><span class="st"> </span>stats<span class="op">::</span><span class="kw">rWishart</span>(<span class="dv">1</span>, p <span class="op">+</span><span class="st"> </span>alpha, <span class="kw">diag</span>(p))[,,<span class="dv">1</span>]<span class="op">/</span>(p <span class="op">+</span><span class="st"> </span>alpha)</a>
-<a class="sourceLine" id="cb2-17" title="17">}</a>
-<a class="sourceLine" id="cb2-18" title="18"></a>
-<a class="sourceLine" id="cb2-19" title="19"><span class="co"># Compute inverse of X if X is sympd</span></a>
-<a class="sourceLine" id="cb2-20" title="20">solve_sympd &lt;-<span class="st"> </span><span class="cf">function</span>(X) {</a>
-<a class="sourceLine" id="cb2-21" title="21">  <span class="kw">chol2inv</span>(<span class="kw">chol</span>(X))</a>
-<a class="sourceLine" id="cb2-22" title="22">}</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate n random integers in {min, ..., max}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>randi <span class="ot">&lt;-</span> <span class="cf">function</span>(n, min, max) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">round</span>(<span class="fu">runif</span>(n, min, max))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Generate random invertible symmetric pxp matrix</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param p matrix size</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param alpha regularization &gt; 0</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>randinvmat <span class="ot">&lt;-</span> <span class="cf">function</span>(p, <span class="at">M =</span> <span class="dv">5</span>, <span class="at">alpha =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stopifnot</span>(p <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stopifnot</span>(M <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   <span class="cf">if</span> (<span class="fu">is.null</span>(alpha)) {</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      alpha <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>   } <span class="cf">else</span> {</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stopifnot</span>(alpha <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>   M <span class="sc">*</span> stats<span class="sc">::</span><span class="fu">rWishart</span>(<span class="dv">1</span>, p <span class="sc">+</span> alpha, <span class="fu">diag</span>(p))[, , <span class="dv">1</span>] <span class="sc">/</span> (p <span class="sc">+</span> alpha)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute inverse of X if X is symmetric-positive definite</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>solve_sympd <span class="ot">&lt;-</span> <span class="cf">function</span>(X) {</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>   <span class="fu">chol2inv</span>(<span class="fu">chol</span>(X))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="data-generation" class="section level2">
 <h2>Data generation</h2>
 <p>We will generate the data according to the model: for sources <span class="math inline">\(i = 1, \ldots, m\)</span>,</p>
-<p><span class="math display">\[X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)\]</span> <span class="math display">\[W_i \; | \; U, n_w \sim \quad IW(U, n_w)\]</span></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">p &lt;-<span class="st"> </span><span class="dv">4</span>      <span class="co"># number of variables</span></a>
-<a class="sourceLine" id="cb3-2" title="2">m &lt;-<span class="st"> </span><span class="dv">100</span>     <span class="co"># number of sources</span></a>
-<a class="sourceLine" id="cb3-3" title="3">n &lt;-<span class="st"> </span><span class="dv">500</span>     <span class="co"># number of items per source</span></a></code></pre></div>
-<p>Upper hierarchical level: generate <span class="math inline">\(\mu\)</span>, <span class="math inline">\(n_w\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(U\)</span></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">list_exact &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb4-2" title="2">list_exact<span class="op">$</span>B.exact &lt;-<span class="st"> </span><span class="kw">randinvmat</span>(p, <span class="dt">alpha=</span><span class="dv">2</span>)      <span class="co"># Between Covariance matrix</span></a>
-<a class="sourceLine" id="cb4-3" title="3">list_exact<span class="op">$</span>U.exact &lt;-<span class="st"> </span><span class="kw">randinvmat</span>(p, <span class="dt">alpha=</span><span class="dv">2</span>)      <span class="co"># Inverted Wishart scale matrix</span></a>
-<a class="sourceLine" id="cb4-4" title="4">list_exact<span class="op">$</span>mu.exact &lt;-<span class="st"> </span><span class="kw">randi</span>(p, <span class="dv">0</span>, <span class="dv">10</span>)   <span class="co"># mean of means</span></a>
-<a class="sourceLine" id="cb4-5" title="5">list_exact<span class="op">$</span>nw.exact &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">*</span>(p <span class="op">+</span><span class="st"> </span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>     <span class="co"># dof for Inverted Wishart, as small as possible</span></a></code></pre></div>
-<p>Middle hierarchical level: for every source generate</p>
+<p><span class="math display">\[X_{ij} \mid \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \mid \mu, B \sim \quad N_p(\mu, B)\]</span> <span class="math display">\[W_i \mid U, n_w \sim \quad IW(U, n_w)\]</span></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="co"># number of variables</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># number of sources</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span> <span class="co"># number of items per source</span></span></code></pre></div>
+<p>Upper hierarchical level: choose some generating hyperparameters <span class="math inline">\(\mu\)</span>, <span class="math inline">\(n_w\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(U\)</span></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>list_exact <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>list_exact<span class="sc">$</span>B.exact <span class="ot">&lt;-</span> <span class="fu">randinvmat</span>(p, <span class="at">alpha =</span> <span class="dv">2</span>) <span class="co"># Between Covariance matrix</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>list_exact<span class="sc">$</span>U.exact <span class="ot">&lt;-</span> <span class="fu">randinvmat</span>(p, <span class="at">alpha =</span> <span class="dv">2</span>) <span class="co"># Inverted Wishart scale matrix</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>list_exact<span class="sc">$</span>mu.exact <span class="ot">&lt;-</span> <span class="fu">randi</span>(p, <span class="dv">0</span>, <span class="dv">10</span>) <span class="co"># mean of means</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>list_exact<span class="sc">$</span>nw.exact <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (p <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="dv">1</span> <span class="co"># dof for Inverted Wishart, as small as possible</span></span></code></pre></div>
+<p>Middle hierarchical level: for each <span class="math inline">\(i\)</span>-th source generate</p>
 <ul>
-<li>source means: <span class="math inline">\(\theta_i\)</span></li>
-<li>within covariance matrices: <span class="math inline">\(W_i\)</span></li>
+<li>true source mean: <span class="math inline">\(\theta_i\)</span></li>
+<li>true within-source covariance matrix: <span class="math inline">\(W_i\)</span></li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">theta.sources.exact &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(m)) {</a>
-<a class="sourceLine" id="cb5-3" title="3">  theta.sources.exact[[i]] &lt;-<span class="st"> </span>mvtnorm<span class="op">::</span><span class="kw">rmvnorm</span>(<span class="dv">1</span>, list_exact<span class="op">$</span>mu.exact, list_exact<span class="op">$</span>B.exact)</a>
-<a class="sourceLine" id="cb5-4" title="4">}</a>
-<a class="sourceLine" id="cb5-5" title="5">W.sources.exact &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(m)) {</a>
-<a class="sourceLine" id="cb5-7" title="7">  <span class="co"># Equivalents:</span></a>
-<a class="sourceLine" id="cb5-8" title="8">  <span class="co"># W.sources.exact[[i]] &lt;- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])</span></a>
-<a class="sourceLine" id="cb5-9" title="9">  W.sources.exact[[i]] &lt;-<span class="st"> </span>bayessource<span class="op">::</span><span class="kw">riwish_Press</span>(list_exact<span class="op">$</span>nw.exact, list_exact<span class="op">$</span>U.exact)</a>
-<a class="sourceLine" id="cb5-10" title="10">}</a></code></pre></div>
-<p>Lower hierarchical level: raw data from every source</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">df &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq</span>(m)) {</a>
-<a class="sourceLine" id="cb6-3" title="3">  <span class="co"># The data</span></a>
-<a class="sourceLine" id="cb6-4" title="4">  df[[i]] &lt;-<span class="st"> </span>mvtnorm<span class="op">::</span><span class="kw">rmvnorm</span>(n, theta.sources.exact[[i]], W.sources.exact[[i]])</a>
-<a class="sourceLine" id="cb6-5" title="5">  <span class="co"># The source (last column)</span></a>
-<a class="sourceLine" id="cb6-6" title="6">  df[[i]] &lt;-<span class="st"> </span><span class="kw">cbind</span>(df[[i]], i)</a>
-<a class="sourceLine" id="cb6-7" title="7">}</a>
-<a class="sourceLine" id="cb6-8" title="8"></a>
-<a class="sourceLine" id="cb6-9" title="9">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">do.call</span>(rbind, df))</a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="kw">colnames</span>(df) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&#39;v&#39;</span>, <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>p)), <span class="st">&#39;source&#39;</span>))</a>
-<a class="sourceLine" id="cb6-11" title="11"></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="kw">head</span>(df)</a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;         v1         v2         v3       v4 source</span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt; 1 7.469499  0.4957342  2.5385219 3.896217      1</span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; 2 7.558600 -1.0233873  4.3096948 4.944321      1</span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; 3 7.069807  4.0731989 -0.3855136 1.190706      1</span></a>
-<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt; 4 7.475307 -0.5468936  0.9135918 2.729407      1</span></a>
-<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt; 5 6.421070  0.7888383  3.1431059 2.563542      1</span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt; 6 6.785213  0.4836733  3.1779949 3.208826      1</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>theta.sources.exact <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(m)) {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   theta.sources.exact[[i]] <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(<span class="dv">1</span>, list_exact<span class="sc">$</span>mu.exact, list_exact<span class="sc">$</span>B.exact)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample from an inverted Wishart</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>W.sources.exact <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(m)) {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>   <span class="co"># ours:</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>   W.sources.exact[[i]] <span class="ot">&lt;-</span> bayessource<span class="sc">::</span><span class="fu">riwish_Press</span>(list_exact<span class="sc">$</span>nw.exact, list_exact<span class="sc">$</span>U.exact)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>   <span class="co"># R:</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>   <span class="co"># W.sources.exact[[i]] &lt;- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Lower hierarchical level: generate raw data from every source</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(m)) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Sample data from the i-th source</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>   <span class="co"># returned as a matrix</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>   df[[i]] <span class="ot">&lt;-</span> mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(n, theta.sources.exact[[i]], W.sources.exact[[i]])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Store the true source in the last column</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>   df[[i]] <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df[[i]], i)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a dataframe</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># columns v_1, v_2, ..., v_p, source</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">do.call</span>(rbind, df))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&quot;v&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>p)), <span class="st">&quot;source&quot;</span>))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         v1        v2         v3       v4 source</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 7.783807 2.3526976  1.1456413 3.235036      1</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 7.478913 4.1146210  0.8399942 1.533766      1</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 7.490046 3.7630065  0.6714497 1.734876      1</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 7.228848 0.7886417 -0.5594819 3.323668      1</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 7.354987 1.7059334  1.9262933 2.380303      1</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 6.920879 2.4161567  3.0941613 1.858068      1</span></span></code></pre></div>
 <p>The item column is the last one (<code>p + 1</code>).</p>
 <div id="visualization" class="section level3">
 <h3>Visualization</h3>
-<p>First two components across sources:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3">df_sub &lt;-<span class="st"> </span>df[<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(df), <span class="kw">nrow</span>(df) <span class="op">*</span><span class="st"> </span><span class="fl">0.05</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>), ]</a>
-<a class="sourceLine" id="cb7-4" title="4"></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="kw">ggplot</span>(df_sub, <span class="kw">aes</span>(<span class="dt">x =</span> v1, <span class="dt">y =</span> v2, <span class="dt">col =</span> <span class="kw">factor</span>(source))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;x1&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;x2&#39;</span>, <span class="dt">title =</span> <span class="st">&#39;Raw data across sources: first two components&#39;</span>, </a>
-<a class="sourceLine" id="cb7-8" title="8">       <span class="dt">subtitle =</span> <span class="kw">paste</span>(<span class="st">&#39;Color = source; &#39;</span>, m, <span class="st">&#39;sources, &#39;</span>, n, <span class="st">&#39;observations per source&#39;</span>))</a></code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAEgCAMAAABcujGyAAACTFBMVEUAAAAAAEgAAHQASEgASHQASJwAdJwAdL8Apf8AqP8Aq/0ArfoAsPYAsvMAtO8AtuoAuB8AuOUAuTMAukIAuuAAu04Au9sAvFkAvNYAvWMAvdAAvmwAvsoAv3UAv30Av8QAwIUAwI0AwJUAwLEAwLgAwL4AwZwAwaMAwaobtwAzMzM1ov85tgBIAABIAEhIAHRISABISEhISHRIdHRIdJxIdL9InL9InN9MtABNTU1NTXJNTZJNcrBNksxSnv9bswBnm/9nsQByTU1yTXJyTZJycrBysABysOV0AAB0AEh0SAB0SHR0dL90nJx0nN90v790v990v/95l/98rgCFrQCIk/+NqwCSTU2STXKSTZKSzP+VkP+VqQCcSACcSHScdACcdEicdHScnEicnHScnL+cpwCcv5ycv9+c37+c3/+hjP+jpQCpowCsiP+voQCwck2wzLCw5f+1hP+1nwC7nQC/dAC/dEi/dHS/gP+/nEi/v5y/v9+/39+/3/+//7+//9+////AmwDFmQDHfP/KlwDMkk3M///PeP/PlADTkgDWdf7YkADccfrcjQDfnEjfnHTfv3Tfv5zf37/f39/f3//f/7/f/9/f///giwDibvfjiADlsHLl///na/PnhhvqgzHr6+vsae/tgUHwZurwfk3ze1n0ZOX2eWP3Y+D4dm36Ytv6dHb8YdX8cX/9b4f+Yc//YcL/Ycn/Yrz/Y7X/Za7/Zqf/aJ//apj/bJD/v3T/zJL/35z/37//39//5bD//7///8z//9///+X////ga2ynAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO2djV8USZrny+7p5U1eBATsRvEFEA7ontudXXVmB7Dn1rH77mZHXpw7X+5tz9lT0J0G2WX2tncbsVuRwuu9lxHoRRJUQASxFRHaWWm3/rF7niciMiOrsqqysl6Iyorfp6UysyLjyYj69vNEREZGBkJaWgorsNMXoKUVSxpQLaWlAdVSWhpQLaWlAdVSWhpQLaWlAdVSWhpQLaXlBdC7AaY//NxN6rcX8+Td1//2Cw8m06+/DgT+4NP37oUfti53Jy5c1crKoJIBNPCOm+oLA/Suq5Myri0ozh9cjATUutyduHBFKyuT8gQoq7a3fx045iJ1tgB6xvG4BnSHlQSgoe3TCOjXPwwEdv0COET3cxeZtZD8ui3wg7+jPTMVeKpj5q6QtYtnXKYs7gbe+Tz0+08DgR9gS+Ltf4EUv5Q3SNaeSMmuAy9B5MGzZEn+0JaZieUQxoN/gFP5STyFuNwQ2/qTsDKaV2eV9rJ8La/bjn3dBuXaagv86B5W11Z4Crjav/0hL7q4PPMYt24vca4pCUD/eQh/KR7vz4Tu7rqMP3Qe/S48IX7zg0/zrFS8zs2TpHS0i5E2ABm9vfhuW+C9e/CDin2ewtwgWXtSSgtQlgf/Ai4rPDNHQPGk3120Xa6wdMxeRtMmk2nIPP667Y9gc9evcT8PAMU9ewp+KXgZ4ZcnrNtLnHNKtg369uI75Cry4N8Z+A3w2Bb/zbZP7/rL0O8vBvKkVES3tIuydt9ehFO/Rq9xkbmpwC/R3Hv3Xrf98T1uhW+QzD0rpQwoy8PMEt3QP0bkwbRF8OPpeJKVwh7ibWW0bPJSWNduXjVsfY2Iv2577x6cmHfv7W8D9quFY7CVJ12edYzbjLzaHFISgO76Y/bL/J+//a9t5CDgp//wL+BXGuI/GfOkvG55KvGLi10uvmv6XmD2C/PUoV2XX7e9++//juXJN0K2PSulDCjL45hISxtg354HkwUoO0mksANqK6NlU87fftV5+L8pXBBmTRtwHC/AulrMn7I1L886xgGNvNockucQ/3XbjwhDFpmQNfjNtt75+9NnWNM0JAIotdasVHcZAGI3ZMsDPRSJYcZ30SNjDA786POQtUESe1ZKGVApDx6BWRC152FeKwOUUSRShHWS5DJKV8cKcSYkb2whoMc4aXgi28CmkNPVWpdnHeM2I682h+S9DbpFsQ3i1h/99//5/7Duob6H8qBeJSQEoFIq5ojMXZS1Gx3Q0D9+yse1zA0S30sM0LA8xLVKgJopwgCVy5gpQB2uNoeURCdpiLXWsK4pZr1u+/OL0P9577eiLlnU2jbBMxt10i5LJ3alEM/gsgXR//2feVfB3DD3pJRDIkCKPI7JVmxnSbvhgIoUYYDKZXQT4u2AMvDsIV7AaF1eBKCRV5tDSgLQ7dPsV7qHAyTUznr3w8vgFn4oIjd0kmikJk9OdZd6t+Yuytqljsbr01ZXR3QmtgJ/AgZ+u+uyuUFnmntSh2Uo8AtmVORhZgldNuizvfOFPY8Qz0kG1Epx10xFW3IZnTpJzJDVSbIDCrlGdJIsfy8uTwYUsnS62hxSMuOgrPPJIhMbICRirf/XKWzhMJOU6q41cmL9tObuljmaRN+FD8fQrx95Jp5oDvlIRlkeYpSGB9Fj8lnmtdoBtVLcDYi7EWxLLqPTMJNtyCsc0HfbeKx2GBSTL88C1KqsyJtcuaFkAIWqO8OGnP+S4upWIE/0v7mg9fSDfzCHtCnV9qeBvHvSSShp9+s2GpQWkfa1baAehw3MDXYJ5p6ZMvS/2gI/+p3ZBjWzZEne/aV8VjRArRR0uZSCbdnK+DpioN4yxAfq7W1QHLH/XE4hwWhennSMbNpLnGvSs5kypm3RKdRKQBrQjEkD6kUa0IxJA+pFGtCMSQPqRRpQLaWlAdVSWhpQLaWlAdVSWhpQLaWlAdVSWhpQLaXlDdC78iQJ0OsP0zjXZvsTynyIT5gYSuHECZopjblFzzyhov3+8/RWRQ7KC6DiAU5rhmJafxU24fIuPXFpfaZEW5zGGJknUjQNZ+rlBVD+zNFdy9ek8ZfZPk2+evs0zmN75wvxmZrM7+ZxG9Ez14DurDwASj8jF05WzGO/jNj86L+xxxP4g0bmfHM2V1I6Af+w1PwgfUkPfUoLQmzlibRkWXwmnKmZWNYQM+SYuZnpX7CwLxvDOaFgZNcP8Xx6DA9ncuLfY3JVfIgPHJ+xmTazk7Lhc/cSKUzuyAOgkp/g6yPgIXPT8QFZVt1tZ6QTWPW35Ymnls6ERJR1OneLPchxRnwmnKlILOe8ffpf0+/tlLlVHhb2ZWOUXxu/WPjfiU5BTiGNrSpwxjM7LEy/bkPa8kK2bJKtIT/LC6Afmf8L0y+6RT+Budnm9PCMOEc6gVf/GYt4mQ/5XAnQY+Iz4Uylq7ZyxgnF8IVT5rbykCf7wp6fMAL//vkeu0y+G+1UZpIds2WTbA35Wcl5UOpksF9G2nQ6aYiFKFsq8SlafXfFQw8O9pycXGKZDgUCjn0rKVM5czPTj/gxfr7Ij4y8pSfo7rHnNXaZgIZdj2xatCJs2SRbQ35WEm3Q7U8uxwLU3gYNsRU5Yle/c+yK3gZNMFO2JohDcZwyjwCUny/yY+Xceu93wOj26V2XZQ8aDqhk2gTUlk2SNeRneXomiffioTZ3XTZDvLUZ7Tz0UXIq+29oPWEeJgsbp452QpmGRUfmMT+57JR5eKY2YyETvE9+DQATVFuWB41yKp1GEfujL+zZJFlDflZy46BOnSRHQOlXl1JhQw+f0+WBMs9aaSHyN2A5DvEhyiFrqDKhTEVie0HOMFfpkHl4J8kyxvLjWdFKYlv0BOcuAj28KkR7k6e3Okm2bJKrIT/L252kIRG7HYaZnD3oFj9DjJdgA+DPP+G/jzyIQs/i2hpZJgqsISc16BLJVCS2ZQ5B1byDFJ65PMyUF2aMRXR2CWfYabv+B7VT88KrAv9sWU0dMzt7NokWJnek5L3417+In0bNzONb12P5iUlJQLfS2U1Na+ZxpQFNUEoC+jfpvFeS1szjSgOaoJQEVEtLSAOqpbQ0oFpKSwOqpbQ0oFpKSwOqpbQ8AGokqsTP8KQMmfGbHUWLowHVdjJqRgOqak2rbkfR4mhAtZ2MmtGAqlrTqttRtDgaUG0no2Y0oKrWtOp2FC2OS0DffHzixLlQ6PtfnfjTf9KARrHT1ZUZO+lRVgP6/X/4LPTmZ5/9y1+dC33zUw2os52urvQQ6vNqi5fcFaDfIZVfnvv+P34VevNvvtKAOtrRgKbDjssQz7zomz/7J3KmodC/AsU9I9fU1bXTV+BjxQX0X/7q56Hv/lQAikr3/ztepagrUN2OosVxC+j3v/o5dJX+TAMa107K43xuVFvU5O4AffPxOaRUt0Hj2kl9SzQnqi16cleAMj4pzOtefGw7GtDU2nEH6DcnUOf0OKgLOzrEp9SOyxDvpHRfmlftaE1H4DkwkBY7qZcGNBdqOiLADwwkTWgOVFus5BrQVNrRgKbajgY0tXZ0iE+xHQ2otpNRMxrQnahp1z33xcWk7KRTGlCVarqiIpV2XI99Li56IFShatsBO7kJaEVFCgjVgGbCjgY0FXZ0iE+bndwENMUhHpWm6fQRdtImDaivazpds5XD7aRP/gPUPzp0KOksENAUXIlWNOWyBz0EStoOOlD9yEfq7WhAUwSoESfMe7+jpGq1ZcaOBtRAQlNiJxagCd+TLyuLaic90oD6vKYBzpgONDFAy8pMQv1dbXGTa0BTYydeNz5hB6oBZck1oKmx4whowuPyVmD3EOIvXUrQmk0aUH8D6hTfE76zKfnNqHaEmpvDDly65IbQpaUoX2hA/Q1oY2NkinQC2twcTqgrQJeWohGqAVUL0ORvdtrsNDbKhN68yT6TCPFR7JiKBNRViNeApu7SvMqVGft0EU+0Rgf05k1BqCyvI6HxQjzj0m0DNJxPc18Dqi6gdlqrq73YsTtQB0AjB5pWVjzYiRCL7O4aoJGyPKoGVClAbVBWHDpkAVpd7ZJQBzv19ezT2YGGAbqyEoPQ589j2ZGlAfU/oLZ7nUkAWl8vCA3X/DwL8fhP0BsL0OfPLULjlSexEB8uHeI9X5pXuTQjRXX7zfjUAWr2kebnkVDmRa34H9OBAqC8lalWtWXajmtAadEwvy59Y/KJbLp1oeF2urqMcD45oasyoIho/MyJT0aoutWWCTtuAf3uxE++Cvl+CXBi0yOgkbeSEFBiUfApCLW1RZ1GlkgaUEruDtAvf/wb8KC+X36R2KyornY16hQXUCCUwLT4NASiVpoyx8F5UnPz4GCknXQpuwFlId6fS4DL8+mrq0Mh7D7RTmNjQvlETqlHMq2PlRU6SICGysp4GgK0TDrp+XNzcxCU0CX4WK4A9dsS4NT0lHtILLbz7lNjY+OtW7HtHDxoP7S4aPei3Hfi39VV6LSvrvLuvOQ2w1yo1X8fJClYbam2s7AQK3kigPpsCXCGpgSovfWJfN66Fb05GgI+7YQuLnZ02AhFQAFH+LsKWsE/LNrboLSFeBNQwWd4eR4+dFs+u+KNQ+0YoAsLsQhNCFCftUE5mrIDtXWPGKBRCTUBffGCHwE+wwldxIAeAWj0dicbosfeEceTlaelRXz98KE3QuOO5Hv9dWL6Pzd2Ugio35YAZ2hKCFaH3ZRHPquNly+j2eF8moTaAJ2dxW48dYmI0HXDcMEnivXfOZ9op6XFJDQ9gAIiHn+d2Hg5KJ0h3l/joD099CG7zcgVR4hPiVCpVdrRwT4lQA0bn4JQ3ha9cMEwNjbwKwI0xjC9OVOJWLQDmpYQj5TtHKCxk7sFNFKJGUr80rzK9Z0kJLSnJzagIBlQDPp8E70l2+KABoPSSV1dAlAcq0dAl5cvXNhYX0dCEVB2o/PkSdlSi+gfmXwijfYQ7yznOXSuWU4C0ORDfJzk/gWUe0hT9n1ksQeOIaHyUYcMJUKjAQqEBm/eDN4w8vPpAA6KIp+rSOjysoF8AqHrIEMC9CToCuVx/DjxKc0RMYxxC1D56Li8x/yi8yzPBFoD3kN8wtKAcjPInnw4bJ85y/BEkVgbHND+ftpyCPEcULzHfuNGPhD64sUNBHRgYHaWA7psGAhoPgN0pYwRajBAkdDjIAYoQxT/jo+PixAvCY5KhPKW5ZIjoYk1VzWgagHKnaXdgRoVtlQlJawLRXwCoZIrvXFDKg7yOTlpAXrjxg3kEwllfEJ0F4QKPlkvCfkUgA4OmoTi33GBogtAoxIav7ZMaUDVCvFCtqGlCgnQW7dKQPg1es3+fmDzxQv48/JlP/J544ZcnI5JEPDJQjx+a5iATiCfT54QoZh2xTY0PzxM7U3gs4XzKQFqKw+XU4h3DvKJzcDTgCrWSeKSAK2urmA9JxS2NhmgrN0JzpNCOXrRfg6o6U87CNA1gz/XEYTGKG4GgxPAJwj4fPLEBHRFGmQaBjXPzRnUUyc8qT+EH5zEwkJjepolrqysjFoO5NNOZIJzmONUW2dnAnklYSciea4DyoZBMd4jqvDJW5m3iFA86gQohXiK+JOT0GPv6HhBfHag22xoCFLXPQiaMK5cmZgwDATUQD4PlJnzlIeHTzJA50DD16+3tMxsbJznI0otYmSpEDTNCK2sjEVoBJFeAN27N8q3nZ2pIlQDmriZnh7sMRGgBCY9X2R12NknEUqfEO1raw0G6GQwiB0iZLdrsuMgA7SBBpdmg0FE8srsrPHtt8DnAVSZCejwtWtA6ElyoAAoEAp8bmxIgJJxDiiQed4ElEfzV6/sxbgUQWgilYDVtndvNEI7OwWiyYKqAU3YDLY7AdAemmbHALUTSjJ7SEW4VVsLrhMOBC1AV58tLh4sKmrggM7OLlNQn52d/RY0QYAOlz19utLQYBgNDddAJ0nEpwD0PAcTP2ZmDB7iX72qrDx/3uSTCH31Kh6h7FgC1RYP0M4UuFINaEJmoMl5iAA9hB9465MBimwSofv2UTrqw+NGRwcDFBudBovjAOg643OxqAgJNRbz8xcZnxaggGdz8/BTUAOJA7pnDxCKgf76XAOGeJC4tpkZIjTEWKwU30xFBdQhqruP87FDvKEBTZnimDl7VtpBNm/dAjJRrAdPM0Twzz76AwJI+/v72e0iHJ4vYg50crLP6OsLBlc7OnB8c7Vgsa8PAYXNfNDi8vLExDK4ytnZgW+/PX8e+WxuZoA2N1+7Nkd8rqxcA0KpJXr9esPgYCmnEPvyEYDSN1NTU+EhvrxclMfBgSYEaEzpEJ8axTZz9iwSWlTE9higtw6ZgPYQm9BZAjafEZ4lJfuqq/c1Tk6+eAENz45TpzqKOl6+fICE9qHWkVkAtKAA94qK1uAQ8Lm2NjsLgC6jsxxAvzgvADUacAMI3b375Mrw8Mo1cqEtLbuv4wSmFgjpfNJdC/GJ5RnHEM/7RwDolL1I5eUWoRFKKMRnQpkDNMt09iz/gA10dLjD+WSA9sBuSUl1Y2NREd5mKnn2jPFJY03oMF/U1oZOgQDIBw8wi2eI5LOioo6O2q52AHRkpO/gWn5+X9/Bg2trSCjG+IaGlZWx8+fH5mtqgE88EmKA7gah67x25crcHPXaEdDCwhY24DQ9DZ94kdPT4+Pj2D/iBZmaCisZAmo7sHdvROkdDmWXfO9BmeekjZ4epAs2mc+EhmYPuk8Dbx2VIJ9EaCSgtdB3Z4A+eFBLgD4jPouKartqa9sLRkAHg0Eg9CB60LUDB4DGp0/b21fGxsaggzRcM79BzVLi86QA9AqIAQqE3rmDnXYgdBq77tBROn9+mhMavcRhDpS6OlZrErei937iVFvqpUN8TEAPHaKwXlQEexTVAVc60kNe0wIUqERC0ameqq4+dWpy8hmOLQGhtbWrhtHbi3w+q3/GAEUdRkCx05Rfhm3QtYmJAxPL2OZsb58Y29hAQufnjeWFhfPX8C75yZOmAzVd6MLw8J07iGZLC/6FaH+++ApujccI4hHay2XthQEq9XOsrZBI7t6QJ2lAo5jhfPKmJvIqukUGetGKCkZoBRJaYlRUU0u0sbGn5xQT4Pisqsqoraqqhc8Hvfn5weADHBstKgoGEdB6ILSmBgAtI0AnSAzQQRxAOvD48ZX55uYFIPQ88nny+PFvm5qgL498zrVstLRQb55c6GZdHfJZWFh8hQANb2VubsaqARuRuHXpUhifgkupT85u3LtwtUlKAxrLzCGZUMMEFNuhFRV0qxOQLEG3yQ5VNBKfBsb1fuCyp6cKhKTmd3QEGaEFBQW9vcBn/WBNDQJaVlYG3fjDiOdBJLS9fXYWAX0Mwtbnwv79uxcWTp48cgT4bGqaww7RXGkppCBAEcvNzcLCujoOKBC6FNYP2tyMTahh2EJ8WFfeEVA+9UkC1OvM6DjSgMY0YxIKfPb0HMIBJoN1lCrwTtIhXEYRv97HAS1h7pOGl/qr8JsqQrQKDwCg6+sjtX19V69erQdAD9bU4EYZPnt0GAjdffAgNDnHcOryxkYD8LkbAd0PAjd65MiR+/ebmo4fR0BLS5HQuf3Dw/uRzM3C8nL8jxG6tLQ0Pm4jdHNqajNOzJdHg0xA+UGnEC/m5kl8podQDWhsM5xQ3ETc8Lk56Daxx+MkQEuA0IICCPkM0KowQKtqCdAHOAAKnferRCg+Q9fbe7B+lQGKnaCDo1euLCOgDQ1jYwAoENpgAnofhPPsbt8eJ0B3Hx+HdmgdaLOcqbu7sLC7EPlEQs25693d3VNT5ba57KwnJPDauxdd44L5HYR43Ig5yB6OowY0XYphBtud1lPGDFCDNUcNnBeyDztJjRTiS0ogdBeUMEKrqiDEI5eCz6oHD4LBZ89WVwFQ7BsBoH1rDNBezicBegB7QPOzs/Pz89CTH2vdvbsBAYUQPzyMgB45AoAWFiKhkLqw5coVAvSoCWh3YXf3zAwBurC5yZDr7n70qHuKPQ3EQ/1eS3wPAeWEmj2mmIBGVJsO8WlSdDO8YyR2WQuU9Zfw1iYbU2pkHwLQfuKzpwd2cIO8Z1XVixfYXX82MrK6Xs8A7V1cWyM+ezmfh2uATwL0xo2ioscrK8Bn68mTT/d/cBT7Wzi8BHwCoRjI644enZsrrKMOPQA6M1Ne/oj4RJUvLU1NAZai4Ql8gghQbIwKJMMB3bvXcqE8bse6C6SHmZQA9Kw5I5m6SvTY3NmzjTQaysgUfCKhLL4XtLYCn1VVSOgr4hMIRUARTWh7jowUFRX19j4DL1rf21tWs7paUwOAPq6pOYCE7t8PX+McpqPA58mJiQ+OAqF1dTj+eeTOnSN7ENA9ddCRr2OAztUVzsxUVj56BOG9exO5LJ+aAp+JW3DdgOYjQejevQgoY5ICO/xnGNGHPjWgqbw0r4oZ4glQnKzU0yPuw7OBUJwUgmzi7fcivL956tQ+k8/W1gKksv/Uq1ev1tcJUCC0lgPa3l5UtLhYgw3R/LWy4hrSYRyjHwNC9yOgjxHQgQHkc2J4+OhRjOPPr1y5A6qbAz737CFA62jEqfD+fbxxRONMOMYEgCKQAOjeborvQCgcYQxuyhzKMZwBGtF991JtKZUGNM69eOQTCCUwsW/EAKVJIQafH1JStI/DaQL66hUC2o98IqEvX97Eoc+RkY6O0dH2kZHF9vbFq0To4WJGKN4ywmYnArofOvDI58DA2NgEDiXtRkDv37+GgOJsUBPQ+/fn5vbeF4BOFxrTS0vAKQMUkcOQ/4jux3fyiM74ZH+7ZQAZnzKhGtCUXppXxTXDZiSLmUtsJJTPWtrH5i+ViNH5U8bqakVBdTVOJ6rCKU00cQnn27UjoKurwOcoOtL29vZRAvRq3/Jyb03N2IULy8sTAOju+f3755uasAd/9CgSS4AOI4tEaB0DdI4AhUN1dQjofeJz+tEjnFpXODX15NGjJ1NTHFA2YaSzU7pHBH+omYpfkjiJl8KH6KMPw2tAVQHUnDMP7hRannSHqRG6RvvwH/TkQSafp7DHU80ABT6f0cSll5PAZ/v7yOfq6uhoLQf06gjyeRVdZy/weeHCxER+/nVcswHH46GTfuQIAoqkQgt0uKUFaaTeUV0d+dG5puP36yorCd2ZTQP5BEChLQqAggBKCvHYCkVYO80OEXbskdknJqCmr7xka4o+jHGjyBeA+mLpG2vO/FkuYx+E/Z59QGl1SQkQ+r4AtLGRAwqEVrx/qrUVRz/xQY/29lroJOGXC7WtrSMjQOzVqwhqb68F6AG843n+/Px1Bih22YnP3RjhAdCWPcgnNEjLy01CMbYjoND5Kdx8xNWNhJrT7FhrFAX7U9SL76aRUUhEfG5uXrpkBnMZyYd+B9QXS4BzPhFRYLOxEQGlrtI+8KPUjX///YoKASgQeqqY7oHCMWN9nfh8OVmLc5aR0Nqr2ELFY1ff70A+kdDe3sNA6IEDY2P5OBP0OhAKfrS4+MgRaI4SoEePlpa2tBQxQHHEkwHaQoDOgQOd2SyEvnzno3LWPcK/wCch+gQdpcUndu0ZoPhgnsH4BEJ5ceWg/hAJ9VhtKVM6AfXF8ov0IIcgFP+exWPUja+uZuNMtOoI47OxtdUoLi4mQINVVRDJ24HPVeSTdNUEdLz5/Y4OBPTC4cOjrfv3I59jYwzQ62PIZ3Hx8P5rrUDoHsSytLSoqLT0+NGjLQgo47OlBfmcmzHVWT5DA0zAJ/hEcqIY7SHI4wiTCahBoZ3xyQHlpbX3i2KNvfsBUOWXAOeTkmPr1i38h/DhKt9snW/WN6pmhNIi4OhAK5DP1meh4uJgkPgkQjdWV9sZoL0IKBC6uPjy5fvNzc319YfBeV640Ns7dhgIRUDXzp9fAD5BBOjoaGvryT0C0JaW0tI9H3wAhN7mfM7MHJ+bO/7IAhT+hQSfBGgIAd3cfIRkhuDY5manXLgnT0IhJFTs42kpruSdkStAVV8CnM35dDRjexJJPBnXaL3BcJ8A9NChEnxMng0wlUy2njq18cwIBicngxxQ2CE3So8lLZYRoNj6RD7r8Q7SBXKjIORzbW1hYayJOkfFxY+hyz+Ko/UMUJwBWvoBCPwmELq01IJM3j7eBDxyPiHW3w9hq5MA7eQhntwm/uvEznynVK4nPMxbgq/dPfXhLw+abYCyb6TXdZmEMu0rLqYQL1ZdLsFR+oKCgg2aCYp3jRYWgngziT3H+SIYHB3tmpysffWqDEM8AvriRT0R2mcC+ngeH/xYyH/8GAhdwZmhAlAgdPj2UQR0DwKKDc9Bo3Lp9m0E9Db2g8B1PgJQsb8UMugmEicRGRWAbtJwk1xOG6AcTJfPzfkBUOXboOQnowJqf6Gc9YLi4mJsZhbTNqY5dcooKZmcLBCAGgzQBdivqLiJO6PBV69WV7u6cPRpoLUVO/D4ZHx9/bOXLzc21np7m5svrKxAw3NtDTryj4HQlZUjR54+NUZHnz5tOnr0pHEbdKel5c4eIPQOA3QJj4EDxZUYgcYmdKRAqBFit+HZfXjWl9/cbGoSgNoLauNTvCRRAjR6K9QPgGbxEuDMgdoAFeG9uLGxmABdX5/ERMQkPoNUUGD098M2es3V1YWFigJsnAKhr0aRz9XVRQJ0AAfoBxHQmj7sLW1sXLgwMrK8vLLyeP7aNeLz8dgYDjLt3l1aWtoEnvMoAXobbySVlz+/A4SWlz8kQMeBz/JyC9BNKk83v+POAUU+m6YkPsMxJZlgSoTGmEPnB0CzfRzUzqcglDwp8YmETk6agBoGW3URtNrevjo4SH35m6/wxicDFAjt6xu4+jI/f7DvxQsI7wxQA/kEQpdwcYbpaeSTAwqENrFVbSRCgTbox9++DYSOjyOfRKjR1DQzs7lprqgAhMIeMom+s2mK7hwJPqMQKj5zBlCb0n1pXhXVjNnkZKA28hgvQj0DlAg18IOSMj4NHF7agEO4yBg2Og0kdHFxcaN+tFVYZakAAAx0SURBVK/vJQ7I9/X1LUIPiUI8B3SJADWmp6fHiFAcAS01CNDxpiYBqGEIQJHPbw0CFEdCpYUb+LyQTSLUbH12P3nCbiA9cQZUaoWaR/wd4rMbUAbiwgIP9Y0CUAHuPuKTKxiU3/7Rj4DiErW4vAgb+CwjPjdu3hwdFYASodgvMoyR6eXl6aWlhWvXFvBLY2xssHd6fvduA10nrqxIhJaX37lz20AXik8OY++IhHwioTKgBjlQ3hSFP918RHSK3wZ1LHFC69tlD6BDgcA7X8DnFv31GaA4y1cCVPqazWfiCjY2Tk6a752DON/e3o9LKCOh9Wxgviz0/sbG6upNDOzA5/XrAOjg4cM3kE/DqJmeXllZWllYWCFAl3p7p6f3gBDQztJSBLSpfM+e8s5OdJhNtgsVgBrmyiJcJqF066ibA4qIRhSWyCRAU7f0TWqUNKBD790LbQXO+A9QgzlQdKE8tNu+tQGKfAKhBlvLvp9UwADFwSQEFF+9jQ1R4/BhSHYd1Dk9ODg6atTUYA41K1z0vqOlpSUG6HxpaSc+gIS352G3kwFKK9haYiH+kUN5TEDpfieASYBG+k/uO4lPl4RmC6Dbp8/Q3zz/AUrCB3Vk34nr0LONfewlRiQGKG4hoBvEZ0HB4CA6UEYo/mWAkgjQzunR0RGcDEqHBgaWlohPJBTafkjofCkXNDwrGaBAaOXcHI4tSeLRXQrxXHy0icY7xcS76IAaCYT57AI09PZi3k4BmuiLdxI3IwGKtzb5Bj67btBrYgxGKNsCPglc5JNe/kaE4n2jsjJD8ImEAmvTD0dMQMVbt+ks3nueJ0DLgU+I9JXl5XsqOztpWdrK43ZCGaDsr1N5xIB8FD7lfpEvQzyBGtgZQBN+dZkHM7IDtQA9dGiDv8jIJuIT+BKAlhGfzc34KgRaCPH69YGBiooR5BMAHTEdKAN0aXBwyRreWQI+6RF37CKxR93DCbXQjA6oGJCnUSeHrxNc/huVNYCGhnZdZj7Uv4BKskI89p2cAEURYBWDg/jqmnoLUFpKtqIC+QRCR64/RELFOYxPth7ykhjeuX2brxICHSRzLQYOKCNUzBNh29HLQ8E+HFBhhgPq0HuKquwB1K3SdWnpD/HOos69M5/cA+IoKM0JqV9sbl4MMUABza4uBBSboU7DjEvz8+ZLYnCw08AQjx0mxufz5xDtKw0LUD7dzojmQdnbP1h3KSzAW+PwvI+UAKFZBOjb/7ujgCYrz2bCbzRJuvnw4U3aaKZZdQa+QA7sVHA+kVDjelfX9fz8yNcV4UMfNkCxHcqGnAxaqpYOGiLE48Q7QzhQB0D5+5N4f97eALXfKEI36ktAt08fI07/k+cQ7+wEVQc0lm4yPglQfMfM4iLaoZnNBKiB74/t6soPe6EWvn2bAcoPIIrUi+d80lrK5hA9CgGVm6NRAHVe4M7mwRNriGYRoKGtAI2Fem6DRmlGZhegAkmbysqAz0X2Ii5oY3ax9ymyV3A7AEqv4Ya/4tXb9B46XCpMytL2/lgUjjmJ5ij+dQ7xbpTKF3mlTClpg0IXPhDIi4lnLNHbnbNN6+u2XRyVt/bKyvhHWRnyibvYS+/qgkiPr+XEL192db3EEC9lgoDCx8pKKPTwYSiEN5VCIfSZ/Hu2xne4sDkaCrGuknlwczP5ImazwjpJr9sCx+KdEgP7LAzx6+v2Dg4Cyraamw3xck36JEANeltsF7ZF6cXG+LpC67XyptCBkqh1mE+3PQ3zrdvm27rChA50xn4v3sWKoJHyrQd9ezGQR2HeK6ApuTSvijTjZp229fCZaHKr03z7K37cvEl8ApaGBeg0e12h02vb+SU8fDifz2QSGg1QlDXWxACdmUkYUN+2QbdP40jo9ulsvtUp3bZ0udKlUyocylxcJBdK+3j/nflW3jHCzhJ3oAio40uxefYrK/lCkguNfj12QMWO89xkZ/kX0H/HPv9GZUCjj5aiGbptKeRyKVYnPgcGFum9m0x0/5371q4ue3Gmp4HYGIDivBH0ntyFurge3keyAxrlzqazfBvi3SndlxZTMe43RQDqeSlWJ0CZ4xR2LDGXGpVPDqjBe/IkunEaX8yO6UATADQhaUAzCagtxHsXC/HWPvJpEmorjnQ8isRQkyl+az+u7NWWGJ++nLCcFYDGCfFpUxRA4/MZKW+AJiRbKzQOrBpQtYeZIsUne4TJOcR7ATSxEO9JMqDxukwa0CwDVEyXC5cZ8sNCfGqsOiiZ8tgcqAY0tZfmVakxU1bmDKjVaXKyk443Y6Sq2nSIT/GleVVKzODQfBQHGg4oux9PSsu7hbKp2lJvRwPqrDKSGKCXFR7iaUYTlwY05XY0oFFUJhTPjgyo0iFeDTMa0JSZcQkohvg0dpGyrtpSbMc1oLSqXZavzZSA8Hamc4h3sONpkMm1sqnaUm/HLaDfnfjJV/5Yo96VrMl2buxoQNNnxyWgX/74N+BBlV8fNGVmEgNUh/j02UkoxCu/Rn2K9PBhSJ5Or6WAXAGq+hr1KTLjcrBIUZejuJnUe9AvT5z4aSjcg2pAlf1FFTeT1hCfK21QzqfzvXhTaW14SsqaakuLnYQAzeI16j0o2mwRrvR23SVlWbWl2E5CgObQOKihAVXDjmtAI5XuS/OqlJnRIV4BOxpQbSejZjSgqta06nYULY4GNKbkJ+bSaSeWsrDaUmhHAxpL8jPH6bQTU9lXbam0owGNJQ3ojtvRgMaUDvE7bScHAI2+2od34b0mRX9Rxc1oQMPNxFgvybPobr2iv6iT3CwwomhxNKBelGWAulrmTtHi+B9QHeJzFVCtrNGlSzt9BUnLxx5U21HJjA7xqta06nYULY4GVNvJqBkNaCrMxJlolzI7rpQ91ZYOOxpQB8WZqpwyO+6UNdWWFjsaUAdpQNWxowF1kg7xytjRgGo7GTWjAU3ejCv/qewvqrgZDWjSZty1QJX9RRU3owHVgCptRgOqQ7zSZjSgqta06nYULY4GVNvJqJk0Afrm4xMnzoVya+mbHLOjaHHcAYprLr752We5swR4DtpRtDjuAP0OqfzyXK4sv5iTdhQtjssQz7xoriwBrqWe4gKKa4PmyBLguWlH0eLEB5QtAf79r34eypUlwHPTjqLFcelB33wMfficWQI8J+0oWhx3gDI+c2wJ8Byzo2hx3AH6zQnUOT0O6mM7ihbHZYh3UrovzasUrWnV7ShaHA2otpNRMxpQVWtadTuKFkcDqu1k1IwGVNWaVt2OosXRgGo7GTWjAVW1plW3o2hxNKDaTkbNaEBVrWnV7ShaHA2otpNRMxpQVWtadTuKFkcDqu1k1EwGAdXSypy0B811O4oWRwOq7WTUjAZU1ZpW3Y6ixdGAajsZNaMBVbWmVbejaHE0oNpORs1oQFWtadXtKFocDai2k1EzGlBVazrzdty8JT4FZhKUBlTRms64HVcv4U7eTKLSgCpa0xm3owFN86V5laI1nXk7OsSn99K8StGaVt2OosVxCeh3J0785KuQXvrGx3YULY47QHFJu29+GtJLgPvYjqLFcelBGaR6+UUf21G0OO4BBdeplwDX2inFA/TNxz/+TC8B7mc7ihYnPqBsCfCQ/SUKGlDf2VG0OG49aCjyNTSqym9tD5+Vx2Nx4rwnicV2+xLgqspnP6jfypMWQHENcGiD2sdBVZXPflC/lSc9gGaTfPaD+q08GlAtP0oDqqW0NKBaSksDqqW0NKBaSssvgGbFQJh70W0Rv5Tpzcf4tkKPxfEJoPYJgVmv73AWrl/KhDfJ3/zsM4/F8Qmg2XEz1q2+/PFvoCx+KdN3SKXn++U+AdQ+nSX7hb+kn8oUMePItXwCqH1CYPYLAfVRmXAyh8fi+ARQP3kblL886Pe/+rnnn8gngPqlvSb0xkdtUOjFQx/ea3F8Amh2TAh0L/wl/VImxqfX4vgEUN+MGXL5aRz0mxOoc7k9DqrlV2lAtZSWBlRLaWlAtZSWBlRLaWlAtZSWBlRLaWlAM6PtTy7v9CVkpzSgmdHQLg2oJ2lAM6Ht0wENqDdpQNOpu4Dl9uljoa281x9qQD1JA5pWDeXhfyANqEdpQNOq1x/++qMv2IYG1JM0oOnV3cAZ+tSAepQGNL0aClCE14B6lQY0rdp65+9PkwvVgHqUBjSd2gY6t97BRqgG1KM0oOnU0Hv3Qm8vYpDXgHqUBlRLaWlAtZSWBlRLaWlAtZSWBlRLaWlAtZSWBlRLaWlAtZSWBlRLaWlAtZTW/wf1Ja9racSYEwAAAABJRU5ErkJggg==" /><!-- --></p>
+<p>Show the first two components across sources:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>df_sub <span class="ot">&lt;-</span> df[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df) <span class="sc">*</span> <span class="fl">0.05</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sub, <span class="fu">aes</span>(<span class="at">x =</span> v1, <span class="at">y =</span> v2, <span class="at">col =</span> <span class="fu">factor</span>(source))) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">&quot;x1&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">&quot;x2&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Raw data across sources: first two components&quot;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Color = source; &quot;</span>, m, <span class="st">&quot;sources, &quot;</span>, n, <span class="st">&quot;observations per source&quot;</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>   )</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 </div>
 <div id="prior-elicitation" class="section level2">
 <h2>Prior elicitation</h2>
 <p>The package supplies the function <code>make_priors_and_init</code>.</p>
 <p>Suppose that <code>df</code> represents a background dataset.<br />
-We can use it to elicit the model hyperparameters:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">col.variables &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span>p</a>
-<a class="sourceLine" id="cb8-2" title="2">col.item &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb8-3" title="3"></a>
-<a class="sourceLine" id="cb8-4" title="4">use.priors &lt;-<span class="st"> &#39;ML&#39;</span></a>
-<a class="sourceLine" id="cb8-5" title="5">use.init &lt;-<span class="st"> &#39;random&#39;</span></a>
-<a class="sourceLine" id="cb8-6" title="6"></a>
-<a class="sourceLine" id="cb8-7" title="7">priors &lt;-<span class="st"> </span><span class="kw">make_priors_and_init</span>(df, col.variables, col.item, use.priors, use.init)</a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="kw">names</span>(priors)</a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; [1] &quot;mu&quot;      &quot;U&quot;       &quot;B.inv&quot;   &quot;nw&quot;      &quot;W.inv.1&quot; &quot;W.inv.2&quot;</span></a></code></pre></div>
+We can use it to elicit the model hyperparameters using the estimators described in <span class="citation">[@Bozza2008Probabilistic]</span>.<br />
+It also chooses an initialization value for the Gibbs sampler.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>col.variables <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>p</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>col.item <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>use.priors <span class="ot">&lt;-</span> <span class="st">&quot;ML&quot;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>use.init <span class="ot">&lt;-</span> <span class="st">&quot;random&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">make_priors_and_init</span>(df, col.variables, col.item, use.priors, use.init)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(priors)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;mu&quot;      &quot;U&quot;       &quot;B.inv&quot;   &quot;nw&quot;      &quot;W.inv.1&quot; &quot;W.inv.2&quot;</span></span></code></pre></div>
 <div id="hyperpriors-on-mean" class="section level3">
 <h3>Hyperpriors on mean</h3>
-<p><span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)\]</span></p>
+<p><span class="math display">\[\theta_i \mid \mu, B \sim \quad N_p(\mu, B)\]</span></p>
 <ul>
 <li>Hyperprior for the between mean <span class="math inline">\(\mu\)</span>:</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">bmatrix</span>(<span class="kw">as.matrix</span>(priors<span class="op">$</span>mu), <span class="dt">pre =</span> <span class="st">&#39;</span><span class="ch">\\</span><span class="st">mu =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(<span class="fu">as.matrix</span>(priors<span class="sc">$</span>mu), <span class="at">pre =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">mu =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ \mu = \begin{bmatrix}
-  6.8433 \\ 
-  2.0367 \\ 
-  0.8760 \\ 
-  3.0164 \\ 
+  6.8288 \\ 
+  2.0473 \\ 
+  0.8846 \\ 
+  2.9926 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">bmatrix</span>(<span class="kw">as.matrix</span>(list_exact<span class="op">$</span>mu.exact), <span class="dt">pre =</span> <span class="st">&#39;</span><span class="ch">\\</span><span class="st">mu =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(<span class="fu">as.matrix</span>(list_exact<span class="sc">$</span>mu.exact), <span class="at">pre =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">mu =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ \mu = \begin{bmatrix}
   7.0000 \\ 
   2.0000 \\ 
@@ -440,15 +292,15 @@ We can use it to elicit the model hyperparameters:</p>
 <ul>
 <li>Hyperprior for the between covariance matrix <span class="math inline">\(B\)</span>:</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>B.inv, <span class="dt">pre =</span> <span class="st">&#39;B^{-1} =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>B.inv, <span class="at">pre =</span> <span class="st">&quot;B^{-1} =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ B^{-1} = \begin{bmatrix}
-  1.1402 &amp; 0.9907 &amp; -0.7688 &amp; -0.0829 \\ 
-  0.9907 &amp; 2.1191 &amp; -0.8502 &amp; 0.1742 \\ 
-  -0.7688 &amp; -0.8502 &amp; 0.8426 &amp; -0.0993 \\ 
-  -0.0829 &amp; 0.1742 &amp; -0.0993 &amp; 0.1968 \\ 
+  1.1238 &amp; 0.9870 &amp; -0.7478 &amp; -0.0710 \\ 
+  0.9870 &amp; 2.1015 &amp; -0.8342 &amp; 0.1850 \\ 
+  -0.7478 &amp; -0.8342 &amp; 0.8177 &amp; -0.1066 \\ 
+  -0.0710 &amp; 0.1850 &amp; -0.1066 &amp; 0.1953 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">bmatrix</span>(<span class="kw">solve_sympd</span>(list_exact<span class="op">$</span>B.exact), <span class="dt">pre =</span> <span class="st">&#39;B^{-1} =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(<span class="fu">solve_sympd</span>(list_exact<span class="sc">$</span>B.exact), <span class="at">pre =</span> <span class="st">&quot;B^{-1} =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ B^{-1} = \begin{bmatrix}
   0.9970 &amp; 0.9335 &amp; -0.7219 &amp; 0.0117 \\ 
   0.9335 &amp; 2.0978 &amp; -0.7957 &amp; 0.1698 \\ 
@@ -460,21 +312,21 @@ We can use it to elicit the model hyperparameters:</p>
 <h3>Hyperpriors on within covariance matrix</h3>
 <p><span class="math display">\[ W_i \sim IW(n_w, U) \]</span></p>
 <ul>
-<li>Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance)</li>
+<li>Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance) s.t. the expected value of <span class="math inline">\(W_i\)</span> is defined</li>
 </ul>
 <p><span class="math display">\[n_w = 11\]</span></p>
 <ul>
 <li>Inverted Wishart scale matrix:</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>U, <span class="dt">pre =</span> <span class="st">&#39;U =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>U, <span class="at">pre =</span> <span class="st">&quot;U =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ U = \begin{bmatrix}
-  1.3071 &amp; 1.4024 &amp; -1.6232 &amp; 0.5583 \\ 
-  1.4024 &amp; 10.9605 &amp; -3.9357 &amp; -1.6787 \\ 
-  -1.6232 &amp; -3.9357 &amp; 12.1624 &amp; 2.7959 \\ 
-  0.5583 &amp; -1.6787 &amp; 2.7959 &amp; 3.7453 \\ 
+  1.6633 &amp; 1.1123 &amp; -1.3456 &amp; 1.6272 \\ 
+  1.1123 &amp; 8.8548 &amp; -1.6904 &amp; -0.6213 \\ 
+  -1.3456 &amp; -1.6904 &amp; 13.1649 &amp; 2.2322 \\ 
+  1.6272 &amp; -0.6213 &amp; 2.2322 &amp; 5.0199 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">bmatrix</span>(list_exact<span class="op">$</span>U.exact, <span class="dt">pre =</span> <span class="st">&#39;U =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(list_exact<span class="sc">$</span>U.exact, <span class="at">pre =</span> <span class="st">&quot;U =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ U = \begin{bmatrix}
   0.9172 &amp; 1.1136 &amp; -1.1124 &amp; 0.5796 \\ 
   1.1136 &amp; 11.4074 &amp; -3.4977 &amp; -1.5801 \\ 
@@ -485,37 +337,47 @@ We can use it to elicit the model hyperparameters:</p>
 </div>
 <div id="initialisation" class="section level2">
 <h2>Initialisation</h2>
-<p>Within covariance matrices and their inverses: we initialize the chain with</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>W.inv<span class="fl">.1</span>, <span class="dt">pre =</span> <span class="st">&#39;W^{-1}_1 =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<p>Within-source covariance matrices and their inverses: we initialize the chain with</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>W.inv<span class="fl">.1</span>, <span class="at">pre =</span> <span class="st">&quot;W^{-1}_1 =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ W^{-1}_1 = \begin{bmatrix}
-  28.0757 &amp; -5.2874 &amp; 6.5017 &amp; -15.1681 \\ 
-  -5.2874 &amp; 1.7458 &amp; -0.7851 &amp; 3.5079 \\ 
-  6.5017 &amp; -0.7851 &amp; 1.8089 &amp; -3.0582 \\ 
-  -15.1681 &amp; 3.5079 &amp; -3.0582 &amp; 10.1268 \\ 
+  8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
+  -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
+  0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
+  -5.1136 &amp; 0.6541 &amp; -1.1145 &amp; 4.6794 \\ 
    \end{bmatrix}  \]</span></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">bmatrix</span>(priors<span class="op">$</span>W.inv<span class="fl">.2</span>, <span class="dt">pre =</span> <span class="st">&#39;W^{-1}_2 =&#39;</span>, <span class="dt">digits =</span> bmatrix.digits)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>W.inv<span class="fl">.2</span>, <span class="at">pre =</span> <span class="st">&quot;W^{-1}_2 =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
 <p><span class="math display">\[ W^{-1}_2 = \begin{bmatrix}
-  28.0757 &amp; -5.2874 &amp; 6.5017 &amp; -15.1681 \\ 
-  -5.2874 &amp; 1.7458 &amp; -0.7851 &amp; 3.5079 \\ 
-  6.5017 &amp; -0.7851 &amp; 1.8089 &amp; -3.0582 \\ 
-  -15.1681 &amp; 3.5079 &amp; -3.0582 &amp; 10.1268 \\ 
+  8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
+  -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
+  0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
+  -5.1136 &amp; 0.6541 &amp; -1.1145 &amp; 4.6794 \\ 
    \end{bmatrix}  \]</span></p>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
 <p>The list returned by <code>make_priors_and_init</code> can be used in calls to <code>marginalLikelihood</code> and <code>samesource_C</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">priors &lt;-<span class="st"> </span><span class="kw">make_priors_and_init</span>(df, col.variables, col.item, use.priors, use.init)</a>
-<a class="sourceLine" id="cb17-2" title="2"></a>
-<a class="sourceLine" id="cb17-3" title="3">mtx_data &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(df[, col.variables])</a>
-<a class="sourceLine" id="cb17-4" title="4"></a>
-<a class="sourceLine" id="cb17-5" title="5">ml &lt;-<span class="st"> </span><span class="kw">marginalLikelihood</span>(<span class="dt">X =</span> mtx_data, <span class="dt">n.iter =</span> <span class="dv">1000</span>, <span class="dt">burn.in =</span> <span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb17-6" title="6">                   <span class="dt">B.inv =</span> priors<span class="op">$</span>B.inv, </a>
-<a class="sourceLine" id="cb17-7" title="7">                   <span class="dt">W.inv =</span> priors<span class="op">$</span>W.inv<span class="fl">.1</span>, </a>
-<a class="sourceLine" id="cb17-8" title="8">                   <span class="dt">U =</span> priors<span class="op">$</span>U, </a>
-<a class="sourceLine" id="cb17-9" title="9">                   <span class="dt">nw =</span> priors<span class="op">$</span>nw, </a>
-<a class="sourceLine" id="cb17-10" title="10">                   <span class="dt">mu =</span> priors<span class="op">$</span>mu)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">make_priors_and_init</span>(df, col.variables, col.item, use.priors, use.init)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>mtx_data <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df[, col.variables])</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ml <span class="ot">&lt;-</span> <span class="fu">marginalLikelihood</span>(</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>   <span class="at">X =</span> mtx_data,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.iter =</span> <span class="dv">1000</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">burn.in =</span> <span class="dv">100</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>   <span class="at">B.inv =</span> priors<span class="sc">$</span>B.inv,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>   <span class="at">W.inv =</span> priors<span class="sc">$</span>W.inv<span class="fl">.1</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>   <span class="at">U =</span> priors<span class="sc">$</span>U,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>   <span class="at">nw =</span> priors<span class="sc">$</span>nw,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>   <span class="at">mu =</span> priors<span class="sc">$</span>mu</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
