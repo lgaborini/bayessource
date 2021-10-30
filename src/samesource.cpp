@@ -27,6 +27,8 @@ using namespace Rcpp;
 //'
 //' @template gaussmv_model
 //' @keywords internal
+//' @family C++ functions
+//' @family core functions
 // [[Rcpp::export]]
 Rcpp::List marginalLikelihood_internal(
       const arma::mat &X,
@@ -39,7 +41,8 @@ Rcpp::List marginalLikelihood_internal(
       const unsigned int burn_in,
       const bool chain_output = false,
       const bool verbose = false,
-      const bool Gibbs_only = false){
+      const bool Gibbs_only = false
+   ){
 
 
    // try/catch block
@@ -94,7 +97,7 @@ Rcpp::List marginalLikelihood_internal(
    arma::mat U_upd_g_chol;
    arma::mat W_inv_g_chol;
 
-   // Outputs Gibbs chain
+   // All samples from the Gibbs chain
    // Chain for \theta
    arma::cube B_upd_gibbs(p, p, n_iter);
    arma::mat mu_upd_gibbs(p, n_iter);
@@ -124,12 +127,14 @@ Rcpp::List marginalLikelihood_internal(
    }
 
    // Initialize Gibbs chain
+   //
    // chain over theta_g ~ (mu_upd_g, B_upd_g), W_inv_g ~ (U_upd_g)
    //
    // We initialize W_inv_g from the hyperprior parameter W_inv
    // B, mu are updated using the posterior formulae
    // theta is sampled using its definition
    // As a consequence, only W_inv_g is fully arbitrary
+   // Therefore set W_inv_g from the function parameter W_inv
    W_inv_g = W_inv;
 
    if (verbose){
@@ -157,13 +162,16 @@ Rcpp::List marginalLikelihood_internal(
       // Cholesky: has no effect here
       U_upd_g = nr * (theta_g - bary).t() * (theta_g - bary) + U + S;
 
-      // Sample W from Inverted Wishart (nwstar, U_upd_g) = sample from Wishart (nwstar, solve(U_upd_g)), then invert
+      // Sample W from Inverted Wishart (nwstar, U_upd_g)
+      // equivalent to sampling from Wishart (nwstar, solve(U_upd_g)), then invert
       if (USE_CHOLESKY){
          U_upd_g_chol = arma::chol(U_upd_g);
          W_inv_g_chol = rwish(nwstar, inv_Cholesky_from_Cholesky(U_upd_g_chol), true, true);
       } else {
          // Using stats::rWishart (verified, same result!)
          // W_inv_g = Rcpp::as<arma::cube>(rWishart(1, nwstar, inv_sympd_tol(U_upd_g))).slice(0);
+
+         // Using our Wishart sampler
          W_inv_g = rwish(nwstar, inv_sympd_tol(U_upd_g), false, false);
       }
 
@@ -218,7 +226,9 @@ Rcpp::List marginalLikelihood_internal(
       Rcout << "Maximum likelihood converged to (\\theta^*, \\W^*): logf* = " << logf_star << endl;
    }
 
+   // Should we also compute the marginal likelihoods from the Gibbs samples?
    if (Gibbs_only){
+
       // Convert Cholesky to full
       if (USE_CHOLESKY){
          for (arma::uword i = 0; i < n_iter; ++i) {
@@ -236,6 +246,7 @@ Rcpp::List marginalLikelihood_internal(
    // Estimate the posterior ordinates ================
 
    if (verbose) Rcout << "Computing posterior ordinates." << endl;
+
 
    double lpihat_theta_star;
    double lpihat_W_star;
@@ -356,9 +367,6 @@ Rcpp::List marginalLikelihood_internal(
    } else {
       return(List::create(_["value"] = lmhatHp_num));
    }
-
-   // dummy, never executed
-   return(List::create(_["value"] = 1));
 
    // try/catch block
    END_RCPP

@@ -54,6 +54,7 @@
 #' @param use.init see details
 #' @param ... additional variables for priors, init
 #' @return a list of variables
+#' @family core functions
 #' @example man-roxygen/example_make_priors_and_init.R
 #' @md
 make_priors_and_init <- function(df.background, col.variables, col.item, use.priors = 'ML', use.init = 'random', ...) {
@@ -171,9 +172,12 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 #'
 #' @param p dimension
 #' @return minimum dof
+#' @family core functions
+#' @family Wishart functions
 #' @export
 #' @references \insertAllCited{}
 get_minimum_nw_IW <- function(p) {
+   stopifnot(is.numeric(p))
    if (p < 1) { stop('p must be >= 1')}
 
    nw.min <- 2*(p + 1) + 1
@@ -190,6 +194,9 @@ get_minimum_nw_IW <- function(p) {
 #' @param S the scale matrix (pxp)
 #' @return a single random variate from IW(v, S)
 #' @template InverseWishart_Press
+#' @family R functions
+#' @family statistical functions
+#' @family Wishart functions
 #' @export
 #' @references \insertAllCited{}
 riwish_Press <- function(v, S){
@@ -223,6 +230,7 @@ riwish_Press <- function(v, S){
 #'
 #' @param X a positive definite matrix
 #' @return the inverse of X
+#' @family math functions
 #' @export
 inv_pd <- function(X) {
    chol2inv(chol(X))

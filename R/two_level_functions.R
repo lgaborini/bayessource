@@ -13,7 +13,8 @@
 #' In that case, either we skip its contribute (default) or fail.
 #'
 #' Multivariate functions supporting paper:
-#' Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl
+#'
+#' Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl - "Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship"
 #'
 #' @param population matrix or dataframe containing data columns, item column and other columns
 #' @param idx.variables data columns (indexes or character vectors)
@@ -27,6 +28,7 @@
 #' - `W` (the within covariance matrix)
 #' - `B` (the between covariance matrix)
 #' @keywords internal
+#' @family core functions
 two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.item, singular.action = 'skip') {
 
    stopifnot(singular.action %in% c('skip', 'fail'))

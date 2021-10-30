@@ -18,8 +18,9 @@
 // #define USE_CHOLESKY true
 #endif
 
-//' Check whether Cholesky speedup is used.
+//' Check whether Cholesky factorization is used.
 //' @keywords internal
+//' @family C++ functions
 // [[Rcpp::export(rng = false)]]
 bool isCholeskyOn();
 

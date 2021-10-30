@@ -24,6 +24,8 @@ isCholeskyOn <- function() {
 #'
 #' @template gaussmv_model
 #' @keywords internal
+#' @family C++ functions
+#' @family core functions
 marginalLikelihood_internal <- function(X, n_iter, B_inv, W_inv, U, nw, mu, burn_in, chain_output = FALSE, verbose = FALSE, Gibbs_only = FALSE) {
     .Call('_bayessource_marginalLikelihood_internal', PACKAGE = 'bayessource', X, n_iter, B_inv, W_inv, U, nw, mu, burn_in, chain_output, verbose, Gibbs_only)
 }
@@ -31,7 +33,8 @@ marginalLikelihood_internal <- function(X, n_iter, B_inv, W_inv, U, nw, mu, burn
 #' Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
 #'
 #' @keywords internal
-#' @noMd
+#' @family C++ functions
+#' @family math functions
 logSumExp <- function(v) {
     .Call('_bayessource_logSumExp', PACKAGE = 'bayessource', v)
 }
@@ -39,7 +42,8 @@ logSumExp <- function(v) {
 #' Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
 #'
 #' @keywords internal
-#' @noMd
+#' @family C++ functions
+#' @family math functions
 logSumExpMean <- function(v) {
     .Call('_bayessource_logSumExpMean', PACKAGE = 'bayessource', v)
 }
@@ -47,7 +51,8 @@ logSumExpMean <- function(v) {
 #' Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.
 #'
 #' @keywords internal
-#' @noMd
+#' @family C++ functions
+#' @family math functions
 logCumsumExp <- function(v) {
     .Call('_bayessource_logCumsumExp', PACKAGE = 'bayessource', v)
 }
@@ -55,7 +60,8 @@ logCumsumExp <- function(v) {
 #' Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
 #'
 #' @keywords internal
-#' @noMd
+#' @family C++ functions
+#' @family math functions
 logCummeanExp <- function(v) {
     .Call('_bayessource_logCummeanExp', PACKAGE = 'bayessource', v)
 }
@@ -68,24 +74,30 @@ logCummeanExp <- function(v) {
 #'
 #' \code{X.chol.inv <- backsolve(r = X.chol, x = diag(p))}
 #' @keywords internal
+#' @family C++ functions
+#' @family math functions
 inv_triangular <- function(U) {
     .Call('_bayessource_inv_triangular', PACKAGE = 'bayessource', U)
 }
 
 #' Compute the inverse of a symmetric positive definite matrix
 #'
-#' Compute the inverse of a symmetric positive definite matrix.   
+#' Compute the inverse of a symmetric positive definite matrix.
 #' Does not output warnings on default symmetry tolerance: basically, symmetry is forced.
-#' 
+#'
 #' @references https://github.com/RcppCore/RcppArmadillo/issues/257
+#' @family C++ functions
 #' @keywords internal
+#' @family math functions
 inv_sympd_tol <- function(U_sympd) {
     .Call('_bayessource_inv_sympd_tol', PACKAGE = 'bayessource', U_sympd)
 }
 
 #' Compute the inverse from the upper Cholesky factor
 #'
+#' @family C++ functions
 #' @keywords internal
+#' @family math functions
 chol2inv <- function(U_chol) {
     .Call('_bayessource_chol2inv', PACKAGE = 'bayessource', U_chol)
 }
@@ -94,7 +106,9 @@ chol2inv <- function(U_chol) {
 #'
 #' If \eqn{A = U' U}, compute \eqn{V} where \eqn{A^{(-1)} = V' V}
 #'
+#' @family C++ functions
 #' @keywords internal
+#' @family math functions
 inv_Cholesky_from_Cholesky <- function(U) {
     .Call('_bayessource_inv_Cholesky_from_Cholesky', PACKAGE = 'bayessource', U)
 }
@@ -104,6 +118,8 @@ inv_Cholesky_from_Cholesky <- function(U) {
 #' If \eqn{A = U' U}, compute log(det(A)) from U
 #'
 #' @keywords internal
+#' @family C++ functions
+#' @family math functions
 ldet_from_Cholesky <- function(T_chol) {
     .Call('_bayessource_ldet_from_Cholesky', PACKAGE = 'bayessource', T_chol)
 }
@@ -117,7 +133,8 @@ ldet_from_Cholesky <- function(T_chol) {
 #' @param Cov covariance matrix
 #' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 #' @return a nxp matrix of samples
-#'
+#' @family C++ functions
+#' @family statistical functions
 #' @export
 rmvnorm <- function(n, mu, Cov, is_chol = FALSE) {
     .Call('_bayessource_rmvnorm', PACKAGE = 'bayessource', n, mu, Cov, is_chol)
@@ -127,13 +144,14 @@ rmvnorm <- function(n, mu, Cov, is_chol = FALSE) {
 #'
 #' Faster than \code{dmvnorm} in package \pkg{mvtnorm}. Implemented in C.
 #'
-#' @param x the observation (nxp)
+#' @param x the observation (nxp matrix)
 #' @param mean mean vector (row vector, 1xp)
 #' @param Cov covariance matrix (pxp)
 #' @param logd if TRUE, return the log-density
 #' @param is_chol if TRUE, Cov is the upper Cholesky factor of Cov
 #' @return the density in x (nx1)
-#'
+#' @family C++ functions
+#' @family statistical functions
 #' @export
 dmvnorm <- function(x, mean, Cov, logd = FALSE, is_chol = FALSE) {
     .Call('_bayessource_dmvnorm', PACKAGE = 'bayessource', x, mean, Cov, logd, is_chol)
@@ -148,7 +166,9 @@ dmvnorm <- function(x, mean, Cov, logd = FALSE, is_chol = FALSE) {
 #' @param is_chol if TRUE, S is the upper Cholesky factor of S
 #' @param return_chol if TRUE, the upper Cholesky factor is returned
 #' @return a single random variate from W(v, S)
-#'
+#' @family C++ functions
+#' @family statistical functions
+#' @family Wishart functions
 #' @export
 #' @template Wishart_eqn
 #' @references \insertAllCited{}
@@ -158,17 +178,19 @@ rwish <- function(v, S, is_chol = FALSE, return_chol = FALSE) {
 
 #' Inverted Wishart density from the inverse (faster).
 #'
-#' Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
-#' Avoids a matrix inversion.
-#'
 #' Computes the pdf p_X(x) by knowing x^(-1)
 #'
-#' @param X_inv inverse of X (the observation)
-#' @param df degrees of freedom
-#' @param Sigma scale matrix
+#' Computes the density of an Inverted Wishart (df, Sigma) in x, by supplying (x^(-1), df, Sigma) rather than (x, df, Sigma).
+#' Avoids a matrix inversion.
+#'
+#' @param X_inv inverse of X (the data)
+#' @param df degrees of freedom of the Inverted Wishart
+#' @param Sigma scale matrix of the Inverted Wishart
 #' @param logd if TRUE, return the log-density
 #' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv
-#'
+#' @family C++ functions
+#' @family statistical functions
+#' @family Wishart functions
 #' @export
 #' @template InverseWishart_Press
 #' @seealso \code{\link{diwishart}}, \code{\link{dwishart}}

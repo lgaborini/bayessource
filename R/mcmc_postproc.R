@@ -15,7 +15,7 @@
 #' @param compute.ML if TRUE, also compute the posterior means
 #' @param cumulative if TRUE, also compute cumulative posterior means to assess precision
 #' @return a named list with multidimensional arrays for W, theta, and ML estimates
-#' 
+#' @family core functions
 #' @export
 mcmc_postproc <- function(mcmc.output, compute.ML = FALSE, cumulative = TRUE) {
    stopifnot(coda::is.mcmc(mcmc.output))

@@ -19,6 +19,7 @@
 #' @return the log-marginal likelihood value, or a list(the log-ml value, `coda` object with the posterior samples)
 #'
 #' @example man-roxygen/example_marginal_likelihood.R
+#' @family core functions
 #' @export
 #' @seealso marginalLikelihood_internal
 #' @template gaussmv_model
@@ -90,6 +91,7 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #' @inheritParams marginalLikelihood
 #' @return the log-BF value (base e), or a list with the log-BF and the marginals: `list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)`
 #' @export
+#' @family core functions
 #' @seealso marginalLikelihood
 #' @template gaussmv_model
 #' @template InverseWishart_Press

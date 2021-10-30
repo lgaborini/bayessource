@@ -9,7 +9,9 @@
 #' @param log if TRUE, return the log-density
 #' @param is.chol if TRUE, Sigma and X are the upper Cholesky factors of Sigma and X
 #' @return the density in X
-#' 
+#' @family R functions
+#' @family statistical functions
+#' @family Wishart functions
 #' @export
 #' @template Wishart_eqn
 #' @references \insertAllCited{}

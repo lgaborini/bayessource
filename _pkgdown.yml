@@ -1,0 +1,27 @@
+reference:
+- title: "Core functions"
+  desc: >
+      Tools to elicit priors, compute marginal likelihoods and Bayes factors.
+      Start from these to deploy {bayessource} to your project.
+- contents:
+  - has_concept("core functions")
+
+
+- title: "Statistical functions"
+  desc: >
+      Functions to sample from statistical distributions or compute densities.
+- contents:
+  - has_concept("statistical functions")
+  - -has_concept("Wishart functions")
+- subtitle: "Wishart / Inverted Wishart functions"
+  desc: >
+      Densities, sampling.
+  contents:
+  - has_concept("Wishart functions")
+
+- title: "Other functions"
+  desc: >
+      Unsorted functions: mathematical tools, etc.
+- contents:
+  - -has_concept("statistical functions")
+  - -has_concept("core functions")

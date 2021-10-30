@@ -1,4 +1,3 @@
-
 #' Inverted Wishart density from the inverse.
 #'
 #' Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
@@ -12,7 +11,9 @@
 #' @param log if TRUE, return the log-density
 #' @param is.chol if TRUE, Sigma and X.inv are the upper Cholesky factors of Sigma and X.inv
 #' @return the density in X
-#' 
+#' @family R functions
+#' @family statistical functions
+#' @family Wishart functions
 #' @keywords internal
 #' @seealso \code{\link{diwishart_inverse}}, \code{\link{diwishart}}
 #' @template InverseWishart_Press
