@@ -54,6 +54,7 @@
 #' @param use.init see details
 #' @param ... additional variables for priors, init
 #' @return a list of variables
+#' @example man-roxygen/example_make_priors_and_init.R
 #' @md
 make_priors_and_init <- function(df.background, col.variables, col.item, use.priors = 'ML', use.init = 'random', ...) {
 

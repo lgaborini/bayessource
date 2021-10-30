@@ -18,6 +18,7 @@
 #' @inheritParams marginalLikelihood_internal
 #' @return the log-marginal likelihood value, or a list(the log-ml value, `coda` object with the posterior samples)
 #'
+#' @example man-roxygen/example_marginal_likelihood.R
 #' @export
 #' @seealso marginalLikelihood_internal
 #' @template gaussmv_model
