@@ -20,52 +20,60 @@ samesource_C(
 )
 }
 \arguments{
-\item{quest}{the questioned dataset}
+\item{quest}{the questioned dataset (nq * p matrix)}
 
-\item{ref}{the reference dataset}
+\item{ref}{the reference dataset (nr * p matrix)}
 
-\item{n.iter}{number of MC iterations}
+\item{W.inv.1}{prior inverse of within-source covariance matrix (questioned items)}
 
-\item{B.inv}{prior inverse of between covariance matrix}
+\item{W.inv.2}{prior inverse of within-source covariance matrix (reference items)}
 
-\item{W.inv.1}{prior inverse of within covariance matrix (questioned items)}
-
-\item{W.inv.2}{prior inverse of within covariance matrix (reference items)}
-
-\item{U}{covariance matrix for the mean}
+\item{U}{covariance matrix for the mean (\eqn{p \times p}{(p x p)}}
 
 \item{nw}{degrees of freedom}
 
-\item{mu}{prior mean}
-
-\item{burn.in}{burn-in iterations}
+\item{mu}{prior mean (\eqn{p \times 1}{(p x 1)}}
 
 \item{verbose}{if TRUE, be verbose}
 
-\item{marginals}{return the marginal likelihoods in the LR formula (default: FALSE)}
+\item{marginals}{if TRUE, also return the marginal likelihoods in the LR formula (default: FALSE)}
 }
 \value{
-the log-BF value (base e), or a list with the log-BF and the marginals: \code{list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)}
+the log-BF value (base e), or a list with the log-BF and the computed marginal likelihoods:
+\itemize{
+\item \code{value}: the log-BF value (base e)
+\item \code{log_ml_Hp}: log-BF numerator (from reference = questioned source)
+\item \code{log_ml_Hd_ref}: log-BF denominator from reference source
+\item \code{log_ml_Hd_quest}: log-BF denominator from questioned (!= reference) source
+}
 }
 \description{
 Implemented in C.
 See \code{\link[bayessource]{diwishart_inverse}} for the parametrization of the Inverted Wishart.
 See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 }
-\section{Normal-Inverse-Wishart model\insertCite{Bozza2008Probabilistic}{bayessource}}{
+\section{Normal-Inverse-Wishart model}{
 
+
+Described in \insertCite{Bozza2008Probabilistic}{bayessource}.
 
 Observation level:
-\deqn{X_{ij} ~ N_p(theta_i, W_i)} (i = population, j = items in population)
+\itemize{
+\item \deqn{X_{ij} \sim N_p(\theta_i, W_i)}{X_{ij} ~ N_p(theta_i, W_i)} (i = source, j = items from source)
+}
 
 Group level:
-\deqn{theta_i ~ N_p(\mu, B)}
-\deqn{W_i ~ IW_p(nw, U)}
+\itemize{
+\item \deqn{\theta_i \sim N_p(\mu, B)}{theta_i ~ N_p(\mu, B)}
+\item \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(nw, U)}
+}
 
 Hyperparameters:
-\eqn{B, U, nw, \mu}
+\itemize{
+\item \deqn{B, U, \nu_w, \mu}{B, U, nw, \mu}
+}
 
-A Gibbs sampler supplies theta, W^{(-1)}.
+Posterior samples of \eqn{\theta}{theta}, \eqn{W^{(-1)}} can be generated with a Gibbs sampler.
 }
 
 \section{Inverted Wishart parametrization (Press)}{
@@ -73,11 +81,11 @@ A Gibbs sampler supplies theta, W^{(-1)}.
 
 Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 
-\deqn{X ~ IW(v, S)}
-with \eqn{S = pxp} matrix, \eqn{v > 2p} (the degrees of freedom).
+\deqn{X \sim IW(\nu, S)}{X ~ IW(v, S)}
+with \eqn{S} is a \eqn{p \times p}{p x p} matrix, \eqn{\nu > 2p}{v > 2p} (the degrees of freedom).
 
 Then:
-\deqn{E[X] = S / (v - 2(p + 1))}
+\deqn{E[X] = \frac{S}{\nu - 2(p + 1)}}{E[X] = S/(n - 2(p + 1))}
 }
 
 \references{
@@ -85,4 +93,14 @@ Then:
 }
 \seealso{
 marginalLikelihood
+
+Other core functions: 
+\code{\link{bayessource-package}},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{make_priors_and_init}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{marginalLikelihood}()},
+\code{\link{mcmc_postproc}()},
+\code{\link{two.level.multivariate.calculate.UC}()}
 }
+\concept{core functions}

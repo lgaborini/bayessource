@@ -7,33 +7,33 @@
 diwishart_inverse(X_inv, df, Sigma, logd = FALSE, is_chol = FALSE)
 }
 \arguments{
-\item{X_inv}{inverse of X (the observation)}
+\item{X_inv}{inverse of X (the data)}
 
-\item{df}{degrees of freedom}
+\item{df}{degrees of freedom of the Inverted Wishart}
 
-\item{Sigma}{scale matrix}
+\item{Sigma}{scale matrix of the Inverted Wishart}
 
 \item{logd}{if TRUE, return the log-density}
 
 \item{is_chol}{if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv}
 }
 \description{
-Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
-Avoids a matrix inversion.
+Computes the pdf p_X(x) by knowing x^(-1)
 }
 \details{
-Computes the pdf p_X(x) by knowing x^(-1)
+Computes the density of an Inverted Wishart (df, Sigma) in x, by supplying (x^(-1), df, Sigma) rather than (x, df, Sigma).
+Avoids a matrix inversion.
 }
 \section{Inverted Wishart parametrization (Press)}{
 
 
 Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 
-\deqn{X ~ IW(v, S)}
-with \eqn{S = pxp} matrix, \eqn{v > 2p} (the degrees of freedom).
+\deqn{X \sim IW(\nu, S)}{X ~ IW(v, S)}
+with \eqn{S} is a \eqn{p \times p}{p x p} matrix, \eqn{\nu > 2p}{v > 2p} (the degrees of freedom).
 
 Then:
-\deqn{E[X] = S / (v - 2(p + 1))}
+\deqn{E[X] = \frac{S}{\nu - 2(p + 1)}}{E[X] = S/(n - 2(p + 1))}
 }
 
 \references{
@@ -41,4 +41,40 @@ Then:
 }
 \seealso{
 \code{\link{diwishart}}, \code{\link{dwishart}}
+
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{dmvnorm}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other statistical functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart}()},
+\code{\link{dmvnorm}()},
+\code{\link{dwishart}()},
+\code{\link{riwish_Press}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other Wishart functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart}()},
+\code{\link{dwishart}()},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{riwish_Press}()},
+\code{\link{rwish}()}
 }
+\concept{C++ functions}
+\concept{Wishart functions}
+\concept{statistical functions}

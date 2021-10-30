@@ -13,4 +13,34 @@ Does not output warnings on default symmetry tolerance: basically, symmetry is f
 \references{
 https://github.com/RcppCore/RcppArmadillo/issues/257
 }
+\seealso{
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dmvnorm}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other math functions: 
+\code{\link{chol2inv}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_pd}()},
+\code{\link{inv_triangular}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()}
+}
+\concept{C++ functions}
+\concept{math functions}
 \keyword{internal}

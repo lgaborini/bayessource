@@ -37,6 +37,18 @@ Items who are observed only once cannot contribute to within covariance estimati
 In that case, either we skip its contribute (default) or fail.
 
 Multivariate functions supporting paper:
-Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl
+
+Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl - "Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship"
 }
+\seealso{
+Other core functions: 
+\code{\link{bayessource-package}},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{make_priors_and_init}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{marginalLikelihood}()},
+\code{\link{mcmc_postproc}()},
+\code{\link{samesource_C}()}
+}
+\concept{core functions}
 \keyword{internal}

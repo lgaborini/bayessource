@@ -9,4 +9,34 @@ logSumExpMean(v)
 \description{
 Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
 }
+\seealso{
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dmvnorm}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExp}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other math functions: 
+\code{\link{chol2inv}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_pd}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExp}()}
+}
+\concept{C++ functions}
+\concept{math functions}
 \keyword{internal}

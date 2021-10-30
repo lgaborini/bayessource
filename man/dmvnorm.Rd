@@ -7,7 +7,7 @@
 dmvnorm(x, mean, Cov, logd = FALSE, is_chol = FALSE)
 }
 \arguments{
-\item{x}{the observation (nxp)}
+\item{x}{the observation (nxp matrix)}
 
 \item{mean}{mean vector (row vector, 1xp)}
 
@@ -23,3 +23,31 @@ the density in x (nx1)
 \description{
 Faster than \code{dmvnorm} in package \pkg{mvtnorm}. Implemented in C.
 }
+\seealso{
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other statistical functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{diwishart}()},
+\code{\link{dwishart}()},
+\code{\link{riwish_Press}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+}
+\concept{C++ functions}
+\concept{statistical functions}

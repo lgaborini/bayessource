@@ -26,3 +26,14 @@ Notice that it performs matrix inversions on every sample of W.
 It is also possible to compute ML estimators for the posterior means, as well as the cumulated estimates.
 The results will be appended to the returned list.
 }
+\seealso{
+Other core functions: 
+\code{\link{bayessource-package}},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{make_priors_and_init}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{marginalLikelihood}()},
+\code{\link{samesource_C}()},
+\code{\link{two.level.multivariate.calculate.UC}()}
+}
+\concept{core functions}

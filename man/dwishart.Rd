@@ -28,13 +28,39 @@ Density of X ~ Wishart(df, Sigma).
 
 Uses \insertCite{Press2012Applied,Anderson2003introduction}{bayessource} parametrization.
 
-\deqn{X ~ W(v, S)}
-with \eqn{S = pxp} matrix, \eqn{v >= p} (the degrees of freedom).
+\deqn{X \sim W(\nu, S)}{X ~ W(\nu, S)}
+with \eqn{S} is a \eqn{p \times p}{pxp} matrix, \eqn{\nu >= p}{v >= p} (the degrees of freedom).
 
 Then:
-\deqn{E[X] = v * S}
+\deqn{E[X] = \nu S}{E[X] = v * S}
 }
 
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other R functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart}()},
+\code{\link{riwish_Press}()}
+
+Other statistical functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{diwishart}()},
+\code{\link{dmvnorm}()},
+\code{\link{riwish_Press}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other Wishart functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{diwishart}()},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{riwish_Press}()},
+\code{\link{rwish}()}
+}
+\concept{R functions}
+\concept{Wishart functions}
+\concept{statistical functions}

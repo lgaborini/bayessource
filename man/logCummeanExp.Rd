@@ -2,11 +2,41 @@
 % Please edit documentation in R/RcppExports.R
 \name{logCummeanExp}
 \alias{logCummeanExp}
-\title{Computes log( cummean_i( exp(v[i]) ) ) in a stable way.}
+\title{Computes log( cummean_i( exp(v\link{i}) ) ) in a stable way.}
 \usage{
 logCummeanExp(v)
 }
 \description{
-Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
+Computes log( cummean_i( exp(v\link{i}) ) ) in a stable way.
 }
+\seealso{
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dmvnorm}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other math functions: 
+\code{\link{chol2inv}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_pd}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()}
+}
+\concept{C++ functions}
+\concept{math functions}
 \keyword{internal}

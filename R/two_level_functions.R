@@ -123,7 +123,12 @@ two.level.multivariate.calculate.UC <- function(population, idx.variables, idx.i
    # convert matrix S to matrix C
    B <- S/(n.items.contributing - 1)
 
-   op <- list(group.means = group.means, all.means = all.means, W = W, B = B)
+   op <- list(
+      group.means = group.means,
+      all.means = all.means,
+      W = W,
+      B = B
+   )
    return(op)
 }
 

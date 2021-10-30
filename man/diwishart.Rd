@@ -28,13 +28,38 @@ Implemented in R (slow).
 
 Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 
-\deqn{X ~ IW(v, S)}
-with \eqn{S = pxp} matrix, \eqn{v > 2p} (the degrees of freedom).
+\deqn{X \sim IW(\nu, S)}{X ~ IW(v, S)}
+with \eqn{S} is a \eqn{p \times p}{p x p} matrix, \eqn{\nu > 2p}{v > 2p} (the degrees of freedom).
 
 Then:
-\deqn{E[X] = S / (v - 2(p + 1))}
+\deqn{E[X] = \frac{S}{\nu - 2(p + 1)}}{E[X] = S/(n - 2(p + 1))}
 }
 
 \seealso{
-\code{\link{diwishart_inverse}}, \code{\link{dwishart}}
+\code{\link[=diwishart_inverse]{diwishart_inverse()}}, \code{\link[=dwishart]{dwishart()}}
+
+Other R functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{dwishart}()},
+\code{\link{riwish_Press}()}
+
+Other statistical functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dmvnorm}()},
+\code{\link{dwishart}()},
+\code{\link{riwish_Press}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other Wishart functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dwishart}()},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{riwish_Press}()},
+\code{\link{rwish}()}
 }
+\concept{R functions}
+\concept{Wishart functions}
+\concept{statistical functions}

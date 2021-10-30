@@ -15,3 +15,16 @@ the inverse of X
 \description{
 Compute the inverse of a positive-definite matrix using Cholesky decomposition.
 }
+\seealso{
+Other math functions: 
+\code{\link{chol2inv}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()}
+}
+\concept{math functions}

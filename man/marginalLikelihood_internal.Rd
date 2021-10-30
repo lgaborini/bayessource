@@ -2,8 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{marginalLikelihood_internal}
 \alias{marginalLikelihood_internal}
-\title{Fast Bayesian same source hypothesis. Gaussian MV.
-To be called by the R wrapper.}
+\title{Fast computation of the Normal-IW marginal likelihood.}
 \usage{
 marginalLikelihood_internal(
   X,
@@ -20,46 +19,82 @@ marginalLikelihood_internal(
 )
 }
 \arguments{
-\item{X}{the dataset}
+\item{X}{the observation matrix (\eqn{n \times p}{(n x p)}: n = observation, p = variables)}
 
-\item{n_iter}{number of MC iterations}
+\item{n_iter}{number of MCMC iterations excluding burn-in}
 
-\item{B_inv}{prior inverse of between covariance matrix}
+\item{B_inv}{prior inverse of between-source covariance matrix}
 
-\item{W_inv}{initialization for prior inverse of within covariance matrix}
+\item{W_inv}{initialization for prior inverse of within-source covariance matrix}
 
-\item{U}{covariance matrix for the mean}
+\item{U}{covariance matrix for the mean (\eqn{p \times p}{(p x p)}}
 
 \item{nw}{degrees of freedom}
 
-\item{mu}{prior mean}
+\item{mu}{prior mean (\eqn{p \times 1}{(p x 1)}}
 
-\item{burn_in}{burn-in iterations}
+\item{burn_in}{number of MCMC burn-in iterations}
 
 \item{chain_output}{if true, output the entire chain as a list (ML-value, samples from theta, samples from W_inv)}
 
 \item{verbose}{if TRUE, be verbose}
 
-\item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.}
+\item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies \code{chain_output = TRUE}.}
 }
 \description{
-Fast Bayesian same source hypothesis. Gaussian MV.
+This is the numerator of the Bayes factor: assume that all observations come from the same source.
 To be called by the R wrapper.
 }
-\section{Normal-Inverse-Wishart model\insertCite{Bozza2008Probabilistic}{bayessource}}{
+\section{Normal-Inverse-Wishart model}{
 
+
+Described in \insertCite{Bozza2008Probabilistic}{bayessource}.
 
 Observation level:
-\deqn{X_{ij} ~ N_p(theta_i, W_i)} (i = population, j = items in population)
-
-Group level:
-\deqn{theta_i ~ N_p(\mu, B)}
-\deqn{W_i ~ IW_p(nw, U)}
-
-Hyperparameters:
-\eqn{B, U, nw, \mu}
-
-A Gibbs sampler supplies theta, W^{(-1)}.
+\itemize{
+\item \deqn{X_{ij} \sim N_p(\theta_i, W_i)}{X_{ij} ~ N_p(theta_i, W_i)} (i = source, j = items from source)
 }
 
+Group level:
+\itemize{
+\item \deqn{\theta_i \sim N_p(\mu, B)}{theta_i ~ N_p(\mu, B)}
+\item \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(nw, U)}
+}
+
+Hyperparameters:
+\itemize{
+\item \deqn{B, U, \nu_w, \mu}{B, U, nw, \mu}
+}
+
+Posterior samples of \eqn{\theta}{theta}, \eqn{W^{(-1)}} can be generated with a Gibbs sampler.
+}
+
+\seealso{
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dmvnorm}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()},
+\code{\link{rmvnorm}()},
+\code{\link{rwish}()}
+
+Other core functions: 
+\code{\link{bayessource-package}},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{make_priors_and_init}()},
+\code{\link{marginalLikelihood}()},
+\code{\link{mcmc_postproc}()},
+\code{\link{samesource_C}()},
+\code{\link{two.level.multivariate.calculate.UC}()}
+}
+\concept{C++ functions}
+\concept{core functions}
 \keyword{internal}

@@ -13,17 +13,41 @@ get_minimum_nw_IW(p)
 minimum dof
 }
 \description{
-Returns minimum value for degrees of freedom such that Inverted Wishart has a mean..
+Returns minimum value for degrees of freedom such that the Inverted Wishart has a well-defined expected value.
 }
 \details{
 Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 
-\deqn{X ~ IW(nw, S)}, with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
-Then:
-\deqn{E[X] = S / (nw - 2(p + 1))}
+\deqn{X \sim IW(\nu, S)}{X ~ IW(nw, S)}
 
-Finally, the minimum dof $v$ is $ nw = 2*(p + 1) + 1 $.
+with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
+
+Then:
+
+\deqn{E[X] = S / (\nu - 2(p + 1))}{E[X] = S / (nw - 2(p + 1))}
+
+Finally, the minimum dof \eqn{\nu}{nw} are: \eqn{\nu = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}.
 }
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other core functions: 
+\code{\link{bayessource-package}},
+\code{\link{make_priors_and_init}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{marginalLikelihood}()},
+\code{\link{mcmc_postproc}()},
+\code{\link{samesource_C}()},
+\code{\link{two.level.multivariate.calculate.UC}()}
+
+Other Wishart functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{diwishart}()},
+\code{\link{dwishart}()},
+\code{\link{riwish_Press}()},
+\code{\link{rwish}()}
+}
+\concept{Wishart functions}
+\concept{core functions}

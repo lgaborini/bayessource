@@ -8,8 +8,8 @@ make_priors_and_init(
   df.background,
   col.variables,
   col.item,
-  use.priors = "ML",
-  use.init = "random",
+  use.priors = c("ML", "vague"),
+  use.init = c("random", "vague"),
   ...
 )
 }
@@ -24,7 +24,7 @@ make_priors_and_init(
 
 \item{use.init}{see details}
 
-\item{...}{additional variables for priors, init}
+\item{...}{additional variables for priors, init (see the description)}
 }
 \value{
 a list of variables
@@ -33,21 +33,18 @@ a list of variables
 Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
 }
 \details{
-Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
-
 An appropriate initialization value for \eqn{W^{-1}_i}, \eqn{i=1,2} is also generated.
 
 Notice that we have three chains in the LR computations, the same initialization is used thrice.
-}
-\section{Priors}{
-
+\subsection{Priors}{
 
 \code{use.priors}:
 \itemize{
-\item \code{'ML'}: maximum likelihood estimation
+\item \code{'ML'}: maximum likelihood estimation as in \insertCite{Bozza2008Probabilistic}{bayessource}
 \item \code{'vague'}: low-information priors
 
 \code{U} is \code{alpha*diag(p)}, B is \code{beta*diag(p)}, \code{mu} is \code{mu0}.
+
 By default \verb{alpha = 1, beta = 1, mu0 = 0}
 }
 
@@ -55,27 +52,44 @@ The Wishart dofs \code{nw} are set as small as possible without losing full rank
 \eqn{nw = 2*(p + 1) + 1}
 }
 
-\section{Initialization}{
+\subsection{Initialization}{
 
+Generate values for \eqn{W^{-1}_1}, \eqn{W^{-1}_2} that will be used as starting values for the Gibbs chains.
+Two methods:
 
 \code{use.init}:
 \itemize{
 \item \code{'random'}: initialize according to the model
-\item \code{'vague'}: low-information initialization
-\eqn{W_i} is \code{alpha_init + beta_init *diag(p)}
+\itemize{
+\item generate one \eqn{W_i \sim IW_p(nw, U)}{W_i ~ IW_p(nw, U)}
+\item then invert: \eqn{W^{-1}_i = (W_i)^{-1}}
 }
+\item \code{'vague'}: low-information initialization
+\itemize{
+\item \eqn{W_i = alpha_init + beta_init * diag(p)}
+}
+}
+}
+
+\subsection{Parameters}{
 
 Some constants can be changed by passing the new values to \code{...} :
 \itemize{
-\item \code{use.priors = 'vague'}:
-\verb{alpha = 1, beta = 1, mu0 = 0}
-\item \code{use.init = 'vague'}:
-\verb{alpha_init = 1, beta_init = 100}
+\item \code{use.priors = 'vague'}: accepts parameters
+\itemize{
+\item \code{alpha} (default: \code{1})
+\item \code{beta} (default: \code{1})
+\item \code{mu0} (default: \code{0})
+}
+\item \code{use.init = 'vague'}: accepts parameters
+\itemize{
+\item \code{alpha_init} (default: \code{1})
+\item \code{beta_init} (default: \code{100})
+}
 }
 }
 
-\section{Returns}{
-
+\subsection{Return values}{
 
 A list of variables:
 \itemize{
@@ -86,4 +100,40 @@ A list of variables:
 \item \code{W.inv.1}, \code{W.inv.2}: the within cov initializations, as inverses
 }
 }
+}
+\examples{
+# Use the iris data
+head(iris, 3)
+col_variables <- c(1,3)
+col_item <- 5
 
+# Elicitation using MLE
+priors_init <- make_priors_and_init(
+   df.background = iris,
+   col.variables = col_variables,
+   col.item = col_item
+)
+
+priors_init
+
+priors_init_2 <- make_priors_and_init(
+   df.background = iris,
+   col.variables = col_variables,
+   col.item = col_item,
+   use.priors = "vague",
+   alpha_init = 100
+)
+
+priors_init_2
+}
+\seealso{
+Other core functions: 
+\code{\link{bayessource-package}},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{marginalLikelihood}()},
+\code{\link{mcmc_postproc}()},
+\code{\link{samesource_C}()},
+\code{\link{two.level.multivariate.calculate.UC}()}
+}
+\concept{core functions}

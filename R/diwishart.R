@@ -1,5 +1,5 @@
 #' Inverted Wishart density, parametrization according to Press.
-#' 
+#'
 #' Implemented in R (slow).
 #'
 #' @param X observation
@@ -12,7 +12,7 @@
 #' @family statistical functions
 #' @family Wishart functions
 #' @export
-#' @seealso \code{\link{diwishart_inverse}}, \code{\link{dwishart}}
+#' @seealso [diwishart_inverse()], [dwishart()]
 #' @template InverseWishart_Press
 diwishart <- function(X, df, Sigma, log = FALSE, is.chol = FALSE) {
    p <- ncol(X)

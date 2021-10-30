@@ -26,13 +26,50 @@ Same code as \code{\link[stats]{rWishart}} function in package \pkg{stats}.
 
 Uses \insertCite{Press2012Applied,Anderson2003introduction}{bayessource} parametrization.
 
-\deqn{X ~ W(v, S)}
-with \eqn{S = pxp} matrix, \eqn{v >= p} (the degrees of freedom).
+\deqn{X \sim W(\nu, S)}{X ~ W(\nu, S)}
+with \eqn{S} is a \eqn{p \times p}{pxp} matrix, \eqn{\nu >= p}{v >= p} (the degrees of freedom).
 
 Then:
-\deqn{E[X] = v * S}
+\deqn{E[X] = \nu S}{E[X] = v * S}
 }
 
 \references{
 \insertAllCited{}
 }
+\seealso{
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dmvnorm}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{rmvnorm}()}
+
+Other statistical functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{diwishart}()},
+\code{\link{dmvnorm}()},
+\code{\link{dwishart}()},
+\code{\link{riwish_Press}()},
+\code{\link{rmvnorm}()}
+
+Other Wishart functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{diwishart}()},
+\code{\link{dwishart}()},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{riwish_Press}()}
+}
+\concept{C++ functions}
+\concept{Wishart functions}
+\concept{statistical functions}

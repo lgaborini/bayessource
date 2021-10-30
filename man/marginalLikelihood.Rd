@@ -2,7 +2,7 @@
 % Please edit documentation in R/samesource_cpp.R
 \name{marginalLikelihood}
 \alias{marginalLikelihood}
-\title{Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.}
+\title{Fast computation of the marginal likelihood for the Normal-Inverted Wishart model.}
 \usage{
 marginalLikelihood(
   X,
@@ -19,50 +19,57 @@ marginalLikelihood(
 )
 }
 \arguments{
-\item{X}{the dataset}
+\item{X}{the observation matrix (\eqn{n \times p}{(n x p)}: n = observation, p = variables)}
 
-\item{n.iter}{number of MC iterations}
-
-\item{B.inv}{prior inverse of between covariance matrix}
-
-\item{W.inv}{prior inverse of within covariance matrix}
-
-\item{U}{covariance matrix for the mean}
+\item{U}{covariance matrix for the mean (\eqn{p \times p}{(p x p)}}
 
 \item{nw}{degrees of freedom}
 
-\item{mu}{prior mean}
+\item{mu}{prior mean (\eqn{p \times 1}{(p x 1)}}
 
-\item{burn.in}{burn-in iterations}
-
-\item{output.mcmc}{output the entire chain}
+\item{output.mcmc}{if TRUE output the entire chain as a {coda} object, else just return the log-ml value}
 
 \item{verbose}{if TRUE, be verbose}
 
-\item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.}
+\item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies \code{chain_output = TRUE}.}
 }
 \value{
-the log-marginal likelihood value, or a list(the log-ml value, \code{coda} object with the posterior samples)
+the log-marginal likelihood value, or a list:
+\itemize{
+\item \code{value}: the log-ml value
+\item \code{mcmc}: a \code{coda} object with the posterior samples
+}
 }
 \description{
+This is the numerator of the Bayes factor: assume that all observations come from the same source.
 Implemented in C.
+}
+\details{
 See \code{\link{diwishart_inverse}} for the parametrization of the Inverted Wishart.
 See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 }
-\section{Normal-Inverse-Wishart model\insertCite{Bozza2008Probabilistic}{bayessource}}{
+\section{Normal-Inverse-Wishart model}{
 
+
+Described in \insertCite{Bozza2008Probabilistic}{bayessource}.
 
 Observation level:
-\deqn{X_{ij} ~ N_p(theta_i, W_i)} (i = population, j = items in population)
+\itemize{
+\item \deqn{X_{ij} \sim N_p(\theta_i, W_i)}{X_{ij} ~ N_p(theta_i, W_i)} (i = source, j = items from source)
+}
 
 Group level:
-\deqn{theta_i ~ N_p(\mu, B)}
-\deqn{W_i ~ IW_p(nw, U)}
+\itemize{
+\item \deqn{\theta_i \sim N_p(\mu, B)}{theta_i ~ N_p(\mu, B)}
+\item \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(nw, U)}
+}
 
 Hyperparameters:
-\eqn{B, U, nw, \mu}
+\itemize{
+\item \deqn{B, U, \nu_w, \mu}{B, U, nw, \mu}
+}
 
-A Gibbs sampler supplies theta, W^{(-1)}.
+Posterior samples of \eqn{\theta}{theta}, \eqn{W^{(-1)}} can be generated with a Gibbs sampler.
 }
 
 \section{Inverted Wishart parametrization (Press)}{
@@ -70,16 +77,87 @@ A Gibbs sampler supplies theta, W^{(-1)}.
 
 Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 
-\deqn{X ~ IW(v, S)}
-with \eqn{S = pxp} matrix, \eqn{v > 2p} (the degrees of freedom).
+\deqn{X \sim IW(\nu, S)}{X ~ IW(v, S)}
+with \eqn{S} is a \eqn{p \times p}{p x p} matrix, \eqn{\nu > 2p}{v > 2p} (the degrees of freedom).
 
 Then:
-\deqn{E[X] = S / (v - 2(p + 1))}
+\deqn{E[X] = \frac{S}{\nu - 2(p + 1)}}{E[X] = S/(n - 2(p + 1))}
 }
 
+\examples{
+# Use the iris data
+df_X <- iris[, c(1,3)]
+X <- as.matrix(df_X)
+p <- ncol(X)
+
+# Observations
+plot(X)
+# True species
+plot(X, col = iris$Species)
+
+
+# Priors
+B.inv <- diag(p)
+W.inv <- diag(p)
+U <- diag(p)
+mu <- colMeans(X)
+# d.o.f.
+nw <- get_minimum_nw_IW(p)
+
+# Computational parameters
+n_iter <- 10000
+n_burn_in <- 1000
+
+# Compute the marginal likelihood
+marginalLikelihood(
+   X = X,
+   n.iter = n_iter,
+   B.inv = B.inv,
+   W.inv = W.inv,
+   U = U,
+   nw = nw,
+   burn.in = n_burn_in,
+   mu = mu
+)
+
+# Diagnostics ------------
+
+# Retain the full Gibbs output
+list_mcmc <- marginalLikelihood(
+   X = X,
+   n.iter = 10000,
+   B.inv = B.inv,
+   W.inv = W.inv,
+   U = U,
+   nw = get_minimum_nw_IW(p),
+   burn.in = 1000,
+   mu = mu,
+   output.mcmc = TRUE
+)
+
+# The log-ML value
+list_mcmc$value
+
+# The full Gibbs chain output
+library(coda)
+head(list_mcmc$mcmc, 20)
+
+# Diagnostics plots by coda
+
+plot(list_mcmc$mcmc)
+coda::autocorr.plot(list_mcmc$mcmc)
+}
 \references{
 \insertAllCited{}
 }
 \seealso{
-marginalLikelihood_internal
+Other core functions: 
+\code{\link{bayessource-package}},
+\code{\link{get_minimum_nw_IW}()},
+\code{\link{make_priors_and_init}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{mcmc_postproc}()},
+\code{\link{samesource_C}()},
+\code{\link{two.level.multivariate.calculate.UC}()}
 }
+\concept{core functions}

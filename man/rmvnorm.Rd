@@ -21,3 +21,31 @@ a nxp matrix of samples
 \description{
 Faster than \code{rmvnorm} in package \pkg{mvtnorm}. Implemented in C.
 }
+\seealso{
+Other C++ functions: 
+\code{\link{chol2inv}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{dmvnorm}()},
+\code{\link{inv_Cholesky_from_Cholesky}()},
+\code{\link{inv_sympd_tol}()},
+\code{\link{inv_triangular}()},
+\code{\link{isCholeskyOn}()},
+\code{\link{ldet_from_Cholesky}()},
+\code{\link{logCummeanExp}()},
+\code{\link{logCumsumExp}()},
+\code{\link{logSumExpMean}()},
+\code{\link{logSumExp}()},
+\code{\link{marginalLikelihood_internal}()},
+\code{\link{rwish}()}
+
+Other statistical functions: 
+\code{\link{diwishart_inverse_R}()},
+\code{\link{diwishart_inverse}()},
+\code{\link{diwishart}()},
+\code{\link{dmvnorm}()},
+\code{\link{dwishart}()},
+\code{\link{riwish_Press}()},
+\code{\link{rwish}()}
+}
+\concept{C++ functions}
+\concept{statistical functions}

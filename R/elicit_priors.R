@@ -1,7 +1,5 @@
 #' Elicit priors and initialization from background dataset
 #'
-#' Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
-#'
 #'
 #' Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
 #'
@@ -9,34 +7,51 @@
 #'
 #' Notice that we have three chains in the LR computations, the same initialization is used thrice.
 #'
-#' @section Priors:
+#' ## Priors
 #'
 #' `use.priors`:
-#' - `'ML'`: maximum likelihood estimation
+#' - `'ML'`: maximum likelihood estimation as in \insertCite{Bozza2008Probabilistic}{bayessource}
 #' - `'vague'`: low-information priors
 #'
 #'   `U` is `alpha*diag(p)`, B is `beta*diag(p)`, `mu` is `mu0`.
+#'
 #'   By default `alpha = 1, beta = 1, mu0 = 0`
 #'
 #' The Wishart dofs `nw` are set as small as possible without losing full rank:
 #' \eqn{nw = 2*(p + 1) + 1}
 #'
-#' @section Initialization:
+#' ## Initialization
+#'
+#' Generate values for \eqn{W^{-1}_1}, \eqn{W^{-1}_2} that will be used as starting values for the Gibbs chains.
+#' Two methods:
 #'
 #' `use.init`:
+#'
 #' - `'random'`: initialize according to the model
+#'
+#'    + generate one \eqn{W_i \sim IW_p(nw, U)}{W_i ~ IW_p(nw, U)}
+#'    + then invert: \eqn{W^{-1}_i = (W_i)^{-1}}
+#'
 #' - `'vague'`: low-information initialization
-#'   \eqn{W_i} is `alpha_init + beta_init *diag(p)`
+#'
+#'   + \eqn{W_i = alpha_init + beta_init * diag(p)}
+#'
+#' ## Parameters
 #'
 #' Some constants can be changed by passing the new values to `...` :
 #'
-#' - `use.priors = 'vague'`:
-#'    `alpha = 1, beta = 1, mu0 = 0`
+#' - `use.priors = 'vague'`: accepts parameters
 #'
-#' - `use.init = 'vague'`:
-#'    `alpha_init = 1, beta_init = 100`
+#'    + `alpha` (default: `1`)
+#'    + `beta` (default: `1`)
+#'    + `mu0` (default: `0`)
 #'
-#' @section Returns:
+#' - `use.init = 'vague'`: accepts parameters
+#'
+#'    + `alpha_init` (default: `1`)
+#'    + `beta_init` (default: `100`)
+#'
+#' ## Return values
 #'
 #' A list of variables:
 #'
@@ -52,15 +67,21 @@
 #' @param col.item column with item id
 #' @param use.priors see details
 #' @param use.init see details
-#' @param ... additional variables for priors, init
+#' @param ... additional variables for priors, init (see the description)
 #' @return a list of variables
 #' @family core functions
 #' @example man-roxygen/example_make_priors_and_init.R
 #' @md
-make_priors_and_init <- function(df.background, col.variables, col.item, use.priors = 'ML', use.init = 'random', ...) {
+make_priors_and_init <- function(
+   df.background,
+   col.variables,
+   col.item,
+   use.priors = c('ML', 'vague'),
+   use.init = c('random', 'vague'),
+   ...) {
 
-   stopifnot(use.priors %in% c('ML', 'vague'))
-   stopifnot(use.init %in% c('random', 'vague'))
+   use.priors <- match.arg(use.priors)
+   use.init <- match.arg(use.init)
 
    p <- length(col.variables)
 
@@ -73,17 +94,21 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
    # Perform maximum likelihood estimation on the background dataset
    if (use.priors == 'ML') {
       # On background dataset
+      # obtain B, mu, W
       WB <- two.level.multivariate.calculate.UC(df.background, col.variables, col.item)
 
       mu <- t(WB$all.means)
       B.inv <- chol2inv(chol(WB$B))
       nw <- nw.min
 
-      ## ML prior for W
-      ## W ~ IW(nw, U)
-      ## We have W0 (sample estimate for W?)
-      ## Set U prior s.t.
-      ## E[W] = U / (nw - 2*p - 2) = W0        # Press
+      # Choose U from W, nw
+      #
+      # W is generated as follows:
+      # W ~ IW(nw, U)
+      # We have W0 (sample estimate for W from the background)
+      #
+      # Set U prior s.t.
+      # E[W] = U / (nw - 2*p - 2) = W0        # Press
 
       U <- WB$W * (nw - 2*p - 2)           # mean of Inverse Wishart (Press)
 
@@ -97,10 +122,10 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
       dots.now <- utils::modifyList(dots.default, dots)
 
       # Generic priors
-      # U is the prior on the Within covariance matrix
+      # U is the prior on the within-source covariance matrix
       U <- dots.now$alpha * diag(p)
       mu <- rep(dots.now$mu0, p)
-      # B.inv is the prior Between precision matrix
+      # B.inv is the prior between-sources precision matrix
       B.inv <- (1 / dots.now$beta) * diag(p)
 
       nw <- nw.min
@@ -160,17 +185,21 @@ make_priors_and_init <- function(df.background, col.variables, col.item, use.pri
 
 #' Get minimum degrees of freedom for Inverted Wishart
 #'
-#' Returns minimum value for degrees of freedom such that Inverted Wishart has a mean..
+#' Returns minimum value for degrees of freedom such that the Inverted Wishart has a well-defined expected value.
 #'
 #' Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 #'
-#' \deqn{X ~ IW(nw, S)}, with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
+#' \deqn{X \sim IW(\nu, S)}{X ~ IW(nw, S)}
+#'
+#' with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
+#'
 #' Then:
-#' \deqn{E[X] = S / (nw - 2(p + 1))}
 #'
-#' Finally, the minimum dof $v$ is $ nw = 2*(p + 1) + 1 $.
+#' \deqn{E[X] = S / (\nu - 2(p + 1))}{E[X] = S / (nw - 2(p + 1))}
 #'
-#' @param p dimension
+#' Finally, the minimum dof \eqn{\nu}{nw} are: \eqn{\nu = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}.
+#'
+#' @param p number of variables
 #' @return minimum dof
 #' @family core functions
 #' @family Wishart functions

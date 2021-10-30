@@ -1,3 +1,9 @@
+# bayessource 0.3.2
+
+* Improved documentation.
+* Add examples.
+* Pkgdown site: adding function families.
+
 # bayessource 0.3.1
 
 * Fig bug in `make_priors_and_init` when a background item is seen only once.    
