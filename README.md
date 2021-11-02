@@ -2,14 +2,14 @@
 
 This R package evaluates through the Bayes Factor whether two sets of samples come from the same Multivariate Gaussian distribution or not.
 
-Currently implements a Gibbs sampler for the Multivariate Normal - Inverse Wishart model.
+It currently implements a fast Gibbs sampler for the Multivariate Normal - Inverse Wishart model.
 
 ## Installation
 
-The packages is not released on CRAN yet.   
+The package is not on CRAN yet.   
 It must be installed using `devtools` or `remotes` from this repository:
 
-```
+```r
 # install.packages('remotes')
 remotes::install_github('lgaborini/bayessource')
 ```
@@ -22,7 +22,19 @@ remotes::install_github('lgaborini/bayessource')
 
 ## Documentation
 
-Documentation is available on [GitHub pages](https://lgaborini.github.io/bayessource).
+Documentation is available on [GitHub pages](https://lgaborini.github.io/bayessource), or in the [docs/index.html]([docs/index.html]) file of the repository.
+
+Also see the vignettes:
+
+- [Introduction](https://lgaborini.github.io/bayessource/articles/introduction.html)
+- [Prior elicitation](https://lgaborini.github.io/bayessource/articles/prior_elicitation.html)
+
+### Main functions
+
+- `make_priors_and_init()`: obtain hyperpriors and initialization from a background dataset
+- `marginalLikelihood()`: fast computation of the marginal likelihood
+- `samesource_C()`: fast computation of the Bayes Factor (same source vs. different sources)
+- `mcmc_postproc()`: collect and tidy posterior samples from this package
 
 ## Extending
 
@@ -33,10 +45,9 @@ These are stored in the directory `man-roxygen`.
 When updating Rd templates, one must pay attenton that:
 
 - LaTeX is supported only through the Rd `\eqn{latex}{ascii}` and `\deqn{latex}{ascii}` tags.
-- It is best to write plain Rd tags
+- it is best to write plain Rd or roxygen2 tags rather than Markdown tags
 - sections must start with the `\@section title:` and end up after the Details.
   Do not forget the `:` at the end.
-
 
 
 ## References

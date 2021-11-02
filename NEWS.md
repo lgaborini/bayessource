@@ -3,6 +3,7 @@
 * Improved documentation.
 * Add examples.
 * Pkgdown site: adding function families.
+* Improved vignettes.
 
 # bayessource 0.3.1
 

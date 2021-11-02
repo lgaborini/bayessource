@@ -12,7 +12,7 @@
 
 <meta name="author" content="Lorenzo Gaborini" />
 
-<meta name="date" content="2021-10-30" />
+<meta name="date" content="2021-11-02" />
 
 <title>Prior elicitation</title>
 
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Prior elicitation</h1>
 <h4 class="author">Lorenzo Gaborini</h4>
-<h4 class="date">2021-10-30</h4>
+<h4 class="date">2021-11-02</h4>
 
 
 
@@ -182,7 +182,11 @@ We will use some supporting functions:</p>
 <div id="data-generation" class="section level2">
 <h2>Data generation</h2>
 <p>We will generate the data according to the model: for sources <span class="math inline">\(i = 1, \ldots, m\)</span>,</p>
-<p><span class="math display">\[X_{ij} \mid \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \mid \mu, B \sim \quad N_p(\mu, B)\]</span> <span class="math display">\[W_i \mid U, n_w \sim \quad IW(U, n_w)\]</span></p>
+<p><span class="math display">\[\begin{align}
+X_{ij} \mid \theta_i, \; W_i &amp;\sim N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \\
+\theta_i \mid \mu, B         &amp;\sim N_p(\mu, B) \\
+W_i \mid U, n_w              &amp;\sim IW(U, n_w)
+\end{align}\]</span></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="co"># number of variables</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># number of sources</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span> <span class="co"># number of items per source</span></span></code></pre></div>
@@ -255,7 +259,7 @@ We will use some supporting functions:</p>
 </div>
 <div id="prior-elicitation" class="section level2">
 <h2>Prior elicitation</h2>
-<p>The package supplies the function <code>make_priors_and_init</code>.</p>
+<p>The package supplies the function <code>make_priors_and_init()</code>.</p>
 <p>Suppose that <code>df</code> represents a background dataset.<br />
 We can use it to elicit the model hyperparameters using the estimators described in <span class="citation">[@Bozza2008Probabilistic]</span>.<br />
 It also chooses an initialization value for the Gibbs sampler.</p>
@@ -270,19 +274,19 @@ It also chooses an initialization value for the Gibbs sampler.</p>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;mu&quot;      &quot;U&quot;       &quot;B.inv&quot;   &quot;nw&quot;      &quot;W.inv.1&quot; &quot;W.inv.2&quot;</span></span></code></pre></div>
 <div id="hyperpriors-on-mean" class="section level3">
 <h3>Hyperpriors on mean</h3>
-<p><span class="math display">\[\theta_i \mid \mu, B \sim \quad N_p(\mu, B)\]</span></p>
+<p><span class="math display">\[\theta_i \mid \mu, B \sim N_p(\mu, B)\]</span></p>
 <ul>
-<li>Hyperprior for the between mean <span class="math inline">\(\mu\)</span>:</li>
+<li>Hyperprior for the between-sources mean <span class="math inline">\(\mu\)</span>:</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(<span class="fu">as.matrix</span>(priors<span class="sc">$</span>mu), <span class="at">pre =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">mu =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
-<p><span class="math display">\[ \mu = \begin{bmatrix}
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## priors$mu</span></span></code></pre></div>
+<p><span class="math display">\[ \hat{&#39;mu} = \begin{bmatrix}
   6.8288 \\ 
   2.0473 \\ 
   0.8846 \\ 
   2.9926 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(<span class="fu">as.matrix</span>(list_exact<span class="sc">$</span>mu.exact), <span class="at">pre =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">mu =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## list_exact$mu.exact</span></span></code></pre></div>
 <p><span class="math display">\[ \mu = \begin{bmatrix}
   7.0000 \\ 
   2.0000 \\ 
@@ -290,17 +294,17 @@ It also chooses an initialization value for the Gibbs sampler.</p>
   3.0000 \\ 
    \end{bmatrix}  \]</span></p>
 <ul>
-<li>Hyperprior for the between covariance matrix <span class="math inline">\(B\)</span>:</li>
+<li>Hyperprior for the between-sources covariance matrix <span class="math inline">\(B\)</span>:</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>B.inv, <span class="at">pre =</span> <span class="st">&quot;B^{-1} =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
-<p><span class="math display">\[ B^{-1} = \begin{bmatrix}
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## priors$B.inv</span></span></code></pre></div>
+<p><span class="math display">\[ \hat{B}^{-1} = \begin{bmatrix}
   1.1238 &amp; 0.9870 &amp; -0.7478 &amp; -0.0710 \\ 
   0.9870 &amp; 2.1015 &amp; -0.8342 &amp; 0.1850 \\ 
   -0.7478 &amp; -0.8342 &amp; 0.8177 &amp; -0.1066 \\ 
   -0.0710 &amp; 0.1850 &amp; -0.1066 &amp; 0.1953 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(<span class="fu">solve_sympd</span>(list_exact<span class="sc">$</span>B.exact), <span class="at">pre =</span> <span class="st">&quot;B^{-1} =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## list_exact$B.exact</span></span></code></pre></div>
 <p><span class="math display">\[ B^{-1} = \begin{bmatrix}
   0.9970 &amp; 0.9335 &amp; -0.7219 &amp; 0.0117 \\ 
   0.9335 &amp; 2.0978 &amp; -0.7957 &amp; 0.1698 \\ 
@@ -318,15 +322,15 @@ It also chooses an initialization value for the Gibbs sampler.</p>
 <ul>
 <li>Inverted Wishart scale matrix:</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>U, <span class="at">pre =</span> <span class="st">&quot;U =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
-<p><span class="math display">\[ U = \begin{bmatrix}
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## priors$U</span></span></code></pre></div>
+<p><span class="math display">\[ \hat{U} = \begin{bmatrix}
   1.6633 &amp; 1.1123 &amp; -1.3456 &amp; 1.6272 \\ 
   1.1123 &amp; 8.8548 &amp; -1.6904 &amp; -0.6213 \\ 
   -1.3456 &amp; -1.6904 &amp; 13.1649 &amp; 2.2322 \\ 
   1.6272 &amp; -0.6213 &amp; 2.2322 &amp; 5.0199 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(list_exact<span class="sc">$</span>U.exact, <span class="at">pre =</span> <span class="st">&quot;U =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## list_exact$U.exact</span></span></code></pre></div>
 <p><span class="math display">\[ U = \begin{bmatrix}
   0.9172 &amp; 1.1136 &amp; -1.1124 &amp; 0.5796 \\ 
   1.1136 &amp; 11.4074 &amp; -3.4977 &amp; -1.5801 \\ 
@@ -338,15 +342,14 @@ It also chooses an initialization value for the Gibbs sampler.</p>
 <div id="initialisation" class="section level2">
 <h2>Initialisation</h2>
 <p>Within-source covariance matrices and their inverses: we initialize the chain with</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>W.inv<span class="fl">.1</span>, <span class="at">pre =</span> <span class="st">&quot;W^{-1}_1 =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## priors$W.inv.1</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## priors$W.inv.2</span></span></code></pre></div>
 <p><span class="math display">\[ W^{-1}_1 = \begin{bmatrix}
   8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
   -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
   0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
   -5.1136 &amp; 0.6541 &amp; -1.1145 &amp; 4.6794 \\ 
-   \end{bmatrix}  \]</span></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bmatrix</span>(priors<span class="sc">$</span>W.inv<span class="fl">.2</span>, <span class="at">pre =</span> <span class="st">&quot;W^{-1}_2 =&quot;</span>, <span class="at">digits =</span> bmatrix.digits)</span></code></pre></div>
-<p><span class="math display">\[ W^{-1}_2 = \begin{bmatrix}
+   \end{bmatrix}  \]</span><span class="math display">\[ W^{-1}_2 = \begin{bmatrix}
   8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
   -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
   0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
@@ -355,21 +358,39 @@ It also chooses an initialization value for the Gibbs sampler.</p>
 </div>
 <div id="usage" class="section level2">
 <h2>Usage</h2>
-<p>The list returned by <code>make_priors_and_init</code> can be used in calls to <code>marginalLikelihood</code> and <code>samesource_C</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">make_priors_and_init</span>(df, col.variables, col.item, use.priors, use.init)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>mtx_data <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df[, col.variables])</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ml <span class="ot">&lt;-</span> <span class="fu">marginalLikelihood</span>(</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>   <span class="at">X =</span> mtx_data,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.iter =</span> <span class="dv">1000</span>,</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">burn.in =</span> <span class="dv">100</span>,</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>   <span class="at">B.inv =</span> priors<span class="sc">$</span>B.inv,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>   <span class="at">W.inv =</span> priors<span class="sc">$</span>W.inv<span class="fl">.1</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>   <span class="at">U =</span> priors<span class="sc">$</span>U,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>   <span class="at">nw =</span> priors<span class="sc">$</span>nw,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>   <span class="at">mu =</span> priors<span class="sc">$</span>mu</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>The list returned by <code>make_priors_and_init()</code> can be used in calls to <code>marginalLikelihood()</code> and <code>samesource_C()</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">make_priors_and_init</span>(df, col.variables, col.item, use.priors, use.init)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>mtx_data <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df[, col.variables])</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>ml <span class="ot">&lt;-</span> <span class="fu">marginalLikelihood</span>(</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>   <span class="at">X =</span> mtx_data,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.iter =</span> <span class="dv">1000</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">burn.in =</span> <span class="dv">100</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>   <span class="at">B.inv =</span> priors<span class="sc">$</span>B.inv,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>   <span class="at">W.inv =</span> priors<span class="sc">$</span>W.inv<span class="fl">.1</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>   <span class="at">U =</span> priors<span class="sc">$</span>U,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>   <span class="at">nw =</span> priors<span class="sc">$</span>nw,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>   <span class="at">mu =</span> priors<span class="sc">$</span>mu</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>ml</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] -509497.2</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>bf <span class="ot">&lt;-</span> <span class="fu">samesource_C</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">quest =</span> mtx_data,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">ref =</span> mtx_data,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.iter =</span> <span class="dv">1000</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>   <span class="at">burn.in =</span> <span class="dv">100</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>   <span class="at">B.inv =</span> priors<span class="sc">$</span>B.inv,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">W.inv.1 =</span> priors<span class="sc">$</span>W.inv<span class="fl">.1</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">W.inv.2 =</span> priors<span class="sc">$</span>W.inv<span class="fl">.1</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>   <span class="at">U =</span> priors<span class="sc">$</span>U,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>   <span class="at">nw =</span> priors<span class="sc">$</span>nw,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>   <span class="at">mu =</span> priors<span class="sc">$</span>mu</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>bf</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 80.74815</span></span></code></pre></div>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>

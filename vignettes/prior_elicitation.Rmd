@@ -28,7 +28,6 @@ library(bayessource)
 requireNamespace("mvtnorm")
 ```
 
-
 Let's generate a test dataset with known parameters.      
 We will use some supporting functions:
 
@@ -62,9 +61,11 @@ solve_sympd <- function(X) {
 
 We will generate the data according to the model: for sources $i = 1, \ldots, m$,
 
-$$X_{ij} \mid \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n $$
-$$\theta_i \mid \mu, B \sim \quad N_p(\mu, B)$$
-$$W_i \mid U, n_w \sim \quad IW(U, n_w)$$
+\begin{align}
+X_{ij} \mid \theta_i, \; W_i &\sim N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \\
+\theta_i \mid \mu, B         &\sim N_p(\mu, B) \\
+W_i \mid U, n_w              &\sim IW(U, n_w)
+\end{align}
 
 ```{r parameters}
 p <- 4 # number of variables
@@ -147,7 +148,7 @@ ggplot(df_sub, aes(x = v1, y = v2, col = factor(source))) +
 
 ## Prior elicitation
 
-The package supplies the function `make_priors_and_init`.
+The package supplies the function `make_priors_and_init()`.
 
 Suppose that `df` represents a background dataset.  
 We can use it to elicit the model hyperparameters using the estimators described in [@Bozza2008Probabilistic].  
@@ -167,29 +168,33 @@ names(priors)
 
 ### Hyperpriors on mean
 
-$$\theta_i \mid \mu, B \sim \quad N_p(\mu, B)$$
+$$\theta_i \mid \mu, B \sim N_p(\mu, B)$$
 
-- Hyperprior for the between mean $\mu$:
+- Hyperprior for the between-sources mean $\mu$:
 
-```{r, results='asis'}
-bmatrix(as.matrix(priors$mu), pre = "\\mu =", digits = bmatrix.digits)
+```{r, results='asis', echo=1, eval=2}
+priors$mu
+bmatrix(as.matrix(priors$mu), pre = "\\hat{\'mu} =", digits = bmatrix.digits)
 ```
 
 Exact: 
 
-```{r, results='asis'}
+```{r, results='asis', echo=1, eval=2}
+list_exact$mu.exact
 bmatrix(as.matrix(list_exact$mu.exact), pre = "\\mu =", digits = bmatrix.digits)
 ```
 
-- Hyperprior for the between covariance matrix $B$:
+- Hyperprior for the between-sources covariance matrix $B$:
 
-```{r, results='asis'}
-bmatrix(priors$B.inv, pre = "B^{-1} =", digits = bmatrix.digits)
+```{r, results='asis', echo=1, eval=2}
+priors$B.inv
+bmatrix(priors$B.inv, pre = "\\hat{B}^{-1} =", digits = bmatrix.digits)
 ```
 
 Exact: 
 
-```{r, results='asis'}
+```{r, results='asis', echo=1, eval=2}
+list_exact$B.exact
 bmatrix(solve_sympd(list_exact$B.exact), pre = "B^{-1} =", digits = bmatrix.digits)
 ```
 
@@ -203,13 +208,15 @@ $$n_w = `r priors$nw`$$
 
 - Inverted Wishart scale matrix:
 
-```{r, results='asis'}
-bmatrix(priors$U, pre = "U =", digits = bmatrix.digits)
+```{r, results='asis', echo=1, eval=2}
+priors$U
+bmatrix(priors$U, pre = "\\hat{U} =", digits = bmatrix.digits)
 ```
 
 Exact: 
 
-```{r, results='asis'}
+```{r, results='asis', echo=1, eval=2}
+list_exact$U.exact
 bmatrix(list_exact$U.exact, pre = "U =", digits = bmatrix.digits)
 ```
 
@@ -217,16 +224,18 @@ bmatrix(list_exact$U.exact, pre = "U =", digits = bmatrix.digits)
 
 Within-source covariance matrices and their inverses: we initialize the chain with
 
-```{r, results='asis'}
+```{r, results='asis', echo=c(1,2), eval=c(3,4)}
+priors$W.inv.1
+priors$W.inv.2
 bmatrix(priors$W.inv.1, pre = "W^{-1}_1 =", digits = bmatrix.digits)
 bmatrix(priors$W.inv.2, pre = "W^{-1}_2 =", digits = bmatrix.digits)
 ```
 
 ## Usage
 
-The list returned by `make_priors_and_init` can be used in calls to `marginalLikelihood` and `samesource_C`:
+The list returned by `make_priors_and_init()` can be used in calls to `marginalLikelihood()` and `samesource_C()`:
 
-```{r, eval=FALSE}
+```{r}
 priors <- make_priors_and_init(df, col.variables, col.item, use.priors, use.init)
 
 mtx_data <- as.matrix(df[, col.variables])
@@ -241,6 +250,25 @@ ml <- marginalLikelihood(
    nw = priors$nw,
    mu = priors$mu
 )
+
+ml
+```
+
+```{r}
+bf <- samesource_C(
+   quest = mtx_data,
+   ref = mtx_data,
+   n.iter = 1000,
+   burn.in = 100,
+   B.inv = priors$B.inv,
+   W.inv.1 = priors$W.inv.1,
+   W.inv.2 = priors$W.inv.1,
+   U = priors$U,
+   nw = priors$nw,
+   mu = priors$mu
+)
+
+bf
 ```
 
 

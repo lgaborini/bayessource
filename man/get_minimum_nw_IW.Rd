@@ -7,7 +7,7 @@
 get_minimum_nw_IW(p)
 }
 \arguments{
-\item{p}{dimension}
+\item{p}{number of variables}
 }
 \value{
 minimum dof
