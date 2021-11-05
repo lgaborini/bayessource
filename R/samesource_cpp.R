@@ -81,14 +81,20 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 
 
 
-#' Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.
+#' Fast computation of the Bayes Factor (same source v. different sources) for the Normal - Inverted Wishart model.
 #'
 #' Implemented in C.
+#'
+#' The hypothesis pair is:
+#'
+#' - \eqn{H_p}: all `ref` and `quest` come from the same source
+#' - \eqn{H_p}: `quest` comes from source 1, `ref` comes from source 2
+#'
 #' See \code{\link[bayessource]{diwishart_inverse}} for the parametrization of the Inverted Wishart.
 #' See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 #'
-#' @param ref the reference dataset (nr * p matrix)
-#' @param quest the questioned dataset (nq * p matrix)
+#' @param ref the reference dataset (a \eqn{n_r \times p}{n_r x p} matrix)
+#' @param quest the questioned dataset (a \eqn{n_q \times p}{n_q x p} matrix)
 #' @param W.inv.1 prior inverse of within-source covariance matrix (questioned items)
 #' @param W.inv.2 prior inverse of within-source covariance matrix (reference items)
 #' @param marginals if TRUE, also return the marginal likelihoods in the LR formula (default: FALSE)
@@ -113,7 +119,8 @@ samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
       X = rbind(quest, ref),
       B_inv = B.inv,
       W_inv = W.inv.1,
-      U = U, nw = nw,
+      U = U,
+      nw = nw,
       mu = mu,
       burn_in = burn.in,
       n_iter = n.iter,
@@ -125,7 +132,8 @@ samesource_C <- function(quest, ref, n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu,
       X = quest,
       B_inv = B.inv,
       W_inv = W.inv.1,
-      U = U, nw = nw,
+      U = U,
+      nw = nw,
       mu = mu,
       burn_in = burn.in,
       n_iter = n.iter,

@@ -10,7 +10,7 @@ get_minimum_nw_IW(p)
 \item{p}{number of variables}
 }
 \value{
-minimum dof
+minimum dof \eqn{\nu_w}{n_w}
 }
 \description{
 Returns minimum value for degrees of freedom such that the Inverted Wishart has a well-defined expected value.
@@ -18,15 +18,15 @@ Returns minimum value for degrees of freedom such that the Inverted Wishart has 
 \details{
 Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 
-\deqn{X \sim IW(\nu, S)}{X ~ IW(nw, S)}
+\deqn{X \sim IW(\nu, S)}{X ~ IW(n_w, S)}
 
-with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
+with \eqn{S = pxp} matrix, \eqn{n_w > 2p}{\nu_w > 2p} (the degrees of freedom).
 
 Then:
 
-\deqn{E[X] = S / (\nu - 2(p + 1))}{E[X] = S / (nw - 2(p + 1))}
+\deqn{E[X] = S / (\nu_w - 2(p + 1))}{E[X] = S / (n_w - 2(p + 1))}
 
-Finally, the minimum dof \eqn{\nu}{nw} are: \eqn{\nu = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}.
+Finally, the minimum dof \eqn{\nu_w}{n_w} are: \eqn{\nu_w = 2(p + 1) + 1}{n_w = 2*(p + 1) + 1}.
 }
 \references{
 \insertAllCited{}

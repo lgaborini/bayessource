@@ -7,7 +7,7 @@
 inv_pd(X)
 }
 \arguments{
-\item{X}{a positive definite matrix}
+\item{X}{a positive-definite matrix}
 }
 \value{
 the inverse of X

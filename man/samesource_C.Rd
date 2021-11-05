@@ -2,7 +2,7 @@
 % Please edit documentation in R/samesource_cpp.R
 \name{samesource_C}
 \alias{samesource_C}
-\title{Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.}
+\title{Fast computation of the Bayes Factor (same source v. different sources) for the Normal - Inverted Wishart model.}
 \usage{
 samesource_C(
   quest,
@@ -20,9 +20,9 @@ samesource_C(
 )
 }
 \arguments{
-\item{quest}{the questioned dataset (nq * p matrix)}
+\item{quest}{the questioned dataset (a \eqn{n_q \times p}{n_q x p} matrix)}
 
-\item{ref}{the reference dataset (nr * p matrix)}
+\item{ref}{the reference dataset (a \eqn{n_r \times p}{n_r x p} matrix)}
 
 \item{n.iter}{number of MCMC iterations excluding burn-in}
 
@@ -32,11 +32,9 @@ samesource_C(
 
 \item{W.inv.2}{prior inverse of within-source covariance matrix (reference items)}
 
-\item{U}{covariance matrix for the mean (\eqn{p \times p}{(p x p)}}
-
 \item{nw}{degrees of freedom}
 
-\item{mu}{prior mean (\eqn{p \times 1}{(p x 1)}}
+\item{mu}{prior mean (\eqn{p \times 1}{p x 1})}
 
 \item{burn.in}{number of MCMC burn-in iterations}
 
@@ -55,6 +53,14 @@ the log-BF value (base e), or a list with the log-BF and the computed marginal l
 }
 \description{
 Implemented in C.
+}
+\details{
+The hypothesis pair is:
+\itemize{
+\item \eqn{H_p}: all \code{ref} and \code{quest} come from the same source
+\item \eqn{H_p}: \code{quest} comes from source 1, \code{ref} comes from source 2
+}
+
 See \code{\link[bayessource]{diwishart_inverse}} for the parametrization of the Inverted Wishart.
 See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 }
@@ -71,12 +77,12 @@ Observation level:
 Group level:
 \itemize{
 \item \deqn{\theta_i \sim N_p(\mu, B)}{theta_i ~ N_p(\mu, B)}
-\item \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(nw, U)}
+\item \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(n_w, U)}
 }
 
 Hyperparameters:
 \itemize{
-\item \deqn{B, U, \nu_w, \mu}{B, U, nw, \mu}
+\item \deqn{B, U, \nu_w, \mu}{B, U, n_w, \mu}
 }
 
 Posterior samples of \eqn{\theta}{theta}, \eqn{W^{(-1)}} can be generated with a Gibbs sampler.

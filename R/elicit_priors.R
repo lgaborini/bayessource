@@ -1,9 +1,9 @@
 #' Elicit priors and initialization from background dataset
 #'
 #'
-#' Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
+#' Here we fix the hyperparameters for priors on \eqn{\theta_i}{theta_i} and \eqn{W_i}{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{\mu}{mu} and \eqn{\nu_w}{n_w}.
 #'
-#' An appropriate initialization value for \eqn{W^{-1}_i}, \eqn{i=1,2} is also generated.
+#' An appropriate initialization value for \eqn{W^{-1}_i}, \eqn{i=1,2} ($h_p$ and $h_d$ chains respectively) is also generated.
 #'
 #' Notice that we have three chains in the LR computations, the same initialization is used thrice.
 #'
@@ -18,7 +18,7 @@
 #'   By default `alpha = 1, beta = 1, mu0 = 0`
 #'
 #' The Wishart dofs `nw` are set as small as possible without losing full rank:
-#' \eqn{nw = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}
+#' \eqn{\nu_w = 2(p + 1) + 1}{n_w = 2*(p + 1) + 1}
 #'
 #' ## Initialization
 #'
@@ -29,12 +29,12 @@
 #'
 #' - `'random'`: initialize according to the model
 #'
-#'    + generate one \eqn{W_i \sim IW_p(nw, U)}{W_i ~ IW_p(nw, U)}
+#'    + generate one \eqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(n_w, U)}
 #'    + then invert: \eqn{W^{-1}_i = (W_i)^{-1}}
 #'
 #' - `'vague'`: low-information initialization
 #'
-#'   + \eqn{W_i = alpha_init + beta_init * diag(p)}
+#'   + \eqn{W_i = \alpha_{\text{init}} + \beta_{\text{init}} * \operatorname{diag}(p)}{W_i = alpha_init + beta_init * diag(p)}
 #'
 #' ## Parameters
 #'
@@ -58,16 +58,16 @@
 #' - `mu`: the global mean
 #' - `B.inv`: the between-source prior covariance matrix, as the inverse
 #' - `U`: the Inverted Wishart scale matrix
-#' - `nw`: the Inverted Wishart dof
+#' - `nw`: the Inverted Wishart dof \eqn{\nu_w}{n_w}
 #' - `W.inv.1`, `W.inv.2`: the initializations for the within-source covariance matrices, as their inverses
 #'
 #' @export
 #' @param df.background the background dataset
-#' @param col.variables columns with variables
-#' @param col.item column with item id
+#' @param col.variables columns with variables: names or positions
+#' @param col.item column with the id of the item (\eqn{i}): names or positions
 #' @param use.priors see details
 #' @param use.init see details
-#' @param ... additional variables for priors, init (see the description)
+#' @param ... additional variables for priors and init (see the description)
 #' @return a list of variables
 #' @family core functions
 #' @example man-roxygen/example_make_priors_and_init.R
@@ -189,25 +189,27 @@ make_priors_and_init <- function(
 #'
 #' Uses \insertCite{Press2012Applied}{bayessource} parametrization.
 #'
-#' \deqn{X \sim IW(\nu, S)}{X ~ IW(nw, S)}
+#' \deqn{X \sim IW(\nu, S)}{X ~ IW(n_w, S)}
 #'
-#' with \eqn{S = pxp} matrix, \eqn{nw > 2p} (the degrees of freedom).
+#' with \eqn{S = pxp} matrix, \eqn{n_w > 2p}{\nu_w > 2p} (the degrees of freedom).
 #'
 #' Then:
 #'
-#' \deqn{E[X] = S / (\nu - 2(p + 1))}{E[X] = S / (nw - 2(p + 1))}
+#' \deqn{E[X] = S / (\nu_w - 2(p + 1))}{E[X] = S / (n_w - 2(p + 1))}
 #'
-#' Finally, the minimum dof \eqn{\nu}{nw} are: \eqn{\nu = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}.
+#' Finally, the minimum dof \eqn{\nu_w}{n_w} are: \eqn{\nu_w = 2(p + 1) + 1}{n_w = 2*(p + 1) + 1}.
 #'
 #' @param p number of variables
-#' @return minimum dof
+#' @return minimum dof \eqn{\nu_w}{n_w}
 #' @family core functions
 #' @family Wishart functions
 #' @export
 #' @references \insertAllCited{}
 get_minimum_nw_IW <- function(p) {
    stopifnot(is.numeric(p))
-   if (p < 1) { stop('p must be >= 1')}
+   if (p < 1) {
+      stop('p must be >= 1')
+   }
 
    nw.min <- 2*(p + 1) + 1
    nw.min
@@ -219,9 +221,9 @@ get_minimum_nw_IW <- function(p) {
 #'
 #' Using \insertCite{Press2012Applied}{bayessource} parametrization.
 #'
-#' @param v dof (\eqn{> 2p})
+#' @param v dof \eqn{\nu_w}{n_w} (\eqn{> 2p})
 #' @param S the scale matrix (pxp)
-#' @return a single random variate from IW(v, S)
+#' @return a single random observation from \deqn{IW_p(\nu_w, U)}{IW_p(n_w, U)}
 #' @template InverseWishart_Press
 #' @family R functions
 #' @family statistical functions
@@ -257,7 +259,7 @@ riwish_Press <- function(v, S){
 #'
 #' Compute the inverse of a positive-definite matrix using Cholesky decomposition.
 #'
-#' @param X a positive definite matrix
+#' @param X a positive-definite matrix
 #' @return the inverse of X
 #' @family math functions
 #' @export

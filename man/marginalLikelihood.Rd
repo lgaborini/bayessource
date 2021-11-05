@@ -19,7 +19,8 @@ marginalLikelihood(
 )
 }
 \arguments{
-\item{X}{the observation matrix (\eqn{n \times p}{(n x p)}: n = observation, p = variables)}
+\item{X}{the observation matrix (\eqn{n \times p}{(n x p)}: n = observation, p = variables)
+@param U covariance matrix for the mean (\eqn{p \times p}{p x p})}
 
 \item{n.iter}{number of MCMC iterations excluding burn-in}
 
@@ -27,11 +28,9 @@ marginalLikelihood(
 
 \item{W.inv}{initialization for prior inverse of within-source covariance matrix}
 
-\item{U}{covariance matrix for the mean (\eqn{p \times p}{(p x p)}}
-
 \item{nw}{degrees of freedom}
 
-\item{mu}{prior mean (\eqn{p \times 1}{(p x 1)}}
+\item{mu}{prior mean (\eqn{p \times 1}{p x 1})}
 
 \item{burn.in}{number of MCMC burn-in iterations}
 
@@ -40,14 +39,6 @@ marginalLikelihood(
 \item{verbose}{if TRUE, be verbose}
 
 \item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies \code{chain_output = TRUE}.}
-
-\item{n_iter}{number of MCMC iterations excluding burn-in}
-
-\item{burn_in}{number of MCMC burn-in iterations}
-
-\item{B_inv}{prior inverse of between-source covariance matrix}
-
-\item{W_inv}{initialization for prior inverse of within-source covariance matrix}
 }
 \value{
 the log-marginal likelihood value, or a list:
@@ -77,12 +68,12 @@ Observation level:
 Group level:
 \itemize{
 \item \deqn{\theta_i \sim N_p(\mu, B)}{theta_i ~ N_p(\mu, B)}
-\item \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(nw, U)}
+\item \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(n_w, U)}
 }
 
 Hyperparameters:
 \itemize{
-\item \deqn{B, U, \nu_w, \mu}{B, U, nw, \mu}
+\item \deqn{B, U, \nu_w, \mu}{B, U, n_w, \mu}
 }
 
 Posterior samples of \eqn{\theta}{theta}, \eqn{W^{(-1)}} can be generated with a Gibbs sampler.

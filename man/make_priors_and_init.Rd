@@ -16,24 +16,24 @@ make_priors_and_init(
 \arguments{
 \item{df.background}{the background dataset}
 
-\item{col.variables}{columns with variables}
+\item{col.variables}{columns with variables: names or positions}
 
-\item{col.item}{column with item id}
+\item{col.item}{column with the id of the item (\eqn{i}): names or positions}
 
 \item{use.priors}{see details}
 
 \item{use.init}{see details}
 
-\item{...}{additional variables for priors, init (see the description)}
+\item{...}{additional variables for priors and init (see the description)}
 }
 \value{
 a list of variables
 }
 \description{
-Here we fix the hyperparameters for priors on \eqn{theta_i} and \eqn{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{mu} and \eqn{n_w}.
+Here we fix the hyperparameters for priors on \eqn{\theta_i}{theta_i} and \eqn{W_i}{W_i}, i.e., \eqn{B}, \eqn{U}, \eqn{\mu}{mu} and \eqn{\nu_w}{n_w}.
 }
 \details{
-An appropriate initialization value for \eqn{W^{-1}_i}, \eqn{i=1,2} is also generated.
+An appropriate initialization value for \eqn{W^{-1}_i}, \eqn{i=1,2} ($h_p$ and $h_d$ chains respectively) is also generated.
 
 Notice that we have three chains in the LR computations, the same initialization is used thrice.
 \subsection{Priors}{
@@ -49,7 +49,7 @@ By default \verb{alpha = 1, beta = 1, mu0 = 0}
 }
 
 The Wishart dofs \code{nw} are set as small as possible without losing full rank:
-\eqn{nw = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}
+\eqn{\nu_w = 2(p + 1) + 1}{n_w = 2*(p + 1) + 1}
 }
 
 \subsection{Initialization}{
@@ -61,12 +61,12 @@ Two methods:
 \itemize{
 \item \code{'random'}: initialize according to the model
 \itemize{
-\item generate one \eqn{W_i \sim IW_p(nw, U)}{W_i ~ IW_p(nw, U)}
+\item generate one \eqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(n_w, U)}
 \item then invert: \eqn{W^{-1}_i = (W_i)^{-1}}
 }
 \item \code{'vague'}: low-information initialization
 \itemize{
-\item \eqn{W_i = alpha_init + beta_init * diag(p)}
+\item \eqn{W_i = \alpha_{\text{init}} + \beta_{\text{init}} * \operatorname{diag}(p)}{W_i = alpha_init + beta_init * diag(p)}
 }
 }
 }
@@ -96,7 +96,7 @@ A list of variables:
 \item \code{mu}: the global mean
 \item \code{B.inv}: the between-source prior covariance matrix, as the inverse
 \item \code{U}: the Inverted Wishart scale matrix
-\item \code{nw}: the Inverted Wishart dof
+\item \code{nw}: the Inverted Wishart dof \eqn{\nu_w}{n_w}
 \item \code{W.inv.1}, \code{W.inv.2}: the initializations for the within-source covariance matrices, as their inverses
 }
 }

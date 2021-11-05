@@ -9,11 +9,11 @@
 #' Group level:
 #'
 #' - \deqn{\theta_i \sim N_p(\mu, B)}{theta_i ~ N_p(\mu, B)}
-#' - \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(nw, U)}
+#' - \deqn{W_i \sim IW_p(\nu_w, U)}{W_i ~ IW_p(n_w, U)}
 #'
 #' Hyperparameters:
 #'
-#' - \deqn{B, U, \nu_w, \mu}{B, U, nw, \mu}
+#' - \deqn{B, U, \nu_w, \mu}{B, U, n_w, \mu}
 #'
 #' Posterior samples of \eqn{\theta}{theta}, \eqn{W^{(-1)}} can be generated with a Gibbs sampler.
 #'

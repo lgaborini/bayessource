@@ -7,12 +7,12 @@
 riwish_Press(v, S)
 }
 \arguments{
-\item{v}{dof (\eqn{> 2p})}
+\item{v}{dof \eqn{\nu_w}{n_w} (\eqn{> 2p})}
 
 \item{S}{the scale matrix (pxp)}
 }
 \value{
-a single random variate from IW(v, S)
+a single random observation from \deqn{IW_p(\nu_w, U)}{IW_p(n_w, U)}
 }
 \description{
 Using \insertCite{Press2012Applied}{bayessource} parametrization.
