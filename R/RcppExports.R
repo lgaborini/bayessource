@@ -13,17 +13,17 @@ isCholeskyOn <- function() {
 #' This is the numerator of the Bayes factor: assume that all observations come from the same source.
 #' To be called by the R wrapper.
 #'
-#' @param X the observation matrix (\eqn{n \times p}{(n x p)}: n = observation, p = variables)
-#'  @param U covariance matrix for the mean (\eqn{p \times p}{p x p})
+#' @param X the observation matrix (\eqn{n \times p}{(n x p)}: \eqn{n} = observations, \eqn{p} = variables)
+#' @param U hyperprior on the IW scale matrix (\eqn{p \times p}{p x p})
+#' @param B_inv inverse of the hyperprior on the between-source covariance matrix
+#' @param W_inv initialization for the prior inverse of within-source covariance matrix
 #' @param n_iter number of MCMC iterations excluding burn-in
 #' @param burn_in number of MCMC burn-in iterations
-#' @param B_inv prior inverse of between-source covariance matrix
-#' @param W_inv initialization for prior inverse of within-source covariance matrix
 #' @param nw degrees of freedom
 #' @param mu prior mean (\eqn{p \times 1}{p x 1})
-#' @param chain_output if true, output the entire chain as a list (ML-value, samples from theta, samples from W_inv)
+#' @param chain_output if true, output the entire chain as a list (ML-value, samples from \eqn{\theta}{theta}, samples from \eqn{W^{(-1)}}{W^{(-1)}})
 #' @param verbose if TRUE, be verbose
-#' @param Gibbs_only if TRUE, only return the Gibbs posterior samples. Implies `chain_output = TRUE`.
+#' @param Gibbs_only if TRUE, only return the Gibbs posterior samples. Implies `chain_output` = `TRUE`.
 #'
 #' @template gaussmv_model
 #' @keywords internal

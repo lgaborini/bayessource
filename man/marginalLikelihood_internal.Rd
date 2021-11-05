@@ -19,14 +19,15 @@ marginalLikelihood_internal(
 )
 }
 \arguments{
-\item{X}{the observation matrix (\eqn{n \times p}{(n x p)}: n = observation, p = variables)
-@param U covariance matrix for the mean (\eqn{p \times p}{p x p})}
+\item{X}{the observation matrix (\eqn{n \times p}{(n x p)}: \eqn{n} = observations, \eqn{p} = variables)}
 
 \item{n_iter}{number of MCMC iterations excluding burn-in}
 
-\item{B_inv}{prior inverse of between-source covariance matrix}
+\item{B_inv}{inverse of the hyperprior on the between-source covariance matrix}
 
-\item{W_inv}{initialization for prior inverse of within-source covariance matrix}
+\item{W_inv}{initialization for the prior inverse of within-source covariance matrix}
+
+\item{U}{hyperprior on the IW scale matrix (\eqn{p \times p}{p x p})}
 
 \item{nw}{degrees of freedom}
 
@@ -34,11 +35,11 @@ marginalLikelihood_internal(
 
 \item{burn_in}{number of MCMC burn-in iterations}
 
-\item{chain_output}{if true, output the entire chain as a list (ML-value, samples from theta, samples from W_inv)}
+\item{chain_output}{if true, output the entire chain as a list (ML-value, samples from \eqn{\theta}{theta}, samples from \eqn{W^{(-1)}}{W^{(-1)}})}
 
 \item{verbose}{if TRUE, be verbose}
 
-\item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies \code{chain_output = TRUE}.}
+\item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies \code{chain_output} = \code{TRUE}.}
 }
 \description{
 This is the numerator of the Bayes factor: assume that all observations come from the same source.

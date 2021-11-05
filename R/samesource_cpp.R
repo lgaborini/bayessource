@@ -13,8 +13,8 @@
 #' @param output.mcmc if TRUE output the entire chain as a {coda} object, else just return the log-ml value
 #' @param n.iter number of MCMC iterations excluding burn-in
 #' @param burn.in number of MCMC burn-in iterations
-#' @param B.inv prior inverse of between-source covariance matrix
-#' @param W.inv initialization for prior inverse of within-source covariance matrix
+#' @param B.inv inverse of the hyperprior on the between-source covariance matrix
+#' @param W.inv initialization for the prior inverse of within-source covariance matrix
 #' @inheritParams marginalLikelihood_internal
 #' @return the log-marginal likelihood value, or a list:
 #' - `value`: the log-ml value
@@ -95,8 +95,8 @@ marginalLikelihood <- function(X, n.iter, B.inv, W.inv, U, nw, mu, burn.in, outp
 #'
 #' @param ref the reference dataset (a \eqn{n_r \times p}{n_r x p} matrix)
 #' @param quest the questioned dataset (a \eqn{n_q \times p}{n_q x p} matrix)
-#' @param W.inv.1 prior inverse of within-source covariance matrix (questioned items)
-#' @param W.inv.2 prior inverse of within-source covariance matrix (reference items)
+#' @param W.inv.1 initialization for the prior inverse of within-source covariance matrix (questioned items)
+#' @param W.inv.2 initialization for the prior inverse of within-source covariance matrix (reference items)
 #' @param marginals if TRUE, also return the marginal likelihoods in the LR formula (default: FALSE)
 #' @inheritParams marginalLikelihood
 #' @return the log-BF value (base e), or a list with the log-BF and the computed marginal likelihoods:

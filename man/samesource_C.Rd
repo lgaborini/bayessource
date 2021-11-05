@@ -26,11 +26,13 @@ samesource_C(
 
 \item{n.iter}{number of MCMC iterations excluding burn-in}
 
-\item{B.inv}{prior inverse of between-source covariance matrix}
+\item{B.inv}{inverse of the hyperprior on the between-source covariance matrix}
 
-\item{W.inv.1}{prior inverse of within-source covariance matrix (questioned items)}
+\item{W.inv.1}{initialization for the prior inverse of within-source covariance matrix (questioned items)}
 
-\item{W.inv.2}{prior inverse of within-source covariance matrix (reference items)}
+\item{W.inv.2}{initialization for the prior inverse of within-source covariance matrix (reference items)}
+
+\item{U}{hyperprior on the IW scale matrix (\eqn{p \times p}{p x p})}
 
 \item{nw}{degrees of freedom}
 
