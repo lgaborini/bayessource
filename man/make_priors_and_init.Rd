@@ -49,7 +49,7 @@ By default \verb{alpha = 1, beta = 1, mu0 = 0}
 }
 
 The Wishart dofs \code{nw} are set as small as possible without losing full rank:
-\eqn{nw = 2*(p + 1) + 1}
+\eqn{nw = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}
 }
 
 \subsection{Initialization}{
@@ -94,10 +94,10 @@ Some constants can be changed by passing the new values to \code{...} :
 A list of variables:
 \itemize{
 \item \code{mu}: the global mean
-\item \code{B.inv}: the between prior covariance, as the inverse
+\item \code{B.inv}: the between-source prior covariance matrix, as the inverse
 \item \code{U}: the Inverted Wishart scale matrix
 \item \code{nw}: the Inverted Wishart dof
-\item \code{W.inv.1}, \code{W.inv.2}: the within cov initializations, as inverses
+\item \code{W.inv.1}, \code{W.inv.2}: the initializations for the within-source covariance matrices, as their inverses
 }
 }
 }

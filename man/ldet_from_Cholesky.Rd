@@ -7,7 +7,7 @@
 ldet_from_Cholesky(T_chol)
 }
 \description{
-If \eqn{A = U' U}, compute log(det(A)) from U
+If \eqn{A = U' U}, compute \eqn{\log{\det{A}}}{log(det(A))} from U
 }
 \seealso{
 Other C++ functions: 

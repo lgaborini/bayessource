@@ -24,6 +24,10 @@ samesource_C(
 
 \item{ref}{the reference dataset (nr * p matrix)}
 
+\item{n.iter}{number of MCMC iterations excluding burn-in}
+
+\item{B.inv}{prior inverse of between-source covariance matrix}
+
 \item{W.inv.1}{prior inverse of within-source covariance matrix (questioned items)}
 
 \item{W.inv.2}{prior inverse of within-source covariance matrix (reference items)}
@@ -33,6 +37,8 @@ samesource_C(
 \item{nw}{degrees of freedom}
 
 \item{mu}{prior mean (\eqn{p \times 1}{(p x 1)}}
+
+\item{burn.in}{number of MCMC burn-in iterations}
 
 \item{verbose}{if TRUE, be verbose}
 

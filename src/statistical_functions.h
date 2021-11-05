@@ -11,7 +11,7 @@
 
 // -------- Numerical functions -----------
 
-//' Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
+//' Computes \eqn{log( sum_i(exp(v_i)) )} in a stable way.
 //'
 //' @keywords internal
 //' @family C++ functions
@@ -19,7 +19,7 @@
 // [[Rcpp::export(rng = false)]]
 double logSumExp(const arma::vec &v);
 
-//' Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
+//' Computes \eqn{log( sum_i( exp(v_i)) ) - log(n)} in a stable way.
 //'
 //' @keywords internal
 //' @family C++ functions
@@ -27,7 +27,7 @@ double logSumExp(const arma::vec &v);
 // [[Rcpp::export(rng = false)]]
 double logSumExpMean(const arma::vec &v);
 
-//' Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.
+//' Computes log( cumsum_i( exp(v_i) )) in a stable way.
 //'
 //' @keywords internal
 //' @family C++ functions
@@ -35,7 +35,7 @@ double logSumExpMean(const arma::vec &v);
 // [[Rcpp::export(rng = false)]]
 arma::vec logCumsumExp(const arma::vec &v);
 
-//' Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
+//' Computes log( cummean_i( exp(v_i) )) in a stable way.
 //'
 //' @keywords internal
 //' @family C++ functions
@@ -90,7 +90,7 @@ arma::mat inv_Cholesky_from_Cholesky(const arma::mat &U);
 
 //' log-determinant from Cholesky factor
 //'
-//' If \eqn{A = U' U}, compute log(det(A)) from U
+//' If \eqn{A = U' U}, compute \eqn{\log{\det{A}}}{log(det(A))} from U
 //'
 //' @keywords internal
 //' @family C++ functions
@@ -102,7 +102,7 @@ double ldet_from_Cholesky(const arma::mat &T_chol);
 
 //' Generate from multivariate normal.
 //'
-//' Faster than \code{rmvnorm} in package \pkg{mvtnorm}. Implemented in C.
+//' Faster than [mvtnorm::rmvnorm()]. Implemented in C.
 //'
 //' @param n amount of samples to generate from
 //' @param mu column vector for the mean
@@ -120,7 +120,7 @@ arma::mat rmvnorm(const unsigned int n,
 
 //' Multivariate normal density. Assumes symmetry.
 //'
-//' Faster than \code{dmvnorm} in package \pkg{mvtnorm}. Implemented in C.
+//' Faster than [mvtnorm::dmvnorm()]. Implemented in C.
 //'
 //' @param x the observation (nxp matrix)
 //' @param mean mean vector (row vector, 1xp)
@@ -175,7 +175,7 @@ arma::mat rwish(
 //' @param df degrees of freedom of the Inverted Wishart
 //' @param Sigma scale matrix of the Inverted Wishart
 //' @param logd if TRUE, return the log-density
-//' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv
+//' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X_inv
 //' @family C++ functions
 //' @family statistical functions
 //' @family Wishart functions

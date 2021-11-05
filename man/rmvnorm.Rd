@@ -19,7 +19,7 @@ rmvnorm(n, mu, Cov, is_chol = FALSE)
 a nxp matrix of samples
 }
 \description{
-Faster than \code{rmvnorm} in package \pkg{mvtnorm}. Implemented in C.
+Faster than \code{\link[mvtnorm:Mvnorm]{mvtnorm::rmvnorm()}}. Implemented in C.
 }
 \seealso{
 Other C++ functions: 

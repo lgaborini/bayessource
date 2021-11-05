@@ -2,12 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{logCumsumExp}
 \alias{logCumsumExp}
-\title{Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.}
+\title{Computes log( cumsum_i( exp(v_i) )) in a stable way.}
 \usage{
 logCumsumExp(v)
 }
 \description{
-Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.
+Computes log( cumsum_i( exp(v_i) )) in a stable way.
 }
 \seealso{
 Other C++ functions: 

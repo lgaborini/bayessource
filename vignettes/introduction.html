@@ -12,7 +12,7 @@
 
 <meta name="author" content="Lorenzo Gaborini" />
 
-<meta name="date" content="2021-11-02" />
+<meta name="date" content="2021-11-05" />
 
 <title>Introduction</title>
 
@@ -163,7 +163,7 @@ div.csl-indent {
 
 <h1 class="title toc-ignore">Introduction</h1>
 <h4 class="author">Lorenzo Gaborini</h4>
-<h4 class="date">2021-11-02</h4>
+<h4 class="date">2021-11-05</h4>
 
 
 
@@ -271,7 +271,7 @@ Collectively, we shorten <span class="math inline">\(Y_i = \left\{ Y_{ij} \right
 p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_d) &amp;= 
 p(Y_{\text{reference}} \mid I, H_d) p(Y_{\text{questioned}} \mid I, H_d) = \\
 &amp;= \left( \int p( Y_{\text{reference}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \text{ d}\theta \text{ d}W \right) 
-\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \text{ d}\theta \text{ d}W \right) 
+\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \text{ d}\theta \text{ d}W \right)
 \end{align}\]</span></p>
 </div>
 <div id="computation-1" class="section level2">
@@ -286,7 +286,7 @@ E.g. here we compute <span class="math inline">\(p(Y_{\text{questioned}} \mid I,
 <p>the LR value can be computed as well, now considering two samples. The function is <code>samesource_C()</code>: (<code>W.inv.2</code> is used only for chain initalisation).</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">samesource_C</span>(<span class="fu">as.matrix</span>(df.quest), <span class="fu">as.matrix</span>(df.ref), n.iter, B.inv, W.inv<span class="fl">.1</span>, W.inv<span class="fl">.2</span>, U, nw, mu, burn.in, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] -8.670725</span></span></code></pre></div>
-<p>Notice how low it is compared to a subset of the reference data (same source, supporting <span class="math inline">\(H_p\)</span>):</p>
+<p>Notice how low it is compared to using a subset of the reference data as the questioned items (same source, supporting <span class="math inline">\(H_p\)</span>):</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">samesource_C</span>(<span class="fu">as.matrix</span>(df.ref)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,], <span class="fu">as.matrix</span>(df.ref), n.iter, B.inv, W.inv<span class="fl">.1</span>, W.inv<span class="fl">.2</span>, U, nw, mu, burn.in, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 22.02843</span></span></code></pre></div>
 <p>All marginal likelihoods in the BF formula can also be obtained by specifying <code>marginals = TRUE</code>:</p>
@@ -399,7 +399,7 @@ E.g. here we compute <span class="math inline">\(p(Y_{\text{questioned}} \mid I,
 ## [1,]  0.696931 -1.050408
 ## [2,] -1.050408  3.198459</code></pre>
 <p>More advanced diagnostics are available with the recent {<a href="https://mc-stan.org/bayesplot/">bayesplot</a>} package:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(bayesplot, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_areas</span>(<span class="at">x =</span> results<span class="sc">$</span>mcmc)</span></code></pre></div>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAwFBMVEUAAAAAW5YDOWwzMzNNTU1NTW5NTY5Nbo5NbqtNjshuTU1uTY5ubqtujqtujshuq8huq+SOTU2OTW6OTY6Obk2Ojm6Oq8iOq+SOyMiOyOSOyP+rbk2rbm6rbo6rjk2rjm6rjqurq8irq+SryKuryMiryOSryP+r5P/Ijk3Ijm7Ijo7Iq27Iq6vI5P/I/8jI/+TI///R4ezkq27kq47kq6vkyI7kyMjk/+Tk///l5eX/yI7/yKv/5Kv//8j//+T////iq0oeAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAH1ElEQVR4nO3da3faRhSF4XgisE3bBFq3aaBteg20SRsb6tamgvn//6ozuqCRENoIj9CRtd8PXlmA5OhZEk7gMH6hWWUv2v4LSI9AIAKBCAQiEIhAoNOBfNA+ethHwxEIRCAQgUAEAhEIRCBQ+0DKw34arHUgRaCKIiDZQm0DKXVHoMMZoAsCVUQgEIFAj4pAlT2qOwMkWkgAkOxTiEAgAoEIBCIQqF0gFQNJFmoZ6M4CiX7Fg0AgAoEIBCIQqFUglQIJFmoX6DEGknwKEQhEIBCBQEKA5Aq1CaR2QIJPoVaBNIEqIxDIBRIr1CKQcoDknkJtAulOAi2Cq4fyh26/C4JxxZY1U3kgqUL5w9z+pDcTF8jc4LT0CqRdILGnUP4wl9cFIHODe3cK9NL0NKB4LMgFEnoO5Q7z9yAY/jW5fGcdwpvgVXTDp3eB+VOUHyB1uNOPo7FyhxmO7Bk0/DQb3oajN5vJ1N6wHswXw9vofq+XmK1rQ5wx0NW/BmgdmK7tDXr78WYwj+5fE2gHFJ8s0Q030wWB4hygcHT1EL63NyyDb2eD+XIw1XrVd6DtLBgvgsEvo+Bar0bmqdnesA5efQjGBmgzMVdd9iOuj0Bn2jKLQCACgQgEIhCIQCACgQgEIhCIQCACgQgEIhCIQCACgQiUa/81eQI5lb1rQaAspS4u9oQItMt+bGX/05cE2mUnoqMP9uSICJSmEqDCh8MIlGR9UiBXiEBJSu+AcoMuBIpTLpAm0F6GxAXKhAgUZUEcIEeIQDZVBMqECKRTjRyQJlBWcrbkgdJbuwh0eMpVr0fBF9l9xwGlV1MBKLm9c0CVU67hyA6dHdiyvOx/FkWgWKhzQJVTrqu5XiWn11FDnLnXN/aAoru7BoSmXI1ePGJ2AKhifvWomj7YU6o15arDz+s+B1XXtTMITbnqjw8HtjyxDgOVTrn+86DD96VbnliHgcqmXJfmpEovtn4CVU+5Wh9OuZ5jyywCgQgEIhCIQCACgQgEIhCIQCACgQgEIhCIQCACgQgEIhCIQCACgQgEIhCIQCACgQgEIhCIQCACgWoDnX9KpjNAyQhR9GGGc44TdQIopYmLJ9USKA9/ierkA6UMe0DnQUoOczsLgqv7aHpjHU9wfMgGXZI8r+Vqw0C5MdB9oOQhDSKlh7mZDOY6HNlJqXiMbB/o/AtNFsdAy4HSRzbDtDvMpZ3wXRiBzc8HH+xxLde4CqC9A64EcrbxDLU7zHA0vN2+M5fXf9G43TIY3i6Cy6+D8WYSjBfx3FTDQE8dkj29Y4DMs9A0/NVcaPEVtp0Nb5OB12XwNoxnFPu9lqu5xv42J83reLY+BkrGFa+T6dZ+L1VqnqFfG4JBPMbqAG1nl7/FD+k3kL3G7Bi5+eG1HEwdIHNuTTXXcjUs1mZhP5wRj7Re/ZAMvIaf3Wqu5XrGLbMIBCIQiEAgAoEIBCIQiEAgAoEIBCIQiEAgAoEIBCIQiECgApDvdyR8JAvormQ505aTBFS+nGnLCQJKV+skUFYe6C5d79XDnr0lByhbzpRAu3JAu1WqRJ1CYoCc5UxF/dZeOUDaARIkJAVIuUCShMQAaRdIkJAQIFUAkvM0JAXIfnGBxAjJAFIlQEKEhABFX3NAUn4BfY0x4JMWu60uAVJlQEJOohpjwCcsdouKgYorBu/ulvDyUI0x4LqL3R7RYw5hD0ink68evtWp1RoDRovd1u6xzuivh+93QrXGgPu92O0RY8D9Xuz2iDHgfi92i8eA+77YLRoD5mK359oyi0AgAoEIBCIQiEAgAoEIBCIQiEAgAoEIBCIQiEAgAoGKQALexSgmCkgpcUOuooAUx4CLFYDuOAZcqHwMWJSQHCBOuZbEKVcQp1xBnHIFccoVdHjK1cPO/SQEqDjlKucUkgJkv+TGgKUIyQDilOuBqqdcPXyDp1dnytU86OqMU64yXvuoMeVqEZ11As8z5erhmzytGlOu67G+T8aAfa7lWjnl2vqQa70p1+2H5BfPc8q1dMrVPMSux1nc8gl16jXpY6Zc70c9nlE8YsrVPA8l15juIRCacn27uPxTL5v4rIboaky5rkbB4JseT9qfb8us/AtmIhMEJFNICpB9z9DDDv0nBuiCQCURCEQgkPOSq7x35eOkAEXvynvYo/cIBBIFJFFIEpDIU4hAIAKBZAApApWXvS8mcLYsThSQoJmFXQQCEQhEIJAwIHlCIoBUCiTwFJIBpAlUHoFABALtA4kTEgYk7xQSByRNSAKQcoDEnUIigLQLJEyozpSradHIEKd2gKSdQjWmXHX+14U3BiRLqMaUq1G8CXwvVarTjyHsgITNedSZct3+eN8AkLSx1kJ1plxX82YuMdHVmHIN3zT0HCS6GlOu0UqcmVDvgPBark39FBNdjSlX3Xegs22ZRSAQgUAEAhEIRCAQgUAEAhEIRCAQgUAEAhEI9LyBPPTSx06a2evTgXz0Uv5eCQQiEKhdoA5EIBCBQAQCEQhEIFCbQPG0je82k6B0tOnEWgTafDm3b0n6buUXvUWg9bXezqb4cfWy0zo+99cikF3NauH1YOLCkc+dtgk0bgZIb756Hs9BjQHpP54HUDPPQabt988DyP4Uc349u7/Wz+Q5qJl/B62D4Bo/6vj4L2kQgUAEAhEIRCAQgUAEAhEIRCAQgUD/A7WEdxTlQ6czAAAAAElFTkSuQmCC" /><!-- --></p>

@@ -33,7 +33,7 @@ marginalLikelihood_internal <- function(X, n_iter, B_inv, W_inv, U, nw, mu, burn
     .Call('_bayessource_marginalLikelihood_internal', PACKAGE = 'bayessource', X, n_iter, B_inv, W_inv, U, nw, mu, burn_in, chain_output, verbose, Gibbs_only)
 }
 
-#' Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
+#' Computes \eqn{log( sum_i(exp(v_i)) )} in a stable way.
 #'
 #' @keywords internal
 #' @family C++ functions
@@ -42,7 +42,7 @@ logSumExp <- function(v) {
     .Call('_bayessource_logSumExp', PACKAGE = 'bayessource', v)
 }
 
-#' Computes \eqn{log( sum_i( exp(v[i] )) ) - log(n)} in a stable way.
+#' Computes \eqn{log( sum_i( exp(v_i)) ) - log(n)} in a stable way.
 #'
 #' @keywords internal
 #' @family C++ functions
@@ -51,7 +51,7 @@ logSumExpMean <- function(v) {
     .Call('_bayessource_logSumExpMean', PACKAGE = 'bayessource', v)
 }
 
-#' Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.
+#' Computes log( cumsum_i( exp(v_i) )) in a stable way.
 #'
 #' @keywords internal
 #' @family C++ functions
@@ -60,7 +60,7 @@ logCumsumExp <- function(v) {
     .Call('_bayessource_logCumsumExp', PACKAGE = 'bayessource', v)
 }
 
-#' Computes log( cummean_i( exp(v[i]) ) ) in a stable way.
+#' Computes log( cummean_i( exp(v_i) )) in a stable way.
 #'
 #' @keywords internal
 #' @family C++ functions
@@ -118,7 +118,7 @@ inv_Cholesky_from_Cholesky <- function(U) {
 
 #' log-determinant from Cholesky factor
 #'
-#' If \eqn{A = U' U}, compute log(det(A)) from U
+#' If \eqn{A = U' U}, compute \eqn{\log{\det{A}}}{log(det(A))} from U
 #'
 #' @keywords internal
 #' @family C++ functions
@@ -129,7 +129,7 @@ ldet_from_Cholesky <- function(T_chol) {
 
 #' Generate from multivariate normal.
 #'
-#' Faster than \code{rmvnorm} in package \pkg{mvtnorm}. Implemented in C.
+#' Faster than [mvtnorm::rmvnorm()]. Implemented in C.
 #'
 #' @param n amount of samples to generate from
 #' @param mu column vector for the mean
@@ -145,7 +145,7 @@ rmvnorm <- function(n, mu, Cov, is_chol = FALSE) {
 
 #' Multivariate normal density. Assumes symmetry.
 #'
-#' Faster than \code{dmvnorm} in package \pkg{mvtnorm}. Implemented in C.
+#' Faster than [mvtnorm::dmvnorm()]. Implemented in C.
 #'
 #' @param x the observation (nxp matrix)
 #' @param mean mean vector (row vector, 1xp)
@@ -190,7 +190,7 @@ rwish <- function(v, S, is_chol = FALSE, return_chol = FALSE) {
 #' @param df degrees of freedom of the Inverted Wishart
 #' @param Sigma scale matrix of the Inverted Wishart
 #' @param logd if TRUE, return the log-density
-#' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv
+#' @param is_chol if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X_inv
 #' @family C++ functions
 #' @family statistical functions
 #' @family Wishart functions
