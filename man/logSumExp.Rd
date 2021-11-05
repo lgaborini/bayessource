@@ -2,12 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{logSumExp}
 \alias{logSumExp}
-\title{Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.}
+\title{Computes \eqn{log( sum_i(exp(v_i)) )} in a stable way.}
 \usage{
 logSumExp(v)
 }
 \description{
-Computes \eqn{log( sum_i( exp(v[i] )) )} in a stable way.
+Computes \eqn{log( sum_i(exp(v_i)) )} in a stable way.
 }
 \seealso{
 Other C++ functions: 

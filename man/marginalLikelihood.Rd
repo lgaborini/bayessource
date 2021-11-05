@@ -32,6 +32,14 @@ marginalLikelihood(
 \item{verbose}{if TRUE, be verbose}
 
 \item{Gibbs_only}{if TRUE, only return the Gibbs posterior samples. Implies \code{chain_output = TRUE}.}
+
+\item{n_iter}{number of MCMC iterations excluding burn-in}
+
+\item{burn_in}{number of MCMC burn-in iterations}
+
+\item{B_inv}{prior inverse of between-source covariance matrix}
+
+\item{W_inv}{initialization for prior inverse of within-source covariance matrix}
 }
 \value{
 the log-marginal likelihood value, or a list:

@@ -18,7 +18,7 @@
 #'   By default `alpha = 1, beta = 1, mu0 = 0`
 #'
 #' The Wishart dofs `nw` are set as small as possible without losing full rank:
-#' \eqn{nw = 2*(p + 1) + 1}
+#' \eqn{nw = 2(p + 1) + 1}{nw = 2*(p + 1) + 1}
 #'
 #' ## Initialization
 #'
@@ -56,10 +56,10 @@
 #' A list of variables:
 #'
 #' - `mu`: the global mean
-#' - `B.inv`: the between prior covariance, as the inverse
+#' - `B.inv`: the between-source prior covariance matrix, as the inverse
 #' - `U`: the Inverted Wishart scale matrix
 #' - `nw`: the Inverted Wishart dof
-#' - `W.inv.1`, `W.inv.2`: the within cov initializations, as inverses
+#' - `W.inv.1`, `W.inv.2`: the initializations for the within-source covariance matrices, as their inverses
 #'
 #' @export
 #' @param df.background the background dataset

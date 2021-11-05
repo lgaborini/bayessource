@@ -155,7 +155,7 @@ and the denominator is a product of marginal likelihoods (assuming independence 
 p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_d) &= 
 p(Y_{\text{reference}} \mid I, H_d) p(Y_{\text{questioned}} \mid I, H_d) = \\
 &= \left( \int p( Y_{\text{reference}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right) 
-\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right) 
+\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right)
 \end{align}
 
 ## Computation
@@ -177,7 +177,7 @@ The function is `samesource_C()`: (`W.inv.2` is used only for chain initalisatio
 samesource_C(as.matrix(df.quest), as.matrix(df.ref), n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE)
 ```
 
-Notice how low it is compared to a subset of the reference data (same source, supporting $H_p$):
+Notice how low it is compared to using a subset of the reference data as the questioned items (same source, supporting $H_p$):
 
 ```{r collapse=TRUE}
 samesource_C(as.matrix(df.ref)[1:20,], as.matrix(df.ref), n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE)
@@ -257,8 +257,8 @@ list.postproc$W.samples.ML
 
 More advanced diagnostics are available with the recent {[bayesplot](https://mc-stan.org/bayesplot/)} package:
 
-```{r plot-bayesplot, eval=require("bayesplot", quietly=TRUE)}
-library(bayesplot, quietly = TRUE)
+```{r plot-bayesplot, eval=require("bayesplot", quietly=TRUE), message=FALSE}
+suppressPackageStartupMessages(library(bayesplot, quietly = TRUE))
 
 bayesplot::mcmc_areas(x = results$mcmc)
 ```

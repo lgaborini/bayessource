@@ -21,7 +21,7 @@ dmvnorm(x, mean, Cov, logd = FALSE, is_chol = FALSE)
 the density in x (nx1)
 }
 \description{
-Faster than \code{dmvnorm} in package \pkg{mvtnorm}. Implemented in C.
+Faster than \code{\link[mvtnorm:Mvnorm]{mvtnorm::dmvnorm()}}. Implemented in C.
 }
 \seealso{
 Other C++ functions: 

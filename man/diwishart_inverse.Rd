@@ -15,7 +15,7 @@ diwishart_inverse(X_inv, df, Sigma, logd = FALSE, is_chol = FALSE)
 
 \item{logd}{if TRUE, return the log-density}
 
-\item{is_chol}{if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv}
+\item{is_chol}{if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X_inv}
 }
 \description{
 Computes the pdf p_X(x) by knowing x^(-1)
