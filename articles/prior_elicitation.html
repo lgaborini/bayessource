@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -75,13 +75,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="prior_elicitation_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Prior elicitation</h1>
                         <h4 class="author">Lorenzo Gaborini</h4>
             
-            <h4 class="date">2020-04-12</h4>
+            <h4 class="date">2021-11-05</h4>
       
       
       <div class="hidden name"><code>prior_elicitation.Rmd</code></div>
@@ -93,134 +93,162 @@
 <div id="test-case" class="section level2">
 <h2 class="hasAnchor">
 <a href="#test-case" class="anchor"></a>Test case</h2>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1337</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1337</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">bayessource</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">'mvtnorm'</span>)
-<span class="co">#&gt; Loading required namespace: mvtnorm</span></pre></body></html></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">bayessource</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"mvtnorm"</span><span class="op">)</span>
+<span class="co">#&gt; Loading required namespace: mvtnorm</span></code></pre></div>
 <p>Let’s generate a test dataset with known parameters.<br>
 We will use some supporting functions:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># Generate n random integers in {min, ..., max}</span>
-<span class="no">randi</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">n</span>, <span class="no">min</span>, <span class="no">max</span>) { <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="no">n</span>, <span class="no">min</span>, <span class="no">max</span>)) }
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Generate n random integers in {min, ..., max}</span>
+<span class="va">randi</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">min</span>, <span class="va">max</span><span class="op">)</span> <span class="op">{</span>
+   <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">min</span>, <span class="va">max</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
 
 <span class="co">#' Generate random invertible symmetric pxp matrix</span>
 <span class="co">#'</span>
 <span class="co">#' @param p matrix size</span>
 <span class="co">#' @param alpha regularization &gt; 0</span>
-<span class="no">randinvmat</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">p</span>, <span class="no">M</span> <span class="kw">=</span> <span class="fl">5</span>, <span class="no">alpha</span> <span class="kw">=</span> <span class="kw">NULL</span>) {
-  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="no">p</span> <span class="kw">&gt;</span> <span class="fl">0</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="no">M</span> <span class="kw">&gt;</span> <span class="fl">0</span>)
-  <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(<span class="no">alpha</span>)) {
-    <span class="no">alpha</span> <span class="kw">&lt;-</span> <span class="no">p</span> + <span class="fl">1</span>
-  } <span class="kw">else</span> {
-    <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="no">alpha</span> <span class="kw">&gt;</span> <span class="fl">0</span>)
-  }
-  <span class="no">M</span> * <span class="kw pkg">stats</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/stats/rWishart.html">rWishart</a></span>(<span class="fl">1</span>, <span class="no">p</span> + <span class="no">alpha</span>, <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="no">p</span>))[,,<span class="fl">1</span>]/(<span class="no">p</span> + <span class="no">alpha</span>)
-}
+<span class="va">randinvmat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p</span>, <span class="va">M</span> <span class="op">=</span> <span class="fl">5</span>, <span class="va">alpha</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
+   <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="va">p</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
+   <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="va">M</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
+   <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+      <span class="va">alpha</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span> <span class="fl">1</span>
+   <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="va">alpha</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
+   <span class="op">}</span>
+   <span class="va">M</span> <span class="op">*</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/rWishart.html">rWishart</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">p</span> <span class="op">+</span> <span class="va">alpha</span>, <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, , <span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="op">(</span><span class="va">p</span> <span class="op">+</span> <span class="va">alpha</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="co"># Compute inverse of X if X is sympd</span>
-<span class="no">solve_sympd</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">X</span>) {
-  <span class="fu"><a href="../reference/chol2inv.html">chol2inv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span>(<span class="no">X</span>))
-}</pre></body></html></div>
+<span class="co"># Compute inverse of X if X is symmetric-positive definite</span>
+<span class="va">solve_sympd</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">{</span>
+   <span class="fu"><a href="../reference/chol2inv.html">chol2inv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
 </div>
 <div id="data-generation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-generation" class="anchor"></a>Data generation</h2>
 <p>We will generate the data according to the model: for sources <span class="math inline">\(i = 1, \ldots, m\)</span>,</p>
-<p><span class="math display">\[X_{ij} \; | \; \theta_i, \; W_i \sim \quad N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \]</span> <span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)\]</span> <span class="math display">\[W_i \; | \; U, n_w \sim \quad IW(U, n_w)\]</span></p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">p</span> <span class="kw">&lt;-</span> <span class="fl">4</span>      <span class="co"># number of variables</span>
-<span class="no">m</span> <span class="kw">&lt;-</span> <span class="fl">100</span>     <span class="co"># number of sources</span>
-<span class="no">n</span> <span class="kw">&lt;-</span> <span class="fl">500</span>     <span class="co"># number of items per source</span></pre></body></html></div>
-<p>Upper hierarchical level: generate <span class="math inline">\(\mu\)</span>, <span class="math inline">\(n_w\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(U\)</span></p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">list_exact</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="no">list_exact</span>$<span class="no">B.exact</span> <span class="kw">&lt;-</span> <span class="fu">randinvmat</span>(<span class="no">p</span>, <span class="kw">alpha</span><span class="kw">=</span><span class="fl">2</span>)      <span class="co"># Between Covariance matrix</span>
-<span class="no">list_exact</span>$<span class="no">U.exact</span> <span class="kw">&lt;-</span> <span class="fu">randinvmat</span>(<span class="no">p</span>, <span class="kw">alpha</span><span class="kw">=</span><span class="fl">2</span>)      <span class="co"># Inverted Wishart scale matrix</span>
-<span class="no">list_exact</span>$<span class="no">mu.exact</span> <span class="kw">&lt;-</span> <span class="fu">randi</span>(<span class="no">p</span>, <span class="fl">0</span>, <span class="fl">10</span>)   <span class="co"># mean of means</span>
-<span class="no">list_exact</span>$<span class="no">nw.exact</span> <span class="kw">&lt;-</span> <span class="fl">2</span>*(<span class="no">p</span> + <span class="fl">1</span>) + <span class="fl">1</span>     <span class="co"># dof for Inverted Wishart, as small as possible</span></pre></body></html></div>
-<p>Middle hierarchical level: for every source generate</p>
+<p><span class="math display">\[\begin{align}
+X_{ij} \mid \theta_i, \; W_i &amp;\sim N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \\
+\theta_i \mid \mu, B         &amp;\sim N_p(\mu, B) \\
+W_i \mid U, n_w              &amp;\sim IW(U, n_w)
+\end{align}\]</span></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">4</span> <span class="co"># number of variables</span>
+<span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="co"># number of sources</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">500</span> <span class="co"># number of items per source</span></code></pre></div>
+<p>Upper hierarchical level: choose some generating hyperparameters <span class="math inline">\(\mu\)</span>, <span class="math inline">\(n_w\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(U\)</span></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">list_exact</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">list_exact</span><span class="op">$</span><span class="va">B.exact</span> <span class="op">&lt;-</span> <span class="fu">randinvmat</span><span class="op">(</span><span class="va">p</span>, alpha <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># Between Covariance matrix</span>
+<span class="va">list_exact</span><span class="op">$</span><span class="va">U.exact</span> <span class="op">&lt;-</span> <span class="fu">randinvmat</span><span class="op">(</span><span class="va">p</span>, alpha <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># Inverted Wishart scale matrix</span>
+<span class="va">list_exact</span><span class="op">$</span><span class="va">mu.exact</span> <span class="op">&lt;-</span> <span class="fu">randi</span><span class="op">(</span><span class="va">p</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># mean of means</span>
+<span class="va">list_exact</span><span class="op">$</span><span class="va">nw.exact</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="op">(</span><span class="va">p</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span> <span class="co"># dof for Inverted Wishart, as small as possible</span></code></pre></div>
+<p>Middle hierarchical level: for each <span class="math inline">\(i\)</span>-th source generate</p>
 <ul>
-<li>source means: <span class="math inline">\(\theta_i\)</span>
+<li>true source mean: <span class="math inline">\(\theta_i\)</span>
 </li>
-<li>within covariance matrices: <span class="math inline">\(W_i\)</span>
+<li>true within-source covariance matrix: <span class="math inline">\(W_i\)</span>
 </li>
 </ul>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">theta.sources.exact</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="no">m</span>)) {
-  <span class="no">theta.sources.exact</span><span class="kw">[[</span><span class="no">i</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mvtnorm</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mvtnorm/man/Mvnorm.html">rmvnorm</a></span>(<span class="fl">1</span>, <span class="no">list_exact</span>$<span class="no">mu.exact</span>, <span class="no">list_exact</span>$<span class="no">B.exact</span>)
-}
-<span class="no">W.sources.exact</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="no">m</span>)) {
-  <span class="co"># Equivalents:</span>
-  <span class="co"># W.sources.exact[[i]] &lt;- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])</span>
-  <span class="no">W.sources.exact</span><span class="kw">[[</span><span class="no">i</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">bayessource</span><span class="kw ns">::</span><span class="fu"><a href="../reference/riwish_Press.html">riwish_Press</a></span>(<span class="no">list_exact</span>$<span class="no">nw.exact</span>, <span class="no">list_exact</span>$<span class="no">U.exact</span>)
-}</pre></body></html></div>
-<p>Lower hierarchical level: raw data from every source</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="no">m</span>)) {
-  <span class="co"># The data</span>
-  <span class="no">df</span><span class="kw">[[</span><span class="no">i</span>]] <span class="kw">&lt;-</span> <span class="kw pkg">mvtnorm</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/mvtnorm/man/Mvnorm.html">rmvnorm</a></span>(<span class="no">n</span>, <span class="no">theta.sources.exact</span><span class="kw">[[</span><span class="no">i</span>]], <span class="no">W.sources.exact</span><span class="kw">[[</span><span class="no">i</span>]])
-  <span class="co"># The source (last column)</span>
-  <span class="no">df</span><span class="kw">[[</span><span class="no">i</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">df</span><span class="kw">[[</span><span class="no">i</span>]], <span class="no">i</span>)
-}
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">theta.sources.exact</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="no">rbind</span>, <span class="no">df</span>))
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">df</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">'v'</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>:<span class="no">p</span>)), <span class="st">'source'</span>))
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="va">theta.sources.exact</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mvtnorm</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mvtnorm/man/Mvnorm.html">rmvnorm</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">list_exact</span><span class="op">$</span><span class="va">mu.exact</span>, <span class="va">list_exact</span><span class="op">$</span><span class="va">B.exact</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">df</span>)
+<span class="co"># Sample from an inverted Wishart</span>
+<span class="va">W.sources.exact</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="co"># ours:</span>
+   <span class="va">W.sources.exact</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">bayessource</span><span class="fu">::</span><span class="fu"><a href="../reference/riwish_Press.html">riwish_Press</a></span><span class="op">(</span><span class="va">list_exact</span><span class="op">$</span><span class="va">nw.exact</span>, <span class="va">list_exact</span><span class="op">$</span><span class="va">U.exact</span><span class="op">)</span>
+   <span class="co"># R:</span>
+   <span class="co"># W.sources.exact[[i]] &lt;- solve(rWishart(1, nw.exact, solve(U.exact))[,,1])</span>
+<span class="op">}</span></code></pre></div>
+<p>Lower hierarchical level: generate raw data from every source</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="co"># Sample data from the i-th source</span>
+   <span class="co"># returned as a matrix</span>
+   <span class="va">df</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">mvtnorm</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mvtnorm/man/Mvnorm.html">rmvnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">theta.sources.exact</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">W.sources.exact</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+   <span class="co"># Store the true source in the last column</span>
+   <span class="va">df</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">df</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="va">i</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># Convert to a dataframe</span>
+<span class="co"># columns v_1, v_2, ..., v_p, source</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">df</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"v"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">p</span><span class="op">)</span><span class="op">)</span>, <span class="st">"source"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
 <span class="co">#&gt;         v1        v2         v3       v4 source</span>
 <span class="co">#&gt; 1 7.783807 2.3526976  1.1456413 3.235036      1</span>
 <span class="co">#&gt; 2 7.478913 4.1146210  0.8399942 1.533766      1</span>
 <span class="co">#&gt; 3 7.490046 3.7630065  0.6714497 1.734876      1</span>
 <span class="co">#&gt; 4 7.228848 0.7886417 -0.5594819 3.323668      1</span>
 <span class="co">#&gt; 5 7.354987 1.7059334  1.9262933 2.380303      1</span>
-<span class="co">#&gt; 6 6.920879 2.4161567  3.0941613 1.858068      1</span></pre></body></html></div>
+<span class="co">#&gt; 6 6.920879 2.4161567  3.0941613 1.858068      1</span></code></pre></div>
 <p>The item column is the last one (<code>p + 1</code>).</p>
 <div id="visualization" class="section level3">
 <h3 class="hasAnchor">
 <a href="#visualization" class="anchor"></a>Visualization</h3>
-<p>First two components across sources:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<p>Show the first two components across sources:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
-<span class="no">df_sub</span> <span class="kw">&lt;-</span> <span class="no">df</span>[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df</span>), <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df</span>) * <span class="fl">0.05</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">FALSE</span>), ]
+<span class="va">df_sub</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.05</span>, replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="op">]</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">df_sub</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">v1</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">v2</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">source</span>))) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">show.legend</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="st">'x1'</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">'x2'</span>, <span class="kw">title</span> <span class="kw">=</span> <span class="st">'Raw data across sources: first two components'</span>,
-       <span class="kw">subtitle</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">'Color = source; '</span>, <span class="no">m</span>, <span class="st">'sources, '</span>, <span class="no">n</span>, <span class="st">'observations per source'</span>))</pre></body></html></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">df_sub</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">v1</span>, y <span class="op">=</span> <span class="va">v2</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">source</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+      x <span class="op">=</span> <span class="st">"x1"</span>,
+      y <span class="op">=</span> <span class="st">"x2"</span>,
+      title <span class="op">=</span> <span class="st">"Raw data across sources: first two components"</span>,
+      subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Color = source; "</span>, <span class="va">m</span>, <span class="st">"sources, "</span>, <span class="va">n</span>, <span class="st">"observations per source"</span><span class="op">)</span>
+   <span class="op">)</span></code></pre></div>
 <p><img src="prior_elicitation_files/figure-html/example-plot-1.png" width="672"></p>
 </div>
 </div>
 <div id="prior-elicitation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#prior-elicitation" class="anchor"></a>Prior elicitation</h2>
-<p>The package supplies the function <code>make_priors_and_init</code>.</p>
+<p>The package supplies the function <code><a href="../reference/make_priors_and_init.html">make_priors_and_init()</a></code>.</p>
 <p>Suppose that <code>df</code> represents a background dataset.<br>
-We can use it to elicit the model hyperparameters:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">col.variables</span> <span class="kw">&lt;-</span> <span class="fl">1</span>:<span class="no">p</span>
-<span class="no">col.item</span> <span class="kw">&lt;-</span> <span class="no">p</span> + <span class="fl">1</span>
+We can use it to elicit the model hyperparameters using the estimators described in <span class="citation">[@Bozza2008Probabilistic]</span>.<br>
+It also chooses an initialization value for the Gibbs sampler.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">col.variables</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="va">p</span>
+<span class="va">col.item</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">+</span> <span class="fl">1</span>
 
-<span class="no">use.priors</span> <span class="kw">&lt;-</span> <span class="st">'ML'</span>
-<span class="no">use.init</span> <span class="kw">&lt;-</span> <span class="st">'random'</span>
+<span class="va">use.priors</span> <span class="op">&lt;-</span> <span class="st">"ML"</span>
+<span class="va">use.init</span> <span class="op">&lt;-</span> <span class="st">"random"</span>
 
-<span class="no">priors</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_priors_and_init.html">make_priors_and_init</a></span>(<span class="no">df</span>, <span class="no">col.variables</span>, <span class="no">col.item</span>, <span class="no">use.priors</span>, <span class="no">use.init</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">priors</span>)
-<span class="co">#&gt; [1] "mu"      "U"       "B.inv"   "nw"      "W.inv.1" "W.inv.2"</span></pre></body></html></div>
+<span class="va">priors</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_priors_and_init.html">make_priors_and_init</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">col.variables</span>, <span class="va">col.item</span>, <span class="va">use.priors</span>, <span class="va">use.init</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">priors</span><span class="op">)</span>
+<span class="co">#&gt; [1] "mu"      "U"       "B.inv"   "nw"      "W.inv.1" "W.inv.2"</span></code></pre></div>
 <div id="hyperpriors-on-mean" class="section level3">
 <h3 class="hasAnchor">
 <a href="#hyperpriors-on-mean" class="anchor"></a>Hyperpriors on mean</h3>
-<p><span class="math display">\[\theta_i \; | \; \mu, B \sim \quad N_p(\mu, B)\]</span></p>
+<p><span class="math display">\[\theta_i \mid \mu, B \sim N_p(\mu, B)\]</span></p>
 <ul>
-<li>Hyperprior for the between mean <span class="math inline">\(\mu\)</span>:</li>
+<li>Hyperprior for the between-sources mean <span class="math inline">\(\mu\)</span>:</li>
 </ul>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">priors</span>$<span class="no">mu</span>), <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'\\mu ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
-<p><span class="math display">\[ \mu = \begin{bmatrix}
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## priors$mu</span></code></pre></div>
+<p><span class="math display">\[ \hat{'mu} = \begin{bmatrix}
   6.8288 \\ 
   2.0473 \\ 
   0.8846 \\ 
   2.9926 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">list_exact</span>$<span class="no">mu.exact</span>), <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'\\mu ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## list_exact$mu.exact</span></code></pre></div>
 <p><span class="math display">\[ \mu = \begin{bmatrix}
   7.0000 \\ 
   2.0000 \\ 
@@ -228,17 +256,19 @@ We can use it to elicit the model hyperparameters:</p>
   3.0000 \\ 
    \end{bmatrix}  \]</span></p>
 <ul>
-<li>Hyperprior for the between covariance matrix <span class="math inline">\(B\)</span>:</li>
+<li>Hyperprior for the between-sources covariance matrix <span class="math inline">\(B\)</span>:</li>
 </ul>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="no">priors</span>$<span class="no">B.inv</span>, <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'B^{-1} ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
-<p><span class="math display">\[ B^{-1} = \begin{bmatrix}
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## priors$B.inv</span></code></pre></div>
+<p><span class="math display">\[ \hat{B}^{-1} = \begin{bmatrix}
   1.1238 &amp; 0.9870 &amp; -0.7478 &amp; -0.0710 \\ 
   0.9870 &amp; 2.1015 &amp; -0.8342 &amp; 0.1850 \\ 
   -0.7478 &amp; -0.8342 &amp; 0.8177 &amp; -0.1066 \\ 
   -0.0710 &amp; 0.1850 &amp; -0.1066 &amp; 0.1953 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="fu">solve_sympd</span>(<span class="no">list_exact</span>$<span class="no">B.exact</span>), <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'B^{-1} ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## list_exact$B.exact</span></code></pre></div>
 <p><span class="math display">\[ B^{-1} = \begin{bmatrix}
   0.9970 &amp; 0.9335 &amp; -0.7219 &amp; 0.0117 \\ 
   0.9335 &amp; 2.0978 &amp; -0.7957 &amp; 0.1698 \\ 
@@ -251,21 +281,23 @@ We can use it to elicit the model hyperparameters:</p>
 <a href="#hyperpriors-on-within-covariance-matrix" class="anchor"></a>Hyperpriors on within covariance matrix</h3>
 <p><span class="math display">\[ W_i \sim IW(n_w, U) \]</span></p>
 <ul>
-<li>Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance)</li>
+<li>Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance) s.t. the expected value of <span class="math inline">\(W_i\)</span> is defined</li>
 </ul>
 <p><span class="math display">\[n_w = 11\]</span></p>
 <ul>
 <li>Inverted Wishart scale matrix:</li>
 </ul>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="no">priors</span>$<span class="no">U</span>, <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'U ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
-<p><span class="math display">\[ U = \begin{bmatrix}
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## priors$U</span></code></pre></div>
+<p><span class="math display">\[ \hat{U} = \begin{bmatrix}
   1.6633 &amp; 1.1123 &amp; -1.3456 &amp; 1.6272 \\ 
   1.1123 &amp; 8.8548 &amp; -1.6904 &amp; -0.6213 \\ 
   -1.3456 &amp; -1.6904 &amp; 13.1649 &amp; 2.2322 \\ 
   1.6272 &amp; -0.6213 &amp; 2.2322 &amp; 5.0199 \\ 
    \end{bmatrix}  \]</span></p>
 <p>Exact:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="no">list_exact</span>$<span class="no">U.exact</span>, <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'U ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## list_exact$U.exact</span></code></pre></div>
 <p><span class="math display">\[ U = \begin{bmatrix}
   0.9172 &amp; 1.1136 &amp; -1.1124 &amp; 0.5796 \\ 
   1.1136 &amp; 11.4074 &amp; -3.4977 &amp; -1.5801 \\ 
@@ -277,16 +309,16 @@ We can use it to elicit the model hyperparameters:</p>
 <div id="initialisation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initialisation" class="anchor"></a>Initialisation</h2>
-<p>Within covariance matrices and their inverses: we initialize the chain with</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="no">priors</span>$<span class="no">W.inv.1</span>, <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'W^{-1}_1 ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
+<p>Within-source covariance matrices and their inverses: we initialize the chain with</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## priors$W.inv.1</span>
+<span class="co">## priors$W.inv.2</span></code></pre></div>
 <p><span class="math display">\[ W^{-1}_1 = \begin{bmatrix}
   8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
   -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
   0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
   -5.1136 &amp; 0.6541 &amp; -1.1145 &amp; 4.6794 \\ 
-   \end{bmatrix}  \]</span></p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu">bmatrix</span>(<span class="no">priors</span>$<span class="no">W.inv.2</span>, <span class="kw">pre</span> <span class="kw">=</span> <span class="st">'W^{-1}_2 ='</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="no">bmatrix.digits</span>)</pre></body></html></div>
-<p><span class="math display">\[ W^{-1}_2 = \begin{bmatrix}
+   \end{bmatrix}  \]</span><span class="math display">\[ W^{-1}_2 = \begin{bmatrix}
   8.2080 &amp; -1.2025 &amp; 0.2300 &amp; -5.1136 \\ 
   -1.2025 &amp; 0.6395 &amp; 0.1093 &amp; 0.6541 \\ 
   0.2300 &amp; 0.1093 &amp; 0.7650 &amp; -1.1145 \\ 
@@ -296,17 +328,45 @@ We can use it to elicit the model hyperparameters:</p>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>The list returned by <code>make_priors_and_init</code> can be used in calls to <code>marginalLikelihood</code> and <code>samesource_C</code>:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">priors</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_priors_and_init.html">make_priors_and_init</a></span>(<span class="no">df</span>, <span class="no">col.variables</span>, <span class="no">col.item</span>, <span class="no">use.priors</span>, <span class="no">use.init</span>)
+<p>The list returned by <code><a href="../reference/make_priors_and_init.html">make_priors_and_init()</a></code> can be used in calls to <code><a href="../reference/marginalLikelihood.html">marginalLikelihood()</a></code> and <code><a href="../reference/samesource_C.html">samesource_C()</a></code>:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">priors</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_priors_and_init.html">make_priors_and_init</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">col.variables</span>, <span class="va">col.item</span>, <span class="va">use.priors</span>, <span class="va">use.init</span><span class="op">)</span>
 
-<span class="no">mtx_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">df</span>[, <span class="no">col.variables</span>])
+<span class="va">mtx_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">df</span><span class="op">[</span>, <span class="va">col.variables</span><span class="op">]</span><span class="op">)</span>
 
-<span class="no">ml</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/marginalLikelihood.html">marginalLikelihood</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">mtx_data</span>, <span class="kw">n.iter</span> <span class="kw">=</span> <span class="fl">1000</span>, <span class="kw">burn.in</span> <span class="kw">=</span> <span class="fl">100</span>,
-                   <span class="kw">B.inv</span> <span class="kw">=</span> <span class="no">priors</span>$<span class="no">B.inv</span>,
-                   <span class="kw">W.inv</span> <span class="kw">=</span> <span class="no">priors</span>$<span class="no">W.inv.1</span>,
-                   <span class="kw">U</span> <span class="kw">=</span> <span class="no">priors</span>$<span class="no">U</span>,
-                   <span class="kw">nw</span> <span class="kw">=</span> <span class="no">priors</span>$<span class="no">nw</span>,
-                   <span class="kw">mu</span> <span class="kw">=</span> <span class="no">priors</span>$<span class="no">mu</span>)</pre></body></html></div>
+<span class="va">ml</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/marginalLikelihood.html">marginalLikelihood</a></span><span class="op">(</span>
+   X <span class="op">=</span> <span class="va">mtx_data</span>,
+   n.iter <span class="op">=</span> <span class="fl">1000</span>,
+   burn.in <span class="op">=</span> <span class="fl">100</span>,
+   B.inv <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">B.inv</span>,
+   W.inv <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">W.inv.1</span>,
+   U <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">U</span>,
+   nw <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">nw</span>,
+   mu <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">mu</span>
+<span class="op">)</span>
+
+<span class="va">ml</span>
+<span class="co">#&gt; [1] -509497.2</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/samesource_C.html">samesource_C</a></span><span class="op">(</span>
+   quest <span class="op">=</span> <span class="va">mtx_data</span>,
+   ref <span class="op">=</span> <span class="va">mtx_data</span>,
+   n.iter <span class="op">=</span> <span class="fl">1000</span>,
+   burn.in <span class="op">=</span> <span class="fl">100</span>,
+   B.inv <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">B.inv</span>,
+   W.inv.1 <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">W.inv.1</span>,
+   W.inv.2 <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">W.inv.1</span>,
+   U <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">U</span>,
+   nw <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">nw</span>,
+   mu <span class="op">=</span> <span class="va">priors</span><span class="op">$</span><span class="va">mu</span>
+<span class="op">)</span>
+
+<span class="va">bf</span>
+<span class="co">#&gt; [1] 80.74815</span></code></pre></div>
+</div>
+<div id="references" class="section level2">
+<h2 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h2>
 </div>
   </div>
 
@@ -325,7 +385,7 @@ We can use it to elicit the model hyperparameters:</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

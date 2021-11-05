@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 1.5.1.9000
-pkgdown_sha: cb74ce08c4b25adda98256ea46196b1182f4e0ea
+pkgdown: 1.6.1
+pkgdown_sha: ~
 articles:
   introduction: introduction.html
   prior_elicitation: prior_elicitation.html
-last_built: 2020-04-12T15:06Z
+last_built: 2021-11-05T17:36Z
 

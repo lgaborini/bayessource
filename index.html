@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -83,14 +83,15 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#bayessource" class="anchor"></a>bayessource</h1></div>
 <p>This R package evaluates through the Bayes Factor whether two sets of samples come from the same Multivariate Gaussian distribution or not.</p>
-<p>Currently implements a Gibbs sampler for the Multivariate Normal - Inverse Wishart model.</p>
+<p>It currently implements a fast Gibbs sampler for the Multivariate Normal - Inverse Wishart model.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>The packages is not released on CRAN yet.<br>
+<p>The package is not on CRAN yet.<br>
 It must be installed using <code>devtools</code> or <code>remotes</code> from this repository:</p>
-<pre><code><a href="https://remotes.r-lib.org/reference/install_github.html"># install.packages('remotes')
-remotes::install_github('lgaborini/bayessource')</a></code></pre>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages('remotes')</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'lgaborini/bayessource'</span><span class="op">)</span></code></pre></div>
 <!-- badges: start -->
 
 <!-- badges: end -->
@@ -98,7 +99,40 @@ remotes::install_github('lgaborini/bayessource')</a></code></pre>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
-<p>Documentation is available on <a href="https://lgaborini.github.io/bayessource">GitHub pages</a>.</p>
+<p>Documentation is available on <a href="https://lgaborini.github.io/bayessource">GitHub pages</a>, or in the <a href="%5Bdocs/index.html%5D">docs/index.html</a> file of the repository.</p>
+<p>Also see the vignettes:</p>
+<ul>
+<li><a href="https://lgaborini.github.io/bayessource/articles/introduction.html">Introduction</a></li>
+<li><a href="https://lgaborini.github.io/bayessource/articles/prior_elicitation.html">Prior elicitation</a></li>
+</ul>
+<div id="main-functions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#main-functions" class="anchor"></a>Main functions</h3>
+<ul>
+<li>
+<code><a href="reference/make_priors_and_init.html">make_priors_and_init()</a></code>: obtain hyperpriors and initialization from a background dataset</li>
+<li>
+<code><a href="reference/marginalLikelihood.html">marginalLikelihood()</a></code>: fast computation of the marginal likelihood</li>
+<li>
+<code><a href="reference/samesource_C.html">samesource_C()</a></code>: fast computation of the Bayes Factor (same source vs. different sources)</li>
+<li>
+<code><a href="reference/mcmc_postproc.html">mcmc_postproc()</a></code>: collect and tidy posterior samples from this package</li>
+</ul>
+</div>
+</div>
+<div id="extending" class="section level2">
+<h2 class="hasAnchor">
+<a href="#extending" class="anchor"></a>Extending</h2>
+<div id="writing-rd-documentation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#writing-rd-documentation" class="anchor"></a>Writing Rd documentation</h3>
+<p>The documentation uses some roxygen2 Rd templates to enter parametrization/model details. These are stored in the directory <code>man-roxygen</code>. When updating Rd templates, one must pay attenton that:</p>
+<ul>
+<li>LaTeX is supported only through the Rd <code>\eqn{latex}{ascii}</code> and <code>\deqn{latex}{ascii}</code> tags.</li>
+<li>it is best to write plain Rd or roxygen2 tags rather than Markdown tags</li>
+<li>sections must start with the <code>\@section title:</code> and end up after the Details. Do not forget the <code>:</code> at the end.</li>
+</ul>
+</div>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
@@ -141,7 +175,7 @@ remotes::install_github('lgaborini/bayessource')</a></code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

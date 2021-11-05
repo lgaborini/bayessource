@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Inverted Wishart density from the inverse (faster). — diwishart_inverse" />
-<meta property="og:description" content="Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
-Avoids a matrix inversion." />
+<meta property="og:description" content="Computes the pdf p_X(x) by knowing x^(-1)" />
 
 
 
@@ -73,7 +72,7 @@ Avoids a matrix inversion." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -81,7 +80,7 @@ Avoids a matrix inversion." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -128,26 +127,25 @@ Avoids a matrix inversion." />
     </div>
 
     <div class="ref-description">
-    <p>Computes the density of an Inverted Wishart (df, Sigma) in X, by supplying (X^(-1), df, Sigma) rather than (X, df, Sigma).
-Avoids a matrix inversion.</p>
+    <p>Computes the pdf p_X(x) by knowing x^(-1)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>diwishart_inverse</span>(<span class='no'>X_inv</span>, <span class='no'>df</span>, <span class='no'>Sigma</span>, <span class='kw'>logd</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>is_chol</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>diwishart_inverse</span><span class='op'>(</span><span class='va'>X_inv</span>, <span class='va'>df</span>, <span class='va'>Sigma</span>, logd <span class='op'>=</span> <span class='cn'>FALSE</span>, is_chol <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X_inv</th>
-      <td><p>inverse of X (the observation)</p></td>
+      <td><p>inverse of X (the data)</p></td>
     </tr>
     <tr>
       <th>df</th>
-      <td><p>degrees of freedom</p></td>
+      <td><p>degrees of freedom of the Inverted Wishart</p></td>
     </tr>
     <tr>
       <th>Sigma</th>
-      <td><p>scale matrix</p></td>
+      <td><p>scale matrix of the Inverted Wishart</p></td>
     </tr>
     <tr>
       <th>logd</th>
@@ -155,13 +153,14 @@ Avoids a matrix inversion.</p>
     </tr>
     <tr>
       <th>is_chol</th>
-      <td><p>if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X.inv</p></td>
+      <td><p>if TRUE, Sigma and X_inv are the upper Cholesky factors of Sigma and X_inv</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Computes the pdf p_X(x) by knowing x^(-1)</p>
+    <p>Computes the density of an Inverted Wishart (df, Sigma) in x, by supplying (x^(-1), df, Sigma) rather than (x, df, Sigma).
+Avoids a matrix inversion.</p>
     <h2 class="hasAnchor" id="inverted-wishart-parametrization-press-"><a class="anchor" href="#inverted-wishart-parametrization-press-"></a>Inverted Wishart parametrization (Press)</h2>
 
     
@@ -169,10 +168,10 @@ Avoids a matrix inversion.</p>
 
 <p>Uses (Press 2012)
  parametrization.</p>
-<p>$$X ~ IW(v, S)$$
-with \(S = pxp\) matrix, \(v &gt; 2p\) (the degrees of freedom).</p>
+<p>$$X \sim IW(\nu, S)$$
+with \(S\) is a \(p \times p\) matrix, \(\nu &gt; 2p\) (the degrees of freedom).</p>
 <p>Then:
-$$E[X] = S / (v - 2(p + 1))$$</p>
+$$E[X] = \frac{S}{\nu - 2(p + 1)}$$</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Press SJ (2012).
@@ -180,7 +179,37 @@ $$E[X] = S / (v - 2(p + 1))$$</p>
 Courier Corporation.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='diwishart.html'>diwishart</a></code>, <code><a href='dwishart.html'>dwishart</a></code></p></div>
+    <div class='dont-index'><p><code><a href='diwishart.html'>diwishart</a></code>, <code><a href='dwishart.html'>dwishart</a></code></p>
+<p>Other C++ functions: 
+<code><a href='chol2inv.html'>chol2inv</a>()</code>,
+<code><a href='dmvnorm.html'>dmvnorm</a>()</code>,
+<code><a href='inv_Cholesky_from_Cholesky.html'>inv_Cholesky_from_Cholesky</a>()</code>,
+<code><a href='inv_sympd_tol.html'>inv_sympd_tol</a>()</code>,
+<code><a href='inv_triangular.html'>inv_triangular</a>()</code>,
+<code><a href='isCholeskyOn.html'>isCholeskyOn</a>()</code>,
+<code><a href='ldet_from_Cholesky.html'>ldet_from_Cholesky</a>()</code>,
+<code><a href='logCummeanExp.html'>logCummeanExp</a>()</code>,
+<code><a href='logCumsumExp.html'>logCumsumExp</a>()</code>,
+<code><a href='logSumExpMean.html'>logSumExpMean</a>()</code>,
+<code><a href='logSumExp.html'>logSumExp</a>()</code>,
+<code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a>()</code>,
+<code><a href='rmvnorm.html'>rmvnorm</a>()</code>,
+<code><a href='rwish.html'>rwish</a>()</code></p>
+<p>Other statistical functions: 
+<code><a href='diwishart_inverse_R.html'>diwishart_inverse_R</a>()</code>,
+<code><a href='diwishart.html'>diwishart</a>()</code>,
+<code><a href='dmvnorm.html'>dmvnorm</a>()</code>,
+<code><a href='dwishart.html'>dwishart</a>()</code>,
+<code><a href='riwish_Press.html'>riwish_Press</a>()</code>,
+<code><a href='rmvnorm.html'>rmvnorm</a>()</code>,
+<code><a href='rwish.html'>rwish</a>()</code></p>
+<p>Other Wishart functions: 
+<code><a href='diwishart_inverse_R.html'>diwishart_inverse_R</a>()</code>,
+<code><a href='diwishart.html'>diwishart</a>()</code>,
+<code><a href='dwishart.html'>dwishart</a>()</code>,
+<code><a href='get_minimum_nw_IW.html'>get_minimum_nw_IW</a>()</code>,
+<code><a href='riwish_Press.html'>riwish_Press</a>()</code>,
+<code><a href='rwish.html'>rwish</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -197,7 +226,7 @@ Courier Corporation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

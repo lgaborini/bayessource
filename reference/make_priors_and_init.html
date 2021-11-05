@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -130,14 +130,14 @@
     <p>Here we fix the hyperparameters for priors on \(theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(mu\) and \(n_w\).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_priors_and_init</span>(
-  <span class='no'>df.background</span>,
-  <span class='no'>col.variables</span>,
-  <span class='no'>col.item</span>,
-  <span class='kw'>use.priors</span> <span class='kw'>=</span> <span class='st'>"ML"</span>,
-  <span class='kw'>use.init</span> <span class='kw'>=</span> <span class='st'>"random"</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>make_priors_and_init</span><span class='op'>(</span>
+  <span class='va'>df.background</span>,
+  <span class='va'>col.variables</span>,
+  <span class='va'>col.item</span>,
+  use.priors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ML"</span>, <span class='st'>"vague"</span><span class='op'>)</span>,
+  use.init <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"random"</span>, <span class='st'>"vague"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,7 +164,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>additional variables for priors, init</p></td>
+      <td><p>additional variables for priors, init (see the description)</p></td>
     </tr>
     </table>
 
@@ -173,55 +173,158 @@
     <p>a list of variables</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Here we fix the hyperparameters for priors on \(theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(mu\) and \(n_w\).</p>
-<p>An appropriate initialization value for \(W^{-1}_i\), \(i=1,2\) is also generated.</p>
-<p>Notice that we have three chains in the LR computations, the same initialization is used thrice.</p>
-    <h2 class="hasAnchor" id="priors"><a class="anchor" href="#priors"></a>Priors</h2>
-
-    
+    <p>An appropriate initialization value for \(W^{-1}_i\), \(i=1,2\) is also generated.</p>
+<p>Notice that we have three chains in the LR computations, the same initialization is used thrice.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Priors</h3>
 
 
 <p><code>use.priors</code>:</p><ul>
-<li><p><code>'ML'</code>: maximum likelihood estimation</p></li>
+<li><p><code>'ML'</code>: maximum likelihood estimation as in (Bozza et al. 2008)</p></li>
 <li><p><code>'vague'</code>: low-information priors</p>
-<p><code>U</code> is <code>alpha*diag(p)</code>, B is <code>beta*diag(p)</code>, <code>mu</code> is <code>mu0</code>.
-By default <code>alpha = 1, beta = 1, mu0 = 0</code></p></li>
+<p><code>U</code> is <code>alpha*diag(p)</code>, B is <code>beta*diag(p)</code>, <code>mu</code> is <code>mu0</code>.</p>
+<p>By default <code>alpha = 1, beta = 1, mu0 = 0</code></p></li>
 </ul>
 
 <p>The Wishart dofs <code>nw</code> are set as small as possible without losing full rank:
-\(nw = 2*(p + 1) + 1\)</p>
-    <h2 class="hasAnchor" id="initialization"><a class="anchor" href="#initialization"></a>Initialization</h2>
+\(nw = 2(p + 1) + 1\)</p>
 
-    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Initialization</h3>
 
 
+<p>Generate values for \(W^{-1}_1\), \(W^{-1}_2\) that will be used as starting values for the Gibbs chains.
+Two methods:</p>
 <p><code>use.init</code>:</p><ul>
-<li><p><code>'random'</code>: initialize according to the model</p></li>
-<li><p><code>'vague'</code>: low-information initialization
-\(W_i\) is <code>alpha_init + beta_init *diag(p)</code></p></li>
+<li><p><code>'random'</code>: initialize according to the model</p><ul>
+<li><p>generate one \(W_i \sim IW_p(nw, U)\)</p></li>
+<li><p>then invert: \(W^{-1}_i = (W_i)^{-1}\)</p></li>
+</ul></li>
+<li><p><code>'vague'</code>: low-information initialization</p><ul>
+<li><p>\(W_i = alpha_init + beta_init * diag(p)\)</p></li>
+</ul></li>
 </ul>
+
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Parameters</h3>
+
 
 <p>Some constants can be changed by passing the new values to <code>...</code> :</p><ul>
-<li><p><code>use.priors = 'vague'</code>:
-<code>alpha = 1, beta = 1, mu0 = 0</code></p></li>
-<li><p><code>use.init = 'vague'</code>:
-<code>alpha_init = 1, beta_init = 100</code></p></li>
+<li><p><code>use.priors = 'vague'</code>: accepts parameters</p><ul>
+<li><p><code>alpha</code> (default: <code>1</code>)</p></li>
+<li><p><code>beta</code> (default: <code>1</code>)</p></li>
+<li><p><code>mu0</code> (default: <code>0</code>)</p></li>
+</ul></li>
+<li><p><code>use.init = 'vague'</code>: accepts parameters</p><ul>
+<li><p><code>alpha_init</code> (default: <code>1</code>)</p></li>
+<li><p><code>beta_init</code> (default: <code>100</code>)</p></li>
+</ul></li>
 </ul>
 
-    <h2 class="hasAnchor" id="returns"><a class="anchor" href="#returns"></a>Returns</h2>
 
-    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Return values</h3>
 
 
 <p>A list of variables:</p><ul>
 <li><p><code>mu</code>: the global mean</p></li>
-<li><p><code>B.inv</code>: the between prior covariance, as the inverse</p></li>
+<li><p><code>B.inv</code>: the between-source prior covariance matrix, as the inverse</p></li>
 <li><p><code>U</code>: the Inverted Wishart scale matrix</p></li>
 <li><p><code>nw</code>: the Inverted Wishart dof</p></li>
-<li><p><code>W.inv.1</code>, <code>W.inv.2</code>: the within cov initializations, as inverses</p></li>
+<li><p><code>W.inv.1</code>, <code>W.inv.2</code>: the initializations for the within-source covariance matrices, as their inverses</p></li>
 </ul>
 
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other core functions: 
+<code><a href='bayessource-package.html'>bayessource-package</a></code>,
+<code><a href='get_minimum_nw_IW.html'>get_minimum_nw_IW</a>()</code>,
+<code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a>()</code>,
+<code><a href='marginalLikelihood.html'>marginalLikelihood</a>()</code>,
+<code><a href='mcmc_postproc.html'>mcmc_postproc</a>()</code>,
+<code><a href='samesource_C.html'>samesource_C</a>()</code>,
+<code><a href='two.level.multivariate.calculate.UC.html'>two.level.multivariate.calculate.UC</a>()</code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='co'># Use the iris data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>iris</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1          5.1         3.5          1.4         0.2  setosa</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2          4.9         3.0          1.4         0.2  setosa</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3          4.7         3.2          1.3         0.2  setosa</span>
+<span class='r-in'><span class='va'>col_variables</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>col_item</span> <span class='op'>&lt;-</span> <span class='fl'>5</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Elicitation using MLE</span></span>
+<span class='r-in'><span class='va'>priors_init</span> <span class='op'>&lt;-</span> <span class='fu'>make_priors_and_init</span><span class='op'>(</span></span>
+<span class='r-in'>   df.background <span class='op'>=</span> <span class='va'>iris</span>,</span>
+<span class='r-in'>   col.variables <span class='op'>=</span> <span class='va'>col_variables</span>,</span>
+<span class='r-in'>   col.item <span class='op'>=</span> <span class='va'>col_item</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>priors_init</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $mu</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  [,1]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length 5.843333</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length 3.758000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $U</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              Sepal.Length Petal.Length</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sepal.Length    0.2650082    0.1675143</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Petal.Length    0.1675143    0.1851878</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $B.inv</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           [,1]      [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 135.25611 -51.13409</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -51.13409  19.56022</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nw</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $W.inv.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           [,1]      [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  4.852533 -4.417948</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -4.417948  6.689959</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $W.inv.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           [,1]      [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  4.852533 -4.417948</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -4.417948  6.689959</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>priors_init_2</span> <span class='op'>&lt;-</span> <span class='fu'>make_priors_and_init</span><span class='op'>(</span></span>
+<span class='r-in'>   df.background <span class='op'>=</span> <span class='va'>iris</span>,</span>
+<span class='r-in'>   col.variables <span class='op'>=</span> <span class='va'>col_variables</span>,</span>
+<span class='r-in'>   col.item <span class='op'>=</span> <span class='va'>col_item</span>,</span>
+<span class='r-in'>   use.priors <span class='op'>=</span> <span class='st'>"vague"</span>,</span>
+<span class='r-in'>   alpha_init <span class='op'>=</span> <span class='fl'>100</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>priors_init_2</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $mu</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $U</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]    1    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]    0    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $B.inv</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      [,1] [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]    1    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]    0    1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nw</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $W.inv.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           [,1]      [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  4.715651 -3.956177</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -3.956177  8.275267</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $W.inv.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           [,1]      [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  4.715651 -3.956177</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -3.956177  8.275267</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -237,7 +340,7 @@ By default <code>alpha = 1, beta = 1, mu0 = 0</code></p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

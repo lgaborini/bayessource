@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -130,12 +130,12 @@
     <p>Two-level function: item is chosen with the third parameter.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>two.level.multivariate.calculate.UC</span>(
-  <span class='no'>population</span>,
-  <span class='no'>idx.variables</span>,
-  <span class='no'>idx.item</span>,
-  <span class='kw'>singular.action</span> <span class='kw'>=</span> <span class='st'>"skip"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>two.level.multivariate.calculate.UC</span><span class='op'>(</span>
+  <span class='va'>population</span>,
+  <span class='va'>idx.variables</span>,
+  <span class='va'>idx.item</span>,
+  singular.action <span class='op'>=</span> <span class='st'>"skip"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,8 +171,18 @@
 
     <p>Items who are observed only once cannot contribute to within covariance estimation.
 In that case, either we skip its contribute (default) or fail.</p>
-<p>Multivariate functions supporting paper:
-Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl</p>
+<p>Multivariate functions supporting paper:</p>
+<p>Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl - "Probabilistic evaluation of handwriting evidence: likelihood ratio for authorship"</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other core functions: 
+<code><a href='bayessource-package.html'>bayessource-package</a></code>,
+<code><a href='get_minimum_nw_IW.html'>get_minimum_nw_IW</a>()</code>,
+<code><a href='make_priors_and_init.html'>make_priors_and_init</a>()</code>,
+<code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a>()</code>,
+<code><a href='marginalLikelihood.html'>marginalLikelihood</a>()</code>,
+<code><a href='mcmc_postproc.html'>mcmc_postproc</a>()</code>,
+<code><a href='samesource_C.html'>samesource_C</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -189,7 +199,7 @@ Bozza, A., Taroni, F., Marquis, R., M. Schmittbuhl</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

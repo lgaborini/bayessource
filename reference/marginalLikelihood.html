@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model. — marginalLikelihood • bayessource</title>
+<title>Fast computation of the marginal likelihood for the Normal-Inverted Wishart model. — marginalLikelihood • bayessource</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model. — marginalLikelihood" />
-<meta property="og:description" content="Implemented in C.
-See diwishart_inverse for the parametrization of the Inverted Wishart.
-See marginalLikelihood_internal for further documentation." />
+<meta property="og:title" content="Fast computation of the marginal likelihood for the Normal-Inverted Wishart model. — marginalLikelihood" />
+<meta property="og:description" content="This is the numerator of the Bayes factor: assume that all observations come from the same source.
+Implemented in C." />
 
 
 
@@ -74,7 +73,7 @@ See marginalLikelihood_internal for further documentation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -82,7 +81,7 @@ See marginalLikelihood_internal for further documentation." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -123,53 +122,52 @@ See marginalLikelihood_internal for further documentation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.</h1>
+    <h1>Fast computation of the marginal likelihood for the Normal-Inverted Wishart model.</h1>
     
     <div class="hidden name"><code>marginalLikelihood.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Implemented in C.
-See <code><a href='diwishart_inverse.html'>diwishart_inverse</a></code> for the parametrization of the Inverted Wishart.
-See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a></code> for further documentation.</p>
+    <p>This is the numerator of the Bayes factor: assume that all observations come from the same source.
+Implemented in C.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>marginalLikelihood</span>(
-  <span class='no'>X</span>,
-  <span class='no'>n.iter</span>,
-  <span class='no'>B.inv</span>,
-  <span class='no'>W.inv</span>,
-  <span class='no'>U</span>,
-  <span class='no'>nw</span>,
-  <span class='no'>mu</span>,
-  <span class='no'>burn.in</span>,
-  <span class='kw'>output.mcmc</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>Gibbs_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>marginalLikelihood</span><span class='op'>(</span>
+  <span class='va'>X</span>,
+  <span class='va'>n.iter</span>,
+  <span class='va'>B.inv</span>,
+  <span class='va'>W.inv</span>,
+  <span class='va'>U</span>,
+  <span class='va'>nw</span>,
+  <span class='va'>mu</span>,
+  <span class='va'>burn.in</span>,
+  output.mcmc <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  Gibbs_only <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>the dataset</p></td>
+      <td><p>the observation matrix (\(n \times p\): n = observation, p = variables)</p></td>
     </tr>
     <tr>
       <th>n.iter</th>
-      <td><p>number of MC iterations</p></td>
+      <td><p>number of MCMC iterations excluding burn-in</p></td>
     </tr>
     <tr>
       <th>B.inv</th>
-      <td><p>prior inverse of between covariance matrix</p></td>
+      <td><p>prior inverse of between-source covariance matrix</p></td>
     </tr>
     <tr>
       <th>W.inv</th>
-      <td><p>prior inverse of within covariance matrix</p></td>
+      <td><p>initialization for prior inverse of within-source covariance matrix</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>covariance matrix for the mean</p></td>
+      <td><p>covariance matrix for the mean (\(p \times p\)</p></td>
     </tr>
     <tr>
       <th>nw</th>
@@ -177,15 +175,15 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
     </tr>
     <tr>
       <th>mu</th>
-      <td><p>prior mean</p></td>
+      <td><p>prior mean (\(p \times 1\)</p></td>
     </tr>
     <tr>
       <th>burn.in</th>
-      <td><p>burn-in iterations</p></td>
+      <td><p>number of MCMC burn-in iterations</p></td>
     </tr>
     <tr>
       <th>output.mcmc</th>
-      <td><p>output the entire chain</p></td>
+      <td><p>if TRUE output the entire chain as a coda object, else just return the log-ml value</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -193,27 +191,58 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
     </tr>
     <tr>
       <th>Gibbs_only</th>
-      <td><p>if TRUE, only return the Gibbs posterior samples. Implies chain_output = TRUE.</p></td>
+      <td><p>if TRUE, only return the Gibbs posterior samples. Implies <code>chain_output = TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>n_iter</th>
+      <td><p>number of MCMC iterations excluding burn-in</p></td>
+    </tr>
+    <tr>
+      <th>burn_in</th>
+      <td><p>number of MCMC burn-in iterations</p></td>
+    </tr>
+    <tr>
+      <th>B_inv</th>
+      <td><p>prior inverse of between-source covariance matrix</p></td>
+    </tr>
+    <tr>
+      <th>W_inv</th>
+      <td><p>initialization for prior inverse of within-source covariance matrix</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the log-marginal likelihood value, or a list(the log-ml value, <code>coda</code> object with the posterior samples)</p>
-    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-et-al-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-et-al-"></a>Normal-Inverse-Wishart model(Bozza et al. 2008)
-</h2>
+    <p>the log-marginal likelihood value, or a list:</p><ul>
+<li><p><code>value</code>: the log-ml value</p></li>
+<li><p><code>mcmc</code>: a <code>coda</code> object with the posterior samples</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>See <code><a href='diwishart_inverse.html'>diwishart_inverse</a></code> for the parametrization of the Inverted Wishart.
+See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a></code> for further documentation.</p>
+    <h2 class="hasAnchor" id="normal-inverse-wishart-model"><a class="anchor" href="#normal-inverse-wishart-model"></a>Normal-Inverse-Wishart model</h2>
 
     
 
 
-<p>Observation level:
-$$X_{ij} ~ N_p(theta_i, W_i)$$ (i = population, j = items in population)</p>
-<p>Group level:
-$$theta_i ~ N_p(\mu, B)$$
-$$W_i ~ IW_p(nw, U)$$</p>
-<p>Hyperparameters:
-\(B, U, nw, \mu\)</p>
-<p>A Gibbs sampler supplies theta, W^(-1).</p>
+<p>Described in (Bozza et al. 2008)
+.</p>
+<p>Observation level:</p><ul>
+<li><p>$$X_{ij} \sim N_p(\theta_i, W_i)$$ (i = source, j = items from source)</p></li>
+</ul>
+
+<p>Group level:</p><ul>
+<li><p>$$\theta_i \sim N_p(\mu, B)$$</p></li>
+<li><p>$$W_i \sim IW_p(\nu_w, U)$$</p></li>
+</ul>
+
+<p>Hyperparameters:</p><ul>
+<li><p>$$B, U, \nu_w, \mu$$</p></li>
+</ul>
+
+<p>Posterior samples of \(\theta\), \(W^{(-1)}\) can be generated with a Gibbs sampler.</p>
     <h2 class="hasAnchor" id="inverted-wishart-parametrization-press-"><a class="anchor" href="#inverted-wishart-parametrization-press-"></a>Inverted Wishart parametrization (Press)</h2>
 
     
@@ -221,10 +250,10 @@ $$W_i ~ IW_p(nw, U)$$</p>
 
 <p>Uses (Press 2012)
  parametrization.</p>
-<p>$$X ~ IW(v, S)$$
-with \(S = pxp\) matrix, \(v &gt; 2p\) (the degrees of freedom).</p>
+<p>$$X \sim IW(\nu, S)$$
+with \(S\) is a \(p \times p\) matrix, \(\nu &gt; 2p\) (the degrees of freedom).</p>
 <p>Then:
-$$E[X] = S / (v - 2(p + 1))$$</p>
+$$E[X] = \frac{S}{\nu - 2(p + 1)}$$</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Bozza S, Taroni F, Marquis R, Schmittbuhl M (2008).
@@ -236,8 +265,111 @@ ISSN 1467-9876, doi: <a href='https://doi.org/10.1111/j.1467-9876.2007.00616.x'>
 Courier Corporation.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>marginalLikelihood_internal</p></div>
+    <div class='dont-index'><p>Other core functions: 
+<code><a href='bayessource-package.html'>bayessource-package</a></code>,
+<code><a href='get_minimum_nw_IW.html'>get_minimum_nw_IW</a>()</code>,
+<code><a href='make_priors_and_init.html'>make_priors_and_init</a>()</code>,
+<code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a>()</code>,
+<code><a href='mcmc_postproc.html'>mcmc_postproc</a>()</code>,
+<code><a href='samesource_C.html'>samesource_C</a>()</code>,
+<code><a href='two.level.multivariate.calculate.UC.html'>two.level.multivariate.calculate.UC</a>()</code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='co'># Use the iris data</span></span>
+<span class='r-in'><span class='va'>df_X</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>df_X</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Observations</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='marginalLikelihood-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># True species</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>X</span>, col <span class='op'>=</span> <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='marginalLikelihood-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Priors</span></span>
+<span class='r-in'><span class='va'>B.inv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>W.inv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>U</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mu</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colSums.html'>colMeans</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># d.o.f.</span></span>
+<span class='r-in'><span class='va'>nw</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_minimum_nw_IW.html'>get_minimum_nw_IW</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Computational parameters</span></span>
+<span class='r-in'><span class='va'>n_iter</span> <span class='op'>&lt;-</span> <span class='fl'>10000</span></span>
+<span class='r-in'><span class='va'>n_burn_in</span> <span class='op'>&lt;-</span> <span class='fl'>1000</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Compute the marginal likelihood</span></span>
+<span class='r-in'><span class='fu'>marginalLikelihood</span><span class='op'>(</span></span>
+<span class='r-in'>   X <span class='op'>=</span> <span class='va'>X</span>,</span>
+<span class='r-in'>   n.iter <span class='op'>=</span> <span class='va'>n_iter</span>,</span>
+<span class='r-in'>   B.inv <span class='op'>=</span> <span class='va'>B.inv</span>,</span>
+<span class='r-in'>   W.inv <span class='op'>=</span> <span class='va'>W.inv</span>,</span>
+<span class='r-in'>   U <span class='op'>=</span> <span class='va'>U</span>,</span>
+<span class='r-in'>   nw <span class='op'>=</span> <span class='va'>nw</span>,</span>
+<span class='r-in'>   burn.in <span class='op'>=</span> <span class='va'>n_burn_in</span>,</span>
+<span class='r-in'>   mu <span class='op'>=</span> <span class='va'>mu</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -389.6291</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Diagnostics ------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Retain the full Gibbs output</span></span>
+<span class='r-in'><span class='va'>list_mcmc</span> <span class='op'>&lt;-</span> <span class='fu'>marginalLikelihood</span><span class='op'>(</span></span>
+<span class='r-in'>   X <span class='op'>=</span> <span class='va'>X</span>,</span>
+<span class='r-in'>   n.iter <span class='op'>=</span> <span class='fl'>10000</span>,</span>
+<span class='r-in'>   B.inv <span class='op'>=</span> <span class='va'>B.inv</span>,</span>
+<span class='r-in'>   W.inv <span class='op'>=</span> <span class='va'>W.inv</span>,</span>
+<span class='r-in'>   U <span class='op'>=</span> <span class='va'>U</span>,</span>
+<span class='r-in'>   nw <span class='op'>=</span> <span class='fu'><a href='get_minimum_nw_IW.html'>get_minimum_nw_IW</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>,</span>
+<span class='r-in'>   burn.in <span class='op'>=</span> <span class='fl'>1000</span>,</span>
+<span class='r-in'>   mu <span class='op'>=</span> <span class='va'>mu</span>,</span>
+<span class='r-in'>   output.mcmc <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># The log-ML value</span></span>
+<span class='r-in'><span class='va'>list_mcmc</span><span class='op'>$</span><span class='va'>value</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -389.6172</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># The full Gibbs chain output</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>coda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>list_mcmc</span><span class='op'>$</span><span class='va'>mcmc</span>, <span class='fl'>20</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Markov Chain Monte Carlo (MCMC) output:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Start = 1001 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> End = 1021 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Thinning interval = 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        theta.1  theta.2  W.inv.1   W.inv.2   W.inv.3  W.inv.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1,] 5.898239 3.811222 7.011690 -2.891335 -2.891335 1.555184</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2,] 5.927134 3.937147 6.576140 -2.745591 -2.745591 1.489662</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3,] 5.770463 3.479544 6.292374 -2.449272 -2.449272 1.282902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4,] 5.810105 3.758315 5.929512 -2.296870 -2.296870 1.207949</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5,] 5.680161 3.371093 6.800086 -2.686530 -2.686530 1.349990</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6,] 5.836394 3.757327 4.765470 -1.886765 -1.886765 1.051854</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7,] 5.768559 3.674916 5.514650 -2.095875 -2.095875 1.056083</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8,] 5.899820 3.943731 5.722077 -2.258172 -2.258172 1.188828</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9,] 5.782385 3.701671 6.541726 -2.671059 -2.671059 1.420142</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10,] 5.849733 3.744221 6.694601 -2.737320 -2.737320 1.512495</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [11,] 5.826484 3.843107 6.015471 -2.459960 -2.459960 1.363562</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [12,] 5.891090 3.782015 5.184274 -2.038621 -2.038621 1.111419</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [13,] 5.829639 3.685075 6.055362 -2.549394 -2.549394 1.436956</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [14,] 5.841186 3.757739 5.308610 -2.186497 -2.186497 1.259971</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [15,] 5.852877 3.754006 5.928448 -2.242769 -2.242769 1.162160</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [16,] 5.831648 3.745047 5.485581 -2.240708 -2.240708 1.225495</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [17,] 5.814808 3.863164 6.271212 -2.608636 -2.608636 1.416767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [18,] 5.885241 3.852222 5.798279 -2.310417 -2.310417 1.259523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [19,] 5.949191 4.022692 6.312793 -2.828027 -2.828027 1.548513</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [20,] 5.864020 3.732325 7.045109 -2.748375 -2.748375 1.407702</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [21,] 5.867916 3.785798 5.764394 -2.599724 -2.599724 1.532775</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Diagnostics plots by coda</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>list_mcmc</span><span class='op'>$</span><span class='va'>mcmc</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='marginalLikelihood-3.png' alt='' width='700' height='433' /></span>
+<span class='r-plt img'><img src='marginalLikelihood-4.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='fu'>coda</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/coda/man/autocorr.plot.html'>autocorr.plot</a></span><span class='op'>(</span><span class='va'>list_mcmc</span><span class='op'>$</span><span class='va'>mcmc</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='marginalLikelihood-5.png' alt='' width='700' height='433' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -253,7 +385,7 @@ Courier Corporation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -74,7 +74,7 @@ See marginalLikelihood_internal for further documentation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ See marginalLikelihood_internal for further documentation." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -134,51 +134,51 @@ See <code><a href='diwishart_inverse.html'>diwishart_inverse</a></code> for the 
 See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a></code> for further documentation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>samesource_C</span>(
-  <span class='no'>quest</span>,
-  <span class='no'>ref</span>,
-  <span class='no'>n.iter</span>,
-  <span class='no'>B.inv</span>,
-  <span class='no'>W.inv.1</span>,
-  <span class='no'>W.inv.2</span>,
-  <span class='no'>U</span>,
-  <span class='no'>nw</span>,
-  <span class='no'>mu</span>,
-  <span class='no'>burn.in</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>marginals</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>samesource_C</span><span class='op'>(</span>
+  <span class='va'>quest</span>,
+  <span class='va'>ref</span>,
+  <span class='va'>n.iter</span>,
+  <span class='va'>B.inv</span>,
+  <span class='va'>W.inv.1</span>,
+  <span class='va'>W.inv.2</span>,
+  <span class='va'>U</span>,
+  <span class='va'>nw</span>,
+  <span class='va'>mu</span>,
+  <span class='va'>burn.in</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  marginals <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>quest</th>
-      <td><p>the questioned dataset</p></td>
+      <td><p>the questioned dataset (nq * p matrix)</p></td>
     </tr>
     <tr>
       <th>ref</th>
-      <td><p>the reference dataset</p></td>
+      <td><p>the reference dataset (nr * p matrix)</p></td>
     </tr>
     <tr>
       <th>n.iter</th>
-      <td><p>number of MC iterations</p></td>
+      <td><p>number of MCMC iterations excluding burn-in</p></td>
     </tr>
     <tr>
       <th>B.inv</th>
-      <td><p>prior inverse of between covariance matrix</p></td>
+      <td><p>prior inverse of between-source covariance matrix</p></td>
     </tr>
     <tr>
       <th>W.inv.1</th>
-      <td><p>prior inverse of within covariance matrix (questioned items)</p></td>
+      <td><p>prior inverse of within-source covariance matrix (questioned items)</p></td>
     </tr>
     <tr>
       <th>W.inv.2</th>
-      <td><p>prior inverse of within covariance matrix (reference items)</p></td>
+      <td><p>prior inverse of within-source covariance matrix (reference items)</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>covariance matrix for the mean</p></td>
+      <td><p>covariance matrix for the mean (\(p \times p\)</p></td>
     </tr>
     <tr>
       <th>nw</th>
@@ -186,11 +186,11 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
     </tr>
     <tr>
       <th>mu</th>
-      <td><p>prior mean</p></td>
+      <td><p>prior mean (\(p \times 1\)</p></td>
     </tr>
     <tr>
       <th>burn.in</th>
-      <td><p>burn-in iterations</p></td>
+      <td><p>number of MCMC burn-in iterations</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -198,27 +198,40 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
     </tr>
     <tr>
       <th>marginals</th>
-      <td><p>return the marginal likelihoods in the LR formula (default: FALSE)</p></td>
+      <td><p>if TRUE, also return the marginal likelihoods in the LR formula (default: FALSE)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>the log-BF value (base e), or a list with the log-BF and the marginals: <code><a href='https://rdrr.io/r/base/list.html'>list(value, log_ml_Hp, log_ml_Hd_ref, log_ml_Hd_quest)</a></code></p>
-    <h2 class="hasAnchor" id="normal-inverse-wishart-model-bozza-et-al-"><a class="anchor" href="#normal-inverse-wishart-model-bozza-et-al-"></a>Normal-Inverse-Wishart model(Bozza et al. 2008)
-</h2>
+    <p>the log-BF value (base e), or a list with the log-BF and the computed marginal likelihoods:</p><ul>
+<li><p><code>value</code>: the log-BF value (base e)</p></li>
+<li><p><code>log_ml_Hp</code>: log-BF numerator (from reference = questioned source)</p></li>
+<li><p><code>log_ml_Hd_ref</code>: log-BF denominator from reference source</p></li>
+<li><p><code>log_ml_Hd_quest</code>: log-BF denominator from questioned (!= reference) source</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="normal-inverse-wishart-model"><a class="anchor" href="#normal-inverse-wishart-model"></a>Normal-Inverse-Wishart model</h2>
 
     
 
 
-<p>Observation level:
-$$X_{ij} ~ N_p(theta_i, W_i)$$ (i = population, j = items in population)</p>
-<p>Group level:
-$$theta_i ~ N_p(\mu, B)$$
-$$W_i ~ IW_p(nw, U)$$</p>
-<p>Hyperparameters:
-\(B, U, nw, \mu\)</p>
-<p>A Gibbs sampler supplies theta, W^(-1).</p>
+<p>Described in (Bozza et al. 2008)
+.</p>
+<p>Observation level:</p><ul>
+<li><p>$$X_{ij} \sim N_p(\theta_i, W_i)$$ (i = source, j = items from source)</p></li>
+</ul>
+
+<p>Group level:</p><ul>
+<li><p>$$\theta_i \sim N_p(\mu, B)$$</p></li>
+<li><p>$$W_i \sim IW_p(\nu_w, U)$$</p></li>
+</ul>
+
+<p>Hyperparameters:</p><ul>
+<li><p>$$B, U, \nu_w, \mu$$</p></li>
+</ul>
+
+<p>Posterior samples of \(\theta\), \(W^{(-1)}\) can be generated with a Gibbs sampler.</p>
     <h2 class="hasAnchor" id="inverted-wishart-parametrization-press-"><a class="anchor" href="#inverted-wishart-parametrization-press-"></a>Inverted Wishart parametrization (Press)</h2>
 
     
@@ -226,10 +239,10 @@ $$W_i ~ IW_p(nw, U)$$</p>
 
 <p>Uses (Press 2012)
  parametrization.</p>
-<p>$$X ~ IW(v, S)$$
-with \(S = pxp\) matrix, \(v &gt; 2p\) (the degrees of freedom).</p>
+<p>$$X \sim IW(\nu, S)$$
+with \(S\) is a \(p \times p\) matrix, \(\nu &gt; 2p\) (the degrees of freedom).</p>
 <p>Then:
-$$E[X] = S / (v - 2(p + 1))$$</p>
+$$E[X] = \frac{S}{\nu - 2(p + 1)}$$</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Bozza S, Taroni F, Marquis R, Schmittbuhl M (2008).
@@ -241,7 +254,15 @@ ISSN 1467-9876, doi: <a href='https://doi.org/10.1111/j.1467-9876.2007.00616.x'>
 Courier Corporation.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>marginalLikelihood</p></div>
+    <div class='dont-index'><p>marginalLikelihood</p>
+<p>Other core functions: 
+<code><a href='bayessource-package.html'>bayessource-package</a></code>,
+<code><a href='get_minimum_nw_IW.html'>get_minimum_nw_IW</a>()</code>,
+<code><a href='make_priors_and_init.html'>make_priors_and_init</a>()</code>,
+<code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a>()</code>,
+<code><a href='marginalLikelihood.html'>marginalLikelihood</a>()</code>,
+<code><a href='mcmc_postproc.html'>mcmc_postproc</a>()</code>,
+<code><a href='two.level.multivariate.calculate.UC.html'>two.level.multivariate.calculate.UC</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -258,7 +279,7 @@ Courier Corporation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Computes log( cumsum_i( exp(v((i))) ) ) in a stable way. — logCumsumExp • bayessource</title>
+<title>Computes log( cumsum_i( exp(v_i) )) in a stable way. — logCumsumExp • bayessource</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Computes log( cumsum_i( exp(v((i))) ) ) in a stable way. — logCumsumExp" />
-<meta property="og:description" content="Computes log( cumsum_i( exp(v((i))) ) ) in a stable way." />
+<meta property="og:title" content="Computes log( cumsum_i( exp(v_i) )) in a stable way. — logCumsumExp" />
+<meta property="og:description" content="Computes log( cumsum_i( exp(v_i) )) in a stable way." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -121,18 +121,45 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.</h1>
+    <h1>Computes log( cumsum_i( exp(v_i) )) in a stable way.</h1>
     
     <div class="hidden name"><code>logCumsumExp.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Computes log( cumsum_i( exp(v((i))) ) ) in a stable way.</p>
+    <p>Computes log( cumsum_i( exp(v_i) )) in a stable way.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>logCumsumExp</span>(<span class='no'>v</span>)</pre>
+    <pre class="usage"><span class='fu'>logCumsumExp</span><span class='op'>(</span><span class='va'>v</span><span class='op'>)</span></pre>
 
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other C++ functions: 
+<code><a href='chol2inv.html'>chol2inv</a>()</code>,
+<code><a href='diwishart_inverse.html'>diwishart_inverse</a>()</code>,
+<code><a href='dmvnorm.html'>dmvnorm</a>()</code>,
+<code><a href='inv_Cholesky_from_Cholesky.html'>inv_Cholesky_from_Cholesky</a>()</code>,
+<code><a href='inv_sympd_tol.html'>inv_sympd_tol</a>()</code>,
+<code><a href='inv_triangular.html'>inv_triangular</a>()</code>,
+<code><a href='isCholeskyOn.html'>isCholeskyOn</a>()</code>,
+<code><a href='ldet_from_Cholesky.html'>ldet_from_Cholesky</a>()</code>,
+<code><a href='logCummeanExp.html'>logCummeanExp</a>()</code>,
+<code><a href='logSumExpMean.html'>logSumExpMean</a>()</code>,
+<code><a href='logSumExp.html'>logSumExp</a>()</code>,
+<code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a>()</code>,
+<code><a href='rmvnorm.html'>rmvnorm</a>()</code>,
+<code><a href='rwish.html'>rwish</a>()</code></p>
+<p>Other math functions: 
+<code><a href='chol2inv.html'>chol2inv</a>()</code>,
+<code><a href='inv_Cholesky_from_Cholesky.html'>inv_Cholesky_from_Cholesky</a>()</code>,
+<code><a href='inv_pd.html'>inv_pd</a>()</code>,
+<code><a href='inv_sympd_tol.html'>inv_sympd_tol</a>()</code>,
+<code><a href='inv_triangular.html'>inv_triangular</a>()</code>,
+<code><a href='ldet_from_Cholesky.html'>ldet_from_Cholesky</a>()</code>,
+<code><a href='logCummeanExp.html'>logCummeanExp</a>()</code>,
+<code><a href='logSumExpMean.html'>logSumExpMean</a>()</code>,
+<code><a href='logSumExp.html'>logSumExp</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -149,7 +176,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

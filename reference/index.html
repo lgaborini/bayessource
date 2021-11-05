@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bayessource</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -134,8 +134,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-core-functions" class="hasAnchor"><a href="#section-core-functions" class="anchor"></a>Core functions</h2>
+          <p class="section-desc"><p>Tools to elicit priors, compute marginal likelihoods and Bayes factors. Start from these to deploy {bayessource} to your project.</p></p>
         </th>
       </tr>
       
@@ -146,10 +146,78 @@
       <tr>
         
         <td>
-          <p><code><a href="bayessource.html">bayessource</a></code> </p>
+          <p><code><a href="bayessource-package.html">bayessource-package</a></code> </p>
         </td>
-        <td><p>bayessource</p></td>
+        <td><p>Package bayessource</p></td>
       </tr><tr>
+        
+        <td>
+          <p><code><a href="get_minimum_nw_IW.html">get_minimum_nw_IW()</a></code> </p>
+        </td>
+        <td><p>Get minimum degrees of freedom for Inverted Wishart</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="make_priors_and_init.html">make_priors_and_init()</a></code> </p>
+        </td>
+        <td><p>Elicit priors and initialization from background dataset</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="marginalLikelihood.html">marginalLikelihood()</a></code> </p>
+        </td>
+        <td><p>Fast computation of the marginal likelihood for the Normal-Inverted Wishart model.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mcmc_postproc.html">mcmc_postproc()</a></code> </p>
+        </td>
+        <td><p>Post-process Gibbs chain outputs.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="samesource_C.html">samesource_C()</a></code> </p>
+        </td>
+        <td><p>Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-statistical-functions" class="hasAnchor"><a href="#section-statistical-functions" class="anchor"></a>Statistical functions</h2>
+          <p class="section-desc"><p>Functions to sample from statistical distributions or compute densities.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="dmvnorm.html">dmvnorm()</a></code> </p>
+        </td>
+        <td><p>Multivariate normal density. Assumes symmetry.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rmvnorm.html">rmvnorm()</a></code> </p>
+        </td>
+        <td><p>Generate from multivariate normal.</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-wishart-inverted-wishart-functions" class="hasAnchor"><a href="#section-wishart-inverted-wishart-functions" class="anchor"></a>Wishart / Inverted Wishart functions</h3>
+          <p class="section-desc"><p>Densities, sampling.</p></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="diwishart.html">diwishart()</a></code> </p>
@@ -161,12 +229,6 @@
           <p><code><a href="diwishart_inverse.html">diwishart_inverse()</a></code> </p>
         </td>
         <td><p>Inverted Wishart density from the inverse (faster).</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dmvnorm.html">dmvnorm()</a></code> </p>
-        </td>
-        <td><p>Multivariate normal density. Assumes symmetry.</p></td>
       </tr><tr>
         
         <td>
@@ -182,51 +244,34 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="inv_pd.html">inv_pd()</a></code> </p>
-        </td>
-        <td><p>Compute the inverse of a positive-definite matrix</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="make_priors_and_init.html">make_priors_and_init()</a></code> </p>
-        </td>
-        <td><p>Elicit priors and initialization from background dataset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="marginalLikelihood.html">marginalLikelihood()</a></code> </p>
-        </td>
-        <td><p>Fast Bayesian marginal likelihood for the Normal - Inverted Wishart model.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="mcmc_postproc.html">mcmc_postproc()</a></code> </p>
-        </td>
-        <td><p>Post-process Gibbs chain outputs.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="riwish_Press.html">riwish_Press()</a></code> </p>
         </td>
         <td><p>Generate random sample from Inverted Wishart.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="rmvnorm.html">rmvnorm()</a></code> </p>
-        </td>
-        <td><p>Generate from multivariate normal.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="rwish.html">rwish()</a></code> </p>
         </td>
         <td><p>Generate random sample from Wishart (faster).</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-other-functions" class="hasAnchor"><a href="#section-other-functions" class="anchor"></a>Other functions</h2>
+          <p class="section-desc"><p>Unsorted functions: mathematical tools, etc.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
-          <p><code><a href="samesource_C.html">samesource_C()</a></code> </p>
+          <p><code><a href="inv_pd.html">inv_pd()</a></code> </p>
         </td>
-        <td><p>Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.</p></td>
+        <td><p>Compute the inverse of a positive-definite matrix</p></td>
       </tr>
     </tbody>
     </table>
@@ -246,7 +291,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
