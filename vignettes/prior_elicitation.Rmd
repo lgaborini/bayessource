@@ -2,11 +2,14 @@
 title: "Prior elicitation"
 author: "Lorenzo Gaborini"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+   rmarkdown::html_vignette:
+      default
 vignette: >
   %\VignetteIndexEntry{Prior elicitation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: vignette.bib
 ---
 
 ```{r setup, include = FALSE}
@@ -64,7 +67,7 @@ We will generate the data according to the model: for sources $i = 1, \ldots, m$
 \begin{align}
 X_{ij} \mid \theta_i, \; W_i &\sim N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \\
 \theta_i \mid \mu, B         &\sim N_p(\mu, B) \\
-W_i \mid U, n_w              &\sim IW(U, n_w)
+W_i \mid U, \nu_w              &\sim IW(U, \nu_w)
 \end{align}
 
 ```{r parameters}
@@ -73,7 +76,7 @@ m <- 100 # number of sources
 n <- 500 # number of items per source
 ```
 
-Upper hierarchical level: choose some generating hyperparameters $\mu$, $n_w$, $B$, $U$
+Upper hierarchical level: choose some generating hyperparameters $\mu$, $\nu_w$, $B$, $U$
 
 ```{r upper-gen}
 list_exact <- list()
@@ -200,11 +203,11 @@ bmatrix(solve_sympd(list_exact$B.exact), pre = "B^{-1} =", digits = bmatrix.digi
 
 ### Hyperpriors on within covariance matrix
 
-$$ W_i \sim IW(n_w, U) $$
+$$ W_i \sim IW(\nu_w, U) $$
 
 - Inverted Wishart degrees of freedom: arbitrary, chosen as low as possible (largest variance) s.t. the expected value of $W_i$ is defined
 
-$$n_w = `r priors$nw`$$
+$$\nu_w = `r priors$nw`$$
 
 - Inverted Wishart scale matrix:
 

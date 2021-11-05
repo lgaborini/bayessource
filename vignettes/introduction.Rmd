@@ -16,7 +16,8 @@ This vignette explains briefly how to use this package.
 
 ```{r, include = FALSE}
 library(bayessource)
-knitr::opts_chunk$set(fig.datapi = 96)
+knitr::opts_chunk$set(fig.dpi = 96)
+
 ```
 
 # Package goal
@@ -98,10 +99,10 @@ The $i$-th source is assumed to generate data from a Multivariate Normal, with m
 \begin{align}
 X_{ij} \; | \; \theta_i, \; W_i &\sim N_p(\theta_i, W_i) \quad \forall j = 1, \ldots, n \\
 \theta_i \; | \; \mu, B &\sim N_p(\mu, B) \\
-W_i \; | \; U, n_w &\sim IW(U, n_w)
+W_i \; | \; U, \nu_w &\sim IW(U, \nu_w)
 \end{align}
 
-where $n_w > 2\,p$, and $U$ is set s.t. $$E[W_i] = \frac{U}{n_w - 2(p + 1)}$$ (parametrization according to [@Press2012Applied]).
+where $\nu_w > 2\,p$, and $U$ is set s.t. $$E[W_i] = \frac{U}{\nu_w - 2(p + 1)}$$ (parametrization according to [@Press2012Applied]).
 
 ### Computation
 
@@ -110,7 +111,7 @@ See the details in [@Bozza2008Probabilistic].
 
 ### Prior elicitation
 
-As the model is Bayesian, we are required to specify the hyperparameters $\mu, B, U, n_w$, as well as the Gibbs chain initialization $W_i$.   
+As the model is Bayesian, we are required to specify the hyperparameters $\mu, B, U, \nu_w$, as well as the Gibbs chain initialization $W_i$.   
 Notice that inference is propagated by supplying the _inverses_ of covariance matrices, i.e. $B^{-1}$ and $W_i^{-1}$.
 
 Example (hyper)priors can be set like this:
@@ -127,14 +128,14 @@ mu <- (mean.quest + mean.ref)/2
 
 The package proves the function `make_priors_and_init()` to supply these parameters based on a background dataset.    
 
-It returns a list containing estimates for $\mu$, $B^{-1}$, $U$, the initialization for $W_i^{-1}$, and the smallest possible $n_w$ such that the matrices are invertible. 
+It returns a list containing estimates for $\mu$, $B^{-1}$, $U$, the initialization for $W_i^{-1}$, and the smallest possible $\nu_w$ such that the matrices are invertible. 
 
 The prior elicitation is described in the dedicated vignette: `vignette("Prior elicitation")`.
 
 ### Observation model
 
 The package has been written to evaluate whether **two** sets of observations come from the same source ($H_p$) or not ($H_d$). 
-Background information (the hyperparameters) is noted with letter $I = \left\{\mu, B, U, n_w \right\}$.  
+Background information (the hyperparameters) is noted with letter $I = \left\{\mu, B, U, \nu_w \right\}$.  
 
 We note with $Y_{ij}$ the $j$-th sample from the $i$-th considered set, where $i \in [\text{reference}, \text{questioned}]$.   
 Collectively, we shorten $Y_i = \left\{ Y_{ij} \right\}_j$.
@@ -147,15 +148,15 @@ $$\text{BF} = \frac{ p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_p) 
 
 Notice that the numerator is a marginal likelihood:
 
-$$p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_p) = \int p( Y_{\text{reference}}, Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W $$
+$$p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_p) = \int p( Y_{\text{reference}}, Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, \nu_w) \dd \theta \dd W $$
 
 and the denominator is a product of marginal likelihoods (assuming independence between sources under $H_d$):
 
 \begin{align}
 p(Y_{\text{reference}}, Y_{\text{questioned}} \mid I, H_d) &= 
 p(Y_{\text{reference}} \mid I, H_d) p(Y_{\text{questioned}} \mid I, H_d) = \\
-&= \left( \int p( Y_{\text{reference}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right) 
-\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right)
+&= \left( \int p( Y_{\text{reference}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, \nu_w) \dd \theta \dd W \right) 
+\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, \nu_w) \dd \theta \dd W \right)
 \end{align}
 
 ## Computation
@@ -171,7 +172,7 @@ marginalLikelihood(as.matrix(df.quest), n.iter, B.inv, W.inv.1, U, nw, mu, burn.
 ```
 
 the LR value can be computed as well, now considering two samples.
-The function is `samesource_C()`: (`W.inv.2` is used only for chain initalisation).
+The function is `samesource_C()`:
 
 ```{r collapse=TRUE}
 samesource_C(as.matrix(df.quest), as.matrix(df.ref), n.iter, B.inv, W.inv.1, W.inv.2, U, nw, mu, burn.in, verbose = FALSE)
@@ -197,9 +198,9 @@ samesource_C(
 
 The package supports the output of the entire chain for $\theta_i$ and $W^{-1}_i$ (i.e., the inverse of $W_i$).   
 
-At the time, this is possible only during the computation of a single marginal likelihood, in this case the one related to the sample from the questioned population, namely:
+At the time, this is possible only during the computation of a single marginal likelihood, in this case the one related to the sample from the **questioned** population, namely:
 
-$\left( \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, n_w) \dd \theta \dd W \right)$
+$m = \int p( Y_{\text{questioned}} \mid \theta, W ) p(\theta, W \mid \mu, B, U, \nu_w) \dd \theta \dd W $
 
 ```{r}
 results <- marginalLikelihood(
@@ -242,8 +243,9 @@ dim(W.inv.samples.cube)
 
 or using the supplied post-processing function `mcmc_postproc()`:
 
-```{r}
+```{r, collapse = FALSE}
 list.postproc <- mcmc_postproc(results$mcmc, compute.ML = TRUE, cumulative = TRUE)
+names(list.postproc)
 str(list.postproc$theta.samples)
 str(list.postproc$W.samples)
 ```
@@ -257,8 +259,13 @@ list.postproc$W.samples.ML
 
 More advanced diagnostics are available with the recent {[bayesplot](https://mc-stan.org/bayesplot/)} package:
 
-```{r plot-bayesplot, eval=require("bayesplot", quietly=TRUE), message=FALSE}
-suppressPackageStartupMessages(library(bayesplot, quietly = TRUE))
+```{r, include=FALSE, message=FALSE}
+has_bayesplot <- requireNamespace("bayesplot", quietly = TRUE)
+```
+
+
+```{r plot-bayesplot, eval=has_bayesplot, message=FALSE}
+library(bayesplot)
 
 bayesplot::mcmc_areas(x = results$mcmc)
 ```
