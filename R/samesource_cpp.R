@@ -11,10 +11,10 @@
 #' See \code{\link[bayessource]{marginalLikelihood_internal}} for further documentation.
 #'
 #' @param output.mcmc if TRUE output the entire chain as a {coda} object, else just return the log-ml value
-#' @param n_iter number of MCMC iterations excluding burn-in
-#' @param burn_in number of MCMC burn-in iterations
-#' @param B_inv prior inverse of between-source covariance matrix
-#' @param W_inv initialization for prior inverse of within-source covariance matrix
+#' @param n.iter number of MCMC iterations excluding burn-in
+#' @param burn.in number of MCMC burn-in iterations
+#' @param B.inv prior inverse of between-source covariance matrix
+#' @param W.inv initialization for prior inverse of within-source covariance matrix
 #' @inheritParams marginalLikelihood_internal
 #' @return the log-marginal likelihood value, or a list:
 #' - `value`: the log-ml value

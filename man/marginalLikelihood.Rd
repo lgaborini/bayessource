@@ -21,11 +21,19 @@ marginalLikelihood(
 \arguments{
 \item{X}{the observation matrix (\eqn{n \times p}{(n x p)}: n = observation, p = variables)}
 
+\item{n.iter}{number of MCMC iterations excluding burn-in}
+
+\item{B.inv}{prior inverse of between-source covariance matrix}
+
+\item{W.inv}{initialization for prior inverse of within-source covariance matrix}
+
 \item{U}{covariance matrix for the mean (\eqn{p \times p}{(p x p)}}
 
 \item{nw}{degrees of freedom}
 
 \item{mu}{prior mean (\eqn{p \times 1}{(p x 1)}}
+
+\item{burn.in}{number of MCMC burn-in iterations}
 
 \item{output.mcmc}{if TRUE output the entire chain as a {coda} object, else just return the log-ml value}
 
