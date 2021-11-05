@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Elicit priors and initialization from background dataset — make_priors_and_init" />
-<meta property="og:description" content="Here we fix the hyperparameters for priors on \(theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(mu\) and \(n_w\)." />
+<meta property="og:description" content="Here we fix the hyperparameters for priors on \(\theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(\mu\) and \(\nu_w\)." />
 
 
 
@@ -127,7 +127,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Here we fix the hyperparameters for priors on \(theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(mu\) and \(n_w\).</p>
+    <p>Here we fix the hyperparameters for priors on \(\theta_i\) and \(W_i\), i.e., \(B\), \(U\), \(\mu\) and \(\nu_w\).</p>
     </div>
 
     <pre class="usage"><span class='fu'>make_priors_and_init</span><span class='op'>(</span>
@@ -148,11 +148,11 @@
     </tr>
     <tr>
       <th>col.variables</th>
-      <td><p>columns with variables</p></td>
+      <td><p>columns with variables: names or positions</p></td>
     </tr>
     <tr>
       <th>col.item</th>
-      <td><p>column with item id</p></td>
+      <td><p>column with the id of the item (\(i\)): names or positions</p></td>
     </tr>
     <tr>
       <th>use.priors</th>
@@ -164,7 +164,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>additional variables for priors, init (see the description)</p></td>
+      <td><p>additional variables for priors and init (see the description)</p></td>
     </tr>
     </table>
 
@@ -173,7 +173,7 @@
     <p>a list of variables</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>An appropriate initialization value for \(W^{-1}_i\), \(i=1,2\) is also generated.</p>
+    <p>An appropriate initialization value for \(W^{-1}_i\), \(i=1,2\) ($h_p$ and $h_d$ chains respectively) is also generated.</p>
 <p>Notice that we have three chains in the LR computations, the same initialization is used thrice.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Priors</h3>
 
 
@@ -185,7 +185,7 @@
 </ul>
 
 <p>The Wishart dofs <code>nw</code> are set as small as possible without losing full rank:
-\(nw = 2(p + 1) + 1\)</p>
+\(\nu_w = 2(p + 1) + 1\)</p>
 
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Initialization</h3>
 
@@ -194,11 +194,11 @@
 Two methods:</p>
 <p><code>use.init</code>:</p><ul>
 <li><p><code>'random'</code>: initialize according to the model</p><ul>
-<li><p>generate one \(W_i \sim IW_p(nw, U)\)</p></li>
+<li><p>generate one \(W_i \sim IW_p(\nu_w, U)\)</p></li>
 <li><p>then invert: \(W^{-1}_i = (W_i)^{-1}\)</p></li>
 </ul></li>
 <li><p><code>'vague'</code>: low-information initialization</p><ul>
-<li><p>\(W_i = alpha_init + beta_init * diag(p)\)</p></li>
+<li><p>\(W_i = \alpha_{\text{init}} + \beta_{\text{init}} * \operatorname{diag}(p)\)</p></li>
 </ul></li>
 </ul>
 
@@ -226,7 +226,7 @@ Two methods:</p>
 <li><p><code>mu</code>: the global mean</p></li>
 <li><p><code>B.inv</code>: the between-source prior covariance matrix, as the inverse</p></li>
 <li><p><code>U</code>: the Inverted Wishart scale matrix</p></li>
-<li><p><code>nw</code>: the Inverted Wishart dof</p></li>
+<li><p><code>nw</code>: the Inverted Wishart dof \(\nu_w\)</p></li>
 <li><p><code>W.inv.1</code>, <code>W.inv.2</code>: the initializations for the within-source covariance matrices, as their inverses</p></li>
 </ul>
 

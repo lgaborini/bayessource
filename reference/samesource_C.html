@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model. — samesource_C • bayessource</title>
+<title>Fast computation of the Bayes Factor (same source v. different sources) for the Normal - Inverted Wishart model. — samesource_C • bayessource</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model. — samesource_C" />
-<meta property="og:description" content="Implemented in C.
-See diwishart_inverse for the parametrization of the Inverted Wishart.
-See marginalLikelihood_internal for further documentation." />
+<meta property="og:title" content="Fast computation of the Bayes Factor (same source v. different sources) for the Normal - Inverted Wishart model. — samesource_C" />
+<meta property="og:description" content="Implemented in C." />
 
 
 
@@ -123,15 +121,13 @@ See marginalLikelihood_internal for further documentation." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast Bayesian same source hypothesis for the Normal - Inverted Wishart model.</h1>
+    <h1>Fast computation of the Bayes Factor (same source v. different sources) for the Normal - Inverted Wishart model.</h1>
     
     <div class="hidden name"><code>samesource_C.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Implemented in C.
-See <code><a href='diwishart_inverse.html'>diwishart_inverse</a></code> for the parametrization of the Inverted Wishart.
-See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a></code> for further documentation.</p>
+    <p>Implemented in C.</p>
     </div>
 
     <pre class="usage"><span class='fu'>samesource_C</span><span class='op'>(</span>
@@ -154,11 +150,11 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>quest</th>
-      <td><p>the questioned dataset (nq * p matrix)</p></td>
+      <td><p>the questioned dataset (a \(n_q \times p\) matrix)</p></td>
     </tr>
     <tr>
       <th>ref</th>
-      <td><p>the reference dataset (nr * p matrix)</p></td>
+      <td><p>the reference dataset (a \(n_r \times p\) matrix)</p></td>
     </tr>
     <tr>
       <th>n.iter</th>
@@ -177,16 +173,12 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
       <td><p>prior inverse of within-source covariance matrix (reference items)</p></td>
     </tr>
     <tr>
-      <th>U</th>
-      <td><p>covariance matrix for the mean (\(p \times p\)</p></td>
-    </tr>
-    <tr>
       <th>nw</th>
       <td><p>degrees of freedom</p></td>
     </tr>
     <tr>
       <th>mu</th>
-      <td><p>prior mean (\(p \times 1\)</p></td>
+      <td><p>prior mean (\(p \times 1\))</p></td>
     </tr>
     <tr>
       <th>burn.in</th>
@@ -211,6 +203,15 @@ See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal
 <li><p><code>log_ml_Hd_quest</code>: log-BF denominator from questioned (!= reference) source</p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The hypothesis pair is:</p><ul>
+<li><p>\(H_p\): all <code>ref</code> and <code>quest</code> come from the same source</p></li>
+<li><p>\(H_p\): <code>quest</code> comes from source 1, <code>ref</code> comes from source 2</p></li>
+</ul>
+
+<p>See <code><a href='diwishart_inverse.html'>diwishart_inverse</a></code> for the parametrization of the Inverted Wishart.
+See <code><a href='marginalLikelihood_internal.html'>marginalLikelihood_internal</a></code> for further documentation.</p>
     <h2 class="hasAnchor" id="normal-inverse-wishart-model"><a class="anchor" href="#normal-inverse-wishart-model"></a>Normal-Inverse-Wishart model</h2>
 
     

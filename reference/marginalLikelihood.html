@@ -151,7 +151,8 @@ Implemented in C.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>the observation matrix (\(n \times p\): n = observation, p = variables)</p></td>
+      <td><p>the observation matrix (\(n \times p\): n = observation, p = variables)
+@param U covariance matrix for the mean (\(p \times p\))</p></td>
     </tr>
     <tr>
       <th>n.iter</th>
@@ -166,16 +167,12 @@ Implemented in C.</p>
       <td><p>initialization for prior inverse of within-source covariance matrix</p></td>
     </tr>
     <tr>
-      <th>U</th>
-      <td><p>covariance matrix for the mean (\(p \times p\)</p></td>
-    </tr>
-    <tr>
       <th>nw</th>
       <td><p>degrees of freedom</p></td>
     </tr>
     <tr>
       <th>mu</th>
-      <td><p>prior mean (\(p \times 1\)</p></td>
+      <td><p>prior mean (\(p \times 1\))</p></td>
     </tr>
     <tr>
       <th>burn.in</th>
@@ -192,22 +189,6 @@ Implemented in C.</p>
     <tr>
       <th>Gibbs_only</th>
       <td><p>if TRUE, only return the Gibbs posterior samples. Implies <code>chain_output = TRUE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>n_iter</th>
-      <td><p>number of MCMC iterations excluding burn-in</p></td>
-    </tr>
-    <tr>
-      <th>burn_in</th>
-      <td><p>number of MCMC burn-in iterations</p></td>
-    </tr>
-    <tr>
-      <th>B_inv</th>
-      <td><p>prior inverse of between-source covariance matrix</p></td>
-    </tr>
-    <tr>
-      <th>W_inv</th>
-      <td><p>initialization for prior inverse of within-source covariance matrix</p></td>
     </tr>
     </table>
 
